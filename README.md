@@ -1,13 +1,13 @@
-# @wopjs/template
+# @wopjs/disposable
 
-[![Docs](https://www.paka.dev/badges/v0/cute.svg)](https://www.paka.dev/npm/@wopjs/template)
+[![Docs](https://www.paka.dev/badges/v0/cute.svg)](https://www.paka.dev/npm/@wopjs/disposable)
 
-Collection of common utilities.
+Manage side effect disposers in a compact, reusable and testable style.
 
 ## Install
 
 ```
-npm add @wopjs/template
+npm add @wopjs/disposable
 ```
 
 ## License
