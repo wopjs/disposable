@@ -26,17 +26,18 @@ export class DisposableStore implements ObjDisposable {
    * Add a disposer to the store.
    * @param disposable A disposer function.
    * @param id Optional id for the disposer. Adding with same id will first invoke(`flush`) the previous disposer.
+   * @returns The same disposer.
    */
-  public add(disposable: DisposableType, id?: DisposableId): DisposableId;
+  public add<T extends DisposableType>(disposable: T, id?: DisposableId): T;
   /**
    * Add an array of disposers to the store.
    * @param disposable
    */
   public add(disposable: DisposableType[]): void;
-  public add(
-    disposable: DisposableType | DisposableType[],
+  public add<T extends DisposableType>(
+    disposable: T | T[],
     id?: DisposableId
-  ): DisposableId | void {
+  ): T | void {
     if (Array.isArray(disposable)) {
       for (const d of disposable) {
         this.add(d);
@@ -53,38 +54,41 @@ export class DisposableStore implements ObjDisposable {
     if (isAbortable(disposable)) {
       disposable.abortable(() => this.remove(id as DisposableId));
     }
-    return id;
+    return disposable;
   }
 
   /**
    * Invoke the executor function and add the returned disposer to the store.
    * @param executor A function that returns a disposer.
    * @param id Optional id for the disposer. Adding with same id will first invoke(`flush`) the previous disposable.
-   * @returns The store id of the disposer.
+   * @returns The returned disposable.
    */
-  public make(executor: () => DisposableType, id?: DisposableId): DisposableId;
+  public make<T extends DisposableType>(
+    executor: () => T,
+    id?: DisposableId
+  ): T;
   /**
    * Invoke the executor function. If it returns a disposer, add the disposer to the store, otherwise do nothing.
    * @param executor A function that returns either a disposer, `null` or `false`.
    * @param id Optional id for the disposer. Adding with same id will first invoke(`flush`) the previous disposable.
-   * @returns The store id of the disposer, or `undefined` if the executor returns `null` or `false`.
+   * @returns The returned disposer, or `undefined` if the executor returns `null` or `false`.
    */
-  public make(
-    executor: () => DisposableType | null | false,
+  public make<T extends DisposableType>(
+    executor: () => T | null | false,
     id?: DisposableId
-  ): DisposableId | void;
+  ): T | void;
   /**
    * Invoke the executor function. If it returns an array of disposers, add all the disposers to the store, otherwise do nothing.
    * @param executor A function that returns either an array of disposers, `null` or `false`.
    */
   public make(executor: () => DisposableType[] | null | false): void;
-  public make(
-    executor: () => DisposableType | DisposableType[] | null | false,
+  public make<T extends DisposableType>(
+    executor: () => T | T[] | null | false,
     id?: DisposableId
-  ): DisposableId | void {
+  ): T | void {
     const disposers = executor();
     if (disposers) {
-      return this.add(disposers as DisposableType, id);
+      return this.add(disposers as T, id);
     }
   }
 
@@ -126,7 +130,7 @@ export class DisposableStore implements ObjDisposable {
     this._disposables_.clear();
   }
 
-  private _currentId_ = 100;
+  private _currentId_ = 0;
   private _genId_(): number {
     while (this._disposables_.has(this._currentId_)) {
       this._currentId_ = (this._currentId_ + 1) | 0;
