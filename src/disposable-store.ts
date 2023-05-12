@@ -4,11 +4,11 @@ import { isAbortable } from "./abortable";
 import { invokeDispose } from "./utils";
 
 /**
- * A disposable manager that manages disposers(disposables).
+ * A disposable store that manages disposers(disposables).
  *
- * All disposers will be invoked(`flush`) when manager is disposed.
+ * All disposers will be invoked(`flush`) when store is disposed.
  */
-export class DisposableManager implements ObjDisposable {
+export class DisposableStore implements ObjDisposable {
   private _disposables_: Map<DisposableId, DisposableType>;
 
   public constructor() {
@@ -16,20 +16,20 @@ export class DisposableManager implements ObjDisposable {
   }
 
   /**
-   * Get the number of disposers in the manager.
+   * Get the number of disposers in the store.
    */
   public get size(): number {
     return this._disposables_.size;
   }
 
   /**
-   * Add a disposer to the manager.
+   * Add a disposer to the store.
    * @param disposable A disposer function.
    * @param id Optional id for the disposer. Adding with same id will first invoke(`flush`) the previous disposer.
    */
   public add(disposable: DisposableType, id?: DisposableId): DisposableId;
   /**
-   * Add an array of disposers to the manager.
+   * Add an array of disposers to the store.
    * @param disposable
    */
   public add(disposable: DisposableType[]): void;
@@ -57,24 +57,24 @@ export class DisposableManager implements ObjDisposable {
   }
 
   /**
-   * Invoke the executor function and add the returned disposer to the manager.
+   * Invoke the executor function and add the returned disposer to the store.
    * @param executor A function that returns a disposer.
    * @param id Optional id for the disposer. Adding with same id will first invoke(`flush`) the previous disposable.
-   * @returns The manager id of the disposer.
+   * @returns The store id of the disposer.
    */
   public make(executor: () => DisposableType, id?: DisposableId): DisposableId;
   /**
-   * Invoke the executor function. If it returns a disposer, add the disposer to the manager, otherwise do nothing.
+   * Invoke the executor function. If it returns a disposer, add the disposer to the store, otherwise do nothing.
    * @param executor A function that returns either a disposer, `null` or `false`.
    * @param id Optional id for the disposer. Adding with same id will first invoke(`flush`) the previous disposable.
-   * @returns The manager id of the disposer, or `undefined` if the executor returns `null` or `false`.
+   * @returns The store id of the disposer, or `undefined` if the executor returns `null` or `false`.
    */
   public make(
     executor: () => DisposableType | null | false,
     id?: DisposableId
   ): DisposableId | void;
   /**
-   * Invoke the executor function. If it returns an array of disposers, add all the disposers to the manager, otherwise do nothing.
+   * Invoke the executor function. If it returns an array of disposers, add all the disposers to the store, otherwise do nothing.
    * @param executor A function that returns either an array of disposers, `null` or `false`.
    */
   public make(executor: () => DisposableType[] | null | false): void;
@@ -89,17 +89,17 @@ export class DisposableManager implements ObjDisposable {
   }
 
   /**
-   * Check whether the manager has the disposer.
-   * @param id Manager id of the disposer.
-   * @returns Whether the manager has the disposer.
+   * Check whether the store has the disposer.
+   * @param id store id of the disposer.
+   * @returns Whether the store has the disposer.
    */
   public has(id: DisposableId): boolean {
     return this._disposables_.has(id);
   }
 
   /**
-   * Remove the disposer from the manager. Does not invoke the disposer.
-   * @param id Manager id of the disposer.
+   * Remove the disposer from the store. Does not invoke the disposer.
+   * @param id store id of the disposer.
    * @returns `true` if the disposer is removed, `false` if the disposer is not found.
    */
   public remove(id: DisposableId): boolean {
@@ -107,8 +107,8 @@ export class DisposableManager implements ObjDisposable {
   }
 
   /**
-   * Invoke the disposer and remove it from the manager.
-   * @param id Manager id of the disposer.
+   * Invoke the disposer and remove it from the store.
+   * @param id store id of the disposer.
    */
   public flush(id: DisposableId): void {
     const disposable = this._disposables_.get(id);
@@ -119,7 +119,7 @@ export class DisposableManager implements ObjDisposable {
   }
 
   /**
-   * Invoke all disposers and clear the manager.
+   * Invoke all disposers and clear the store.
    */
   public dispose(): void {
     this._disposables_.forEach(invokeDispose);

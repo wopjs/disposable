@@ -4,7 +4,7 @@ import { invoke } from "./utils";
 
 /**
  * A disposable that can be safely self-disposed.
- * If it is attached to a disposable manager, it will be removed from the manager automatically when self-disposed.
+ * If it is attached to a disposable store, it will be removed from the store automatically when self-disposed.
  */
 export interface AbortableDisposable {
   (): any;
@@ -22,7 +22,7 @@ interface AbortableDisposableImpl extends AbortableDisposable {
 /**
  * Enhance a disposer so that it can be safely self-disposed.
  *
- * If the enhanced disposable is attached to a disposable manager, it will be removed from the manager automatically when self-disposed.
+ * If the enhanced disposable is attached to a disposable store, it will be removed from the store automatically when self-disposed.
  *
  * @param disposer The disposer to be called when the disposable is disposed.
  * @returns An abortable disposable.
@@ -33,12 +33,12 @@ interface AbortableDisposableImpl extends AbortableDisposable {
  * const disposer = abortable(() => clearTimeout(timeoutId));
  * timeoutId = setTimeout(() => console.log("hello"), 1000);
  *
- * // Add to a manager
- * const disposable = new DisposableManager();
+ * // Add to a store
+ * const disposable = new DisposableStore();
  * disposable.add(disposer);
  *
  * // Self-dispose
- * disposer(); // setTimeout is cleared and the disposer is removed from the manager.
+ * disposer(); // setTimeout is cleared and the disposer is removed from the store.
  * ```
  */
 export const abortable = (disposer: () => any): Disposable => {

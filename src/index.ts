@@ -6,6 +6,6 @@ export type {
   Disposable,
 } from "./interface";
 
-export { DisposableManager } from "./disposable-manager";
+export { DisposableStore } from "./disposable-store";
 
 export { abortable } from "./abortable";
