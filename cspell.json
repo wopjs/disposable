@@ -1,6 +1,7 @@
 {
   "language": "en",
   "words": [
+    "abortable",
     "coverallsapp",
     "CRIMX",
     "hyrious",
@@ -14,7 +15,8 @@
     "Vals",
     "vite",
     "vitest",
-    "wopjs"
+    "wopjs",
+    "yoctocolors"
   ],
   "ignorePaths": [
     "**/coverage/**",

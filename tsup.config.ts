@@ -10,7 +10,7 @@ export default defineConfig({
   dts: true,
   splitting: false,
   sourcemap: false,
-  minify: false,
+  minify: Boolean(process.env.MINIFY),
   esbuildOptions: options => {
     options.mangleProps = /[^_]_$/;
     options.mangleCache = mangleCache;
