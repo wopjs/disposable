@@ -1,4 +1,4 @@
-import type { DisposableId, DisposableType, ObjDisposable } from "./interface";
+import type { DisposableId, DisposableType, IDisposable } from "./interface";
 
 import { isAbortable } from "./abortable";
 import { invokeDispose } from "./utils";
@@ -8,7 +8,7 @@ import { invokeDispose } from "./utils";
  *
  * All disposers will be invoked(`flush`) when store is disposed.
  */
-export class DisposableStore implements ObjDisposable {
+export class DisposableStore implements IDisposable {
   private _disposables_: Map<DisposableId, DisposableType>;
 
   public constructor() {

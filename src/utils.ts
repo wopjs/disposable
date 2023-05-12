@@ -1,4 +1,4 @@
-import type { DisposableType, FnDisposable, ObjDisposable } from "./interface";
+import type { DisposableType, Disposer, IDisposable } from "./interface";
 
 export const invoke = <T>(fn: () => T): T | void => {
   try {
@@ -9,4 +9,4 @@ export const invoke = <T>(fn: () => T): T | void => {
 };
 
 export const invokeDispose = <T>(disposable: DisposableType): T | void =>
-  invoke((disposable as ObjDisposable).dispose || (disposable as FnDisposable));
+  invoke((disposable as IDisposable).dispose || (disposable as Disposer));

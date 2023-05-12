@@ -1,4 +1,4 @@
-import type { Disposable } from "./interface";
+import type { DisposableDisposer } from "./interface";
 
 import { invoke } from "./utils";
 
@@ -6,7 +6,7 @@ import { invoke } from "./utils";
  * A disposable that can be safely self-disposed.
  * If it is attached to a disposable store, it will be removed from the store automatically when self-disposed.
  */
-export interface AbortableDisposable {
+interface AbortableDisposable {
   (): any;
   dispose: () => any;
   abortable: (onDispose: () => void) => void;
@@ -41,7 +41,7 @@ interface AbortableDisposableImpl extends AbortableDisposable {
  * disposer(); // setTimeout is cleared and the disposer is removed from the store.
  * ```
  */
-export const abortable = (disposer: () => any): Disposable => {
+export const abortable = (disposer: () => any): DisposableDisposer => {
   const abortable: AbortableDisposableImpl = (): void => {
     if (abortable._d) {
       invoke(abortable._d);
