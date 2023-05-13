@@ -6,6 +6,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
@@ -37,4 +38,10 @@ jobs:
       - name: Build 🔧
         run: |
           pnpm run lint
+          pnpm run coverage
           pnpm run build
+
+      - name: Upload Coverage
+        uses: paambaati/codeclimate-action@v4.0.0
+        env:
+          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
