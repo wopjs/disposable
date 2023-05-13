@@ -68,5 +68,4 @@ function bindOnDispose(
 
 export const isAbortable = (
   disposable: any
-): disposable is AbortableDisposable =>
-  disposable.disposable && disposable.abort;
+): disposable is AbortableDisposable => disposable && disposable.abortable;
