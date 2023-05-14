@@ -3,6 +3,31 @@ import type { DisposableDisposer, IDisposable } from "../src";
 import { abortable, disposable } from "../src";
 
 describe("DisposableStore", () => {
+  describe("new", () => {
+    it("should create a empty store", () => {
+      const store = disposable();
+      expect(store.size()).toBe(0);
+    });
+
+    it("should add initial disposable", () => {
+      const disposer = vi.fn();
+      const store = disposable(disposer);
+      expect(store.size()).toBe(1);
+      expect(store.has(disposer)).toBe(true);
+    });
+
+    it("should add an array of initial disposables", () => {
+      const disposers = Array(5)
+        .fill(0)
+        .map(() => vi.fn());
+      const store = disposable(disposers);
+      expect(store.size()).toBe(disposers.length);
+      for (const disposer of disposers) {
+        expect(store.has(disposer)).toBe(true);
+      }
+    });
+  });
+
   describe("add", () => {
     it("should add a function disposer to the store", () => {
       const store = disposable();

@@ -38,6 +38,16 @@ export interface DisposableStore extends DisposableDisposer {
    * @returns The same array of disposables.
    */
   add<T extends DisposableType[]>(disposables: T): T;
+  /**
+   * Add a disposer or an array of disposers to the store.
+   * @param disposables A disposer or an array of disposables.
+   * @returns The same disposer or the same array of disposables.
+   */
+  add<T extends DisposableType>(
+    this: DisposableStoreImpl,
+    disposable: T | T[],
+    id?: DisposableId
+  ): T | T[] | void;
 
   /**
    * Invoke the executor function and add the returned disposer to the store.
@@ -176,9 +186,46 @@ const methods: PickMethods<DisposableStoreImpl> = {
   },
 };
 
-export const disposable = (): DisposableStore => {
-  const store: Disposer & OmitMethods<DisposableStoreImpl> = (): void =>
-    (store as unknown as DisposableStore).dispose();
-  store._disposables_ = new Map();
-  return Object.assign(store, methods);
+/**
+ * Create a disposable store that manages disposables.
+ *
+ * A disposable store is also a disposer, which means it can be added to another disposable store.
+ *
+ * @example
+ * ```ts
+ * import { type IDisposable, disposable } from "@wopjs/disposable";
+ *
+ * class A implements IDisposable {
+ *   dispose = disposable()
+ *   constructor() {
+ *     this.dispose.add(...);
+ *   }
+ * }
+ *
+ * class B implements IDisposable {
+ *   dispose = disposable()
+ *   a = this.disposable.add(new A())
+ *   constructor() {
+ *     this.dispose.add(...);
+ *  }
+ * }
+ *
+ * const b = new B();
+ * b.dispose(); // dispose both `b` and `b.a`.
+ * ```
+ *
+ * @param disposables Optional initial disposable or an array of disposables added to the store.
+ * @returns A disposable store.
+ */
+export const disposable = (
+  disposables?: DisposableType | DisposableType[]
+): DisposableStore => {
+  const disposer: Disposer & OmitMethods<DisposableStoreImpl> = (): void =>
+    (disposer as unknown as DisposableStore).dispose();
+  disposer._disposables_ = new Map();
+  const store = Object.assign(disposer, methods);
+  if (disposables) {
+    store.add(disposables);
+  }
+  return store;
 };
