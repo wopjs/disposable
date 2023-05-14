@@ -681,9 +681,8 @@ describe("DisposableStore", () => {
 
       class B implements IDisposable {
         public dispose = disposable();
-        public a: A;
+        public a = this.dispose.add(new A());
         public constructor() {
-          this.a = this.dispose.add(new A());
           this.dispose.add(spyB);
         }
       }
