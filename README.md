@@ -25,7 +25,7 @@ Manage side effect disposers in a compact, reusable and testable style. Designed
 npm add @wopjs/disposable
 ```
 
-## Example
+## Examples
 
 ```ts
 import {
