@@ -20,6 +20,7 @@ import { invokeDispose } from "./utils";
 export interface DisposableStore extends DisposableDisposer {
   /** Invoke `.dispose()`. */
   (): void;
+
   /**
    * Get the number of disposers in the store.
    */
