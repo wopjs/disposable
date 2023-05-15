@@ -2,11 +2,12 @@
   "name": "@wopjs/disposable",
   "version": "0.0.1",
   "description": "Manage side effect disposers in a compact, reusable and testable style.",
-  "type": "module",
-  "exports": "./dist/index.js",
+  "repository": "wopjs/disposable",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "files": [
-    "src",
     "dist"
   ],
   "scripts": {
