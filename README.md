@@ -230,7 +230,7 @@ const myDisposable = {
 
 ### Disposer
 
-A disposer is a function that disposes a disposable. It is usually created by a factory function, which is called a disposer factory.
+A disposer is a function that clean up resources. It is usually created by a factory function.
 
 ```js
 const addListener = (target, type, listener) => {
@@ -240,22 +240,13 @@ const addListener = (target, type, listener) => {
 };
 
 const disposer = addListener(window, "click", () => console.log("click"));
-```
 
-To make it easier to work with TypeScript, `makeDisposable` is provided to create a disposable disposer.
-
-```ts
-import { makeDisposable } from "@wopjs/disposable";
-
-const addListener = (target, type, listener) => {
-  target.addEventListener(type, listener);
-  return makeDisposable(() => target.removeEventListener(type, listener));
-};
+disposer(); // listener is removed
 ```
 
 ### DisposableStore
 
-A disposable store is a disposable that manages disposables.
+A disposable store is a disposable that manages disposers and disposables.
 
 ```js
 import { disposable } from "@wopjs/disposable";
@@ -268,7 +259,7 @@ store.make(() => {
 store.dispose(); // Logs "disposer" and "disposable"
 ```
 
-It is also a disposer! So that it can be easily composed with other disposers.
+It is also a disposer! Which means it can be easily composed with other disposables.
 
 ```js
 import { disposable, type IDisposable } from "@wopjs/disposable";
@@ -311,9 +302,20 @@ const dispose = disposable();
 dispose.add(addListener(window, "click"));
 ```
 
+To make it easier to work with TypeScript, `makeDisposable` is provided to create a disposable disposer.
+
+```ts
+import { makeDisposable } from "@wopjs/disposable";
+
+const addListener = (target, type, listener) => {
+  target.addEventListener(type, listener);
+  return makeDisposable(() => target.removeEventListener(type, listener));
+};
+```
+
 ## Abortable
 
-Abortable is a special kind of disposable that can be disposed outside of the store (like when `setTimeout` or `once` event finishes). It will notify the store to delete itself from the store when disposed. The signature is the same as a disposable disposer so it is also compatible to the majority of frameworks.
+Abortable is a special kind of disposable that may be disposed outside of the store (like when `setTimeout` or `once` event finishes). It will notify the store to delete itself from the store when disposed. The signature is the same as a disposable disposer.
 
 ```js
 const timeout = (handle, timeout) => {
@@ -328,6 +330,8 @@ const timeout = (handle, timeout) => {
 
 const dispose = disposable();
 dispose.add(timeout(() => console.log("timeout"), 1000));
+
+// The `timeout` disposer will be removed from the `dispose` after 1s.
 ```
 
 ## License
