@@ -14,6 +14,7 @@
   "scripts": {
     "prepublishOnly": "pnpm run build",
     "lint": "eslint --ext .ts,.tsx . && prettier --check .",
+    "docs": "typedoc --options typedoc.json",
     "build": "tsup",
     "test": "vitest",
     "coverage": "vitest run --coverage",
@@ -50,6 +51,7 @@
     "prettier": "^2.8.7",
     "pretty-bytes": "^6.1.0",
     "tsup": "^6.7.0",
+    "typedoc": "^0.23.28",
     "typescript": "^5.0.4",
     "vite": "^4.2.2",
     "vitest": "^0.31.0",

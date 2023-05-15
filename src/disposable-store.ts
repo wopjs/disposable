@@ -60,7 +60,6 @@ export interface DisposableStore extends DisposableDisposer {
    * @returns The same disposer/disposable or the same array of disposers/disposables.
    */
   add<T extends DisposableType>(
-    this: DisposableStoreImpl,
     disposable: T | T[],
     id?: DisposableId
   ): T | T[] | void;

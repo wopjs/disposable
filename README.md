@@ -4,12 +4,14 @@
   <img width="200" src="https://raw.githubusercontent.com/wopjs/disposable/main/assets/disposable.svg">
 </p>
 
-[![Docs](https://www.paka.dev/badges/v0/cute.svg)](https://www.paka.dev/npm/@wopjs/disposable)
+[![Docs](https://img.shields.io/badge/Docs-read-%23fdf9f5)](https://wopjs.github.io/disposable)
 [![Build Status](https://github.com/wopjs/disposable/actions/workflows/build.yml/badge.svg)](https://github.com/wopjs/disposable/actions/workflows/build.yml)
 [![Coverage Status](https://img.shields.io/codeclimate/coverage/wopjs/disposable)](https://codeclimate.com/github/wopjs/disposable)
 [![npm-version](https://img.shields.io/npm/v/@wopjs/disposable.svg)](https://www.npmjs.com/package/@wopjs/disposable)
 [![minified-size](https://img.shields.io/bundlephobia/minzip/@wopjs/disposable)](https://bundlephobia.com/package/@wopjs/disposable)
-[![tree-shakable](https://badgen.net/bundlephobia/tree-shaking/@wopjs/disposable)](https://bundlephobia.com/package/@wopjs/disposable)
+[![tree-shakable](https://img.shields.io/badge/tree-shakable-success)](https://bundlejs.com/?q=@wopjs/disposable)
+[![no-dependencies](https://img.shields.io/badge/dependencies-none-success)](https://bundlejs.com/?q=@wopjs/disposable)
+[![side-effect-free](https://img.shields.io/badge/side--effect-free-success)](https://bundlejs.com/?q=@wopjs/disposable)
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?maxAge=2592000)](http://commitizen.github.io/cz-cli/)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-brightgreen.svg?maxAge=2592000)](https://conventionalcommits.org)
@@ -101,107 +103,107 @@ b.dispose(); // both a and b are disposed
 
 ## Features
 
-- Non-invasive.
+### Non-invasive
 
-  - Disposable adopts both disposer function `() => any` and `.disposer()` contracts which are widely accepted. Implementing these patterns does not require any extra effort.
+- Disposable adopts both disposer function `() => any` and `.disposer()` contracts which are widely accepted. Implementing these patterns does not require any extra effort.
 
-    ```js
-    // disposer function pattern
-    const disposer = () => console.log("dispose");
+  ```js
+  // disposer function pattern
+  const disposer = () => console.log("dispose");
 
-    // class disposable pattern
-    class MyDisposable {
-      dispose() {
-        console.log("dispose");
-      }
+  // class disposable pattern
+  class MyDisposable {
+    dispose() {
+      console.log("dispose");
     }
-    const myDisposable = new MyDisposable();
+  }
+  const myDisposable = new MyDisposable();
 
-    // plain object disposable pattern
-    const myDisposable = {
-      dispose() {
-        console.log("dispose");
-      },
-    };
-    ```
+  // plain object disposable pattern
+  const myDisposable = {
+    dispose() {
+      console.log("dispose");
+    },
+  };
+  ```
 
-  - And of course it works well with other `@wopjs` libraries.
-    ```js
-    import { addEventListener } from "wopjs/dom";
-    import { timeout } from "wopjs/time";
-    ```
+- And of course it works well with other `@wopjs` libraries.
+  ```js
+  import { addEventListener } from "wopjs/dom";
+  import { timeout } from "wopjs/time";
+  ```
 
-- Compact.
+### Compact
 
-  - Disposables are designed to be composable and chainable.
+- Disposables are designed to be composable and chainable.
 
-    ```ts
-    import { disposable, type IDisposable } from "@wopjs/disposable";
+  ```ts
+  import { disposable, type IDisposable } from "@wopjs/disposable";
 
-    class A implements IDisposable {
-      dispose = disposable();
-      constructor() {
-        this.dispose.add(() => console.log("a"));
-      }
-      print() {
-        console.log("print a");
-      }
+  class A implements IDisposable {
+    dispose = disposable();
+    constructor() {
+      this.dispose.add(() => console.log("a"));
     }
-
-    class B implements IDisposable {
-      dispose = disposable();
-      a = this.dispose.add(new A());
+    print() {
+      console.log("print a");
     }
+  }
 
-    const b = new B();
-    b.a.print(); // "print a"
-    b.dispose(); // both a and b are disposed
-    ```
+  class B implements IDisposable {
+    dispose = disposable();
+    a = this.dispose.add(new A());
+  }
 
-  - You can also create your own side effects in a compact way.
+  const b = new B();
+  b.a.print(); // "print a"
+  b.dispose(); // both a and b are disposed
+  ```
 
-    ```js
-    import { disposable } from "@wopjs/disposable";
+- You can also create your own side effects in a compact way.
 
-    class A {
-      dispose = disposable();
-      constructor() {
-        dispose.make(() => {
-          const handler = () => console.log("click");
-          someEvent.on("type", handler);
-          return () => someEvent.off("type", handler);
-        });
-      }
+  ```js
+  import { disposable } from "@wopjs/disposable";
+
+  class A {
+    dispose = disposable();
+    constructor() {
+      dispose.make(() => {
+        const handler = () => console.log("click");
+        someEvent.on("type", handler);
+        return () => someEvent.off("type", handler);
+      });
     }
+  }
 
-    const a = new A();
-    a.dispose(); // clear all disposers
-    ```
+  const a = new A();
+  a.dispose(); // clear all disposers
+  ```
 
-- Refresh-able
+### Refresh-able
 
-  - Disposables can use id as key when adding to the store. Adding a disposable with the same id will dispose (flush) the old one first.
+- Disposables can use id as key when adding to the store. Adding a disposable with the same id will dispose (flush) the old one first.
 
-    ```js
-    import { disposable } from "@wopjs/disposable";
-    import { addEventListener } from "@wopjs/dom";
-    import { timeout } from "@wopjs/time";
+  ```js
+  import { disposable } from "@wopjs/disposable";
+  import { addEventListener } from "@wopjs/dom";
+  import { timeout } from "@wopjs/time";
 
-    const dispose = disposable();
-    dispose.add(
-      addEventListener(window, "click", event => {
-        // Clicking within 1s will trigger debounce effect (the pending timeout is cancelled before adding the new one).
-        dispose.add(
-          timeout(() => console.log(event), 1000),
-          "myId"
-        );
-      })
-    );
-    ```
+  const dispose = disposable();
+  dispose.add(
+    addEventListener(window, "click", event => {
+      // Clicking within 1s will trigger debounce effect (the pending timeout is cancelled before adding the new one).
+      dispose.add(
+        timeout(() => console.log(event), 1000),
+        "myId"
+      );
+    })
+  );
+  ```
 
-- Small footprint.
+### Small Footprint
 
-  - Designed and implemented with efficiency and ergonomics in mind, not only the (minified) bundle size is less than 1kb, using this library also enables patterns that require way less code to manage side effect disposers.
+- Designed and implemented with efficiency and ergonomics in mind, not only the (minified) bundle size is less than 1kb, using this library also enables patterns that require way less code to manage side effect disposers.
 
 ## Concepts
 

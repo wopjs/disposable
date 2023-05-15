@@ -47,3 +47,13 @@ jobs:
           CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
         with:
           coverageLocations: ${{github.workspace}}/coverage/clover.xml:clover
+
+      - name: Build Docs 📖
+        run: |
+          pnpm run docs
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          branch: gh-pages
+          folder: docs
