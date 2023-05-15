@@ -20,20 +20,46 @@ describe("abortable", () => {
     const fnDisposer = vi.fn();
     const disposer = abortable(fnDisposer);
 
-    const fnStore = vi.fn();
+    const fnOnDispose = vi.fn();
 
     expect(isAbortable(disposer)).toBeTruthy();
 
     if (isAbortable(disposer)) {
-      disposer.abortable(fnStore);
+      disposer.abortable(fnOnDispose);
     }
 
     expect(fnDisposer).toHaveBeenCalledTimes(0);
-    expect(fnStore).toHaveBeenCalledTimes(0);
+    expect(fnOnDispose).toHaveBeenCalledTimes(0);
 
     disposer();
 
     expect(fnDisposer).toHaveBeenCalledOnce();
-    expect(fnStore).toHaveBeenCalledOnce();
+    expect(fnOnDispose).toHaveBeenCalledOnce();
+  });
+
+  it("should remove previous bound store before binding new one", () => {
+    const fnDisposer = vi.fn();
+    const disposer = abortable(fnDisposer);
+
+    const onDispose1 = vi.fn();
+    const onDispose2 = vi.fn();
+
+    expect(isAbortable(disposer)).toBeTruthy();
+
+    if (isAbortable(disposer)) {
+      disposer.abortable(onDispose1);
+    }
+
+    expect(fnDisposer).toHaveBeenCalledTimes(0);
+    expect(onDispose1).toHaveBeenCalledTimes(0);
+    expect(onDispose2).toHaveBeenCalledTimes(0);
+
+    if (isAbortable(disposer)) {
+      disposer.abortable(onDispose2);
+    }
+
+    expect(fnDisposer).toHaveBeenCalledTimes(0);
+    expect(onDispose1).toHaveBeenCalledTimes(1);
+    expect(onDispose2).toHaveBeenCalledTimes(0);
   });
 });

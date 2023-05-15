@@ -11,11 +11,11 @@ import { isAbortable } from "./abortable";
 import { invokeDispose } from "./utils";
 
 /**
- * A disposable store which manages disposers(disposables).
+ * A disposable store which manages disposer/disposable.
  *
- * All disposers will be invoked(`flush`) when store is disposed.
+ * All disposers/disposables will be invoked(`flush`) when store is disposed.
  *
- * It implements `DisposableDisposer` interface, so it can be used as a disposer.
+ * It implements `DisposableDisposer` interface, so it can be used as both a disposable and a disposer.
  */
 export interface DisposableStore extends DisposableDisposer {
   /** Invoke `.dispose()`. */
@@ -26,22 +26,38 @@ export interface DisposableStore extends DisposableDisposer {
   size(): number;
 
   /**
-   * Add a disposer to the store.
-   * @param disposable A disposer function.
-   * @param id Optional id for the disposer. Adding with same id will first invoke(`flush`) the previous disposer.
-   * @returns The same disposer.
+   * Add a disposer/disposable to the store.
+   *
+   * If id is provided, it will be used as key in the store, otherwise the disposer/disposable will be used as key in the store.
+   *
+   * Adding with same key will first invoke(`flush`) the previous disposer/disposable at the key.
+   *
+   * @param disposable A disposer/disposable .
+   * @param id Optional id for the disposer/disposable .
+   * @returns The same disposer/disposable .
    */
   add<T extends DisposableType>(disposable: T, id?: DisposableId): T;
   /**
-   * Add an array of disposers to the store.
-   * @param disposables An array of disposables.
-   * @returns The same array of disposables.
+   * Add each disposer/disposable in an array to the store.
+   *
+   * Adding same disposer/disposable will first invoke(`flush`) the existing one.
+   *
+   * @param disposables An array of disposers/disposables.
+   * @returns The same array of disposers/disposables.
    */
   add<T extends DisposableType[]>(disposables: T): T;
   /**
-   * Add a disposer or an array of disposers to the store.
-   * @param disposables A disposer or an array of disposables.
-   * @returns The same disposer or the same array of disposables.
+   * Add a disposer/disposable or an array of disposers/disposables in to the store.
+   *
+   * Id is ignored if it is an array of disposers/disposables.
+   *
+   * If id is provided, it will be used as key in the store, otherwise the disposer/disposable will be used as key in the store.
+   *
+   * Adding with same key will first invoke(`flush`) the previous disposer/disposable at the key.
+   *
+   * @param disposables A disposer/disposable or an array of disposers/disposables.
+   * @param id Optional id for the disposer/disposable.
+   * @returns The same disposer/disposable or the same array of disposers/disposables.
    */
   add<T extends DisposableType>(
     this: DisposableStoreImpl,
@@ -50,69 +66,82 @@ export interface DisposableStore extends DisposableDisposer {
   ): T | T[] | void;
 
   /**
-   * Invoke the executor function and add the returned disposer to the store.
-   * @param executor A function that returns a disposer.
-   * @param id Optional id for the disposer. Adding with same id will first invoke(`flush`) the previous disposable.
-   * @returns The returned disposable.
+   * Invoke the executor function and add the returned disposer/disposable to the store.
+   *
+   * @param executor A function that returns a disposer/disposable.
+   * @param id Optional id for the disposer/disposable. Adding with same id will first invoke(`flush`) the previous disposer/disposable.
+   * @returns The returned disposer/disposable.
    */
   make<T extends DisposableType>(executor: () => T, id?: DisposableId): T;
   /**
-   * Invoke the executor function. If it returns a disposer, add the disposer to the store, otherwise do nothing.
-   * @param executor A function that returns either a disposer or `null`.
-   * @param id Optional id for the disposer. Adding with same id will first invoke(`flush`) the previous disposable.
-   * @returns The returned disposer, or `undefined` if the executor returns `null`.
+   * Invoke the executor function and add the returned disposer/disposable to the store. Do nothing if `null` is returned.
+   *
+   * If id is provided, it will be used as key in the store, otherwise the returned disposer/disposable will be used as key in the store.
+   *
+   * Adding with same key will first invoke(`flush`) the previous disposer/disposable at the key.
+   *
+   * @param executor A function that returns either a disposer/disposable or `null`.
+   * @param id Optional id for the disposer/disposable. Adding with same id will first invoke(`flush`) the previous disposer/disposable.
+   * @returns The returned disposer/disposable, or `undefined` if the executor returns `null`.
    */
   make<T extends DisposableType>(
     executor: () => T | null,
     id?: DisposableId
   ): T | void;
   /**
-   * Invoke the executor function. If it returns an array of disposers, add all the disposers to the store, otherwise do nothing.
-   * @param executor A function that returns either an array of disposers.
-   * @returns The returned array of disposers.
+   * Invoke the executor function and add each disposer/disposable in the returned array to the store.
+   *
+   * Adding same disposer/disposable will first invoke(`flush`) the existing one.
+   *
+   * @param executor A function that returns an array of disposers/disposables.
+   * @returns The returned array of disposers/disposables.
    */
   make<T extends DisposableType[]>(executor: () => T): T;
   /**
-   * Invoke the executor function. If it returns an array of disposers, add all the disposers to the store, otherwise do nothing.
-   * @param executor A function that returns either an array of disposers or `null`.
-   * @param The returned array of disposers, or `undefined` if the executor returns `null`.
+   * Invoke the executor function and add each of the returned disposers/disposables to the store. Do nothing if `null` is returned.
+   *
+   * Adding same disposer/disposable  first invoke(`flush`) the existing one.
+   *
+   * @param executor A function that returns either an array of disposers/disposables or `undefined`.
+   * @param The returned array of disposers/disposables, or `undefined` if the executor returns `undefined`.
    */
   make<T extends DisposableType[]>(executor: () => T | null): T | void;
 
   /**
-   * Check whether the store has the disposer.
-   * @param key disposer function or store id of the disposer.
-   * @returns Whether the store has the disposer.
+   * Check whether the store has the disposer/disposable.
+   *
+   * @param key disposer/disposable or store id of the disposer/disposable.
+   * @returns Whether the store has the disposer/disposable.
    */
   has(key: DisposableKey): boolean;
 
   /**
    * Check whether the store has the disposer.
-   * @param key disposer function or store id of the disposer.
-   * @returns Whether the store has the disposer.
+   * @param key disposer/disposable or store id of the disposer/disposable.
+   * @returns Whether the store has the disposer/disposable.
    */
   get<T extends DisposableType = DisposableType>(
     key: DisposableKey
   ): T | undefined;
 
   /**
-   * Remove the disposer from the store. Does not invoke the disposer.
-   * @param key disposer function or store id of the disposer.
-   * @returns `true` if the disposer is removed, `false` if the disposer is not found.
+   * Remove the disposer/disposable from the store. Does not invoke the disposer.
+   *
+   * @param key disposer/disposable or store id of the disposer/disposable.
+   * @returns `true` if the disposer/disposable is removed, `false` if the disposer/disposable is not found.
    */
   remove(key: DisposableKey): boolean;
 
   /**
-   * Invoke the disposer and remove it from the store.
-   * @param key disposer function or store id of the disposer.
+   * Invoke the disposer/disposable and remove it from the store.
+   *
+   * @param key disposer/disposable or store id of the disposer/disposable.
    */
   flush(key: DisposableKey): void;
 }
 
 interface DisposableStoreImpl extends DisposableStore {
   _disposables_: Map<DisposableKey, DisposableType>;
-  _ids_?: WeakMap<DisposableType, DisposableId>;
-  _getId_(key: DisposableKey): DisposableKey;
 }
 
 const methods: PickMethods<DisposableStoreImpl> = {
@@ -130,19 +159,11 @@ const methods: PickMethods<DisposableStoreImpl> = {
       }
       return disposable;
     }
-
-    this.flush(disposable);
-
-    let disposableId: DisposableKey = disposable;
-    if (id != null) {
-      // flush before setting id to WeakMap
-      this.flush(id);
-      disposableId = id;
-      (this._ids_ || (this._ids_ = new WeakMap())).set(disposable, id);
-    }
-    this._disposables_.set(disposableId, disposable);
+    const key: DisposableKey = id == null ? disposable : id;
+    this.flush(key);
+    this._disposables_.set(key, disposable);
     if (isAbortable(disposable)) {
-      disposable.abortable(() => this.remove(disposableId));
+      disposable.abortable(() => this.remove(key));
     }
     return disposable;
   },
@@ -157,32 +178,27 @@ const methods: PickMethods<DisposableStoreImpl> = {
     }
   },
   has(this: DisposableStoreImpl, key: DisposableKey): boolean {
-    return this._disposables_.has(this._getId_(key));
+    return this._disposables_.has(key);
   },
   get<T extends DisposableType = DisposableType>(
     this: DisposableStoreImpl,
     key: DisposableKey
   ): T | undefined {
-    return this._disposables_.get(this._getId_(key)) as T | undefined;
+    return this._disposables_.get(key) as T | undefined;
   },
   remove(this: DisposableStoreImpl, key: DisposableKey): boolean {
-    return this._disposables_.delete(this._getId_(key));
+    return this._disposables_.delete(key);
   },
   flush(this: DisposableStoreImpl, key: DisposableKey): void {
-    const id = this._getId_(key);
-    const disposable = this._disposables_.get(id);
+    const disposable = this.get(key);
     if (disposable) {
-      this._disposables_.delete(id);
+      this.remove(key);
       invokeDispose(disposable);
     }
   },
   dispose(this: DisposableStoreImpl): void {
     this._disposables_.forEach(invokeDispose);
     this._disposables_.clear();
-  },
-  _getId_(this: DisposableStoreImpl, key: DisposableKey): DisposableKey {
-    const id = this._ids_ && this._ids_.get(key as DisposableType);
-    return id == null ? key : id;
   },
 };
 

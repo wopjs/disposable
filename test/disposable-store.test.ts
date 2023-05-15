@@ -81,7 +81,7 @@ describe("DisposableStore", () => {
       expect(store.size()).toBe(2);
     });
 
-    it("should flush previous disposable when adding the same disposable again", () => {
+    it("should flush old one when adding the same disposable again", () => {
       const store = disposable();
       const disposer1 = vi.fn();
 
@@ -89,11 +89,13 @@ describe("DisposableStore", () => {
 
       expect(disposer1).toBeCalledTimes(0);
       expect(store.size()).toBe(1);
+      expect(store.has(disposer1)).toBe(true);
 
       store.add(disposer1);
 
       expect(disposer1).toBeCalledTimes(1);
       expect(store.size()).toBe(1);
+      expect(store.has(disposer1)).toBe(true);
     });
 
     it("should flush previous disposable when adding a new disposable with the same id", () => {
@@ -111,6 +113,33 @@ describe("DisposableStore", () => {
       expect(disposer1).toBeCalledTimes(1);
       expect(disposer2).toBeCalledTimes(0);
       expect(store.size()).toBe(1);
+    });
+
+    it("should add two records if added a same disposable with itself and id", () => {
+      const store = disposable();
+      const disposer = vi.fn();
+
+      store.add(disposer);
+
+      expect(disposer).toBeCalledTimes(0);
+      expect(store.size()).toBe(1);
+
+      store.add(disposer, "id1");
+
+      expect(disposer).toBeCalledTimes(0);
+      expect(store.size()).toBe(2);
+    });
+
+    it("should not get the disposable by function if added with id", () => {
+      const store = disposable();
+      const disposer = vi.fn();
+
+      store.add(disposer, "id1");
+
+      expect(disposer).toBeCalledTimes(0);
+      expect(store.size()).toBe(1);
+      expect(store.has("id1")).toBe(true);
+      expect(store.has(disposer)).toBe(false);
     });
   });
 
@@ -198,7 +227,7 @@ describe("DisposableStore", () => {
       fnEffect.mockReset();
       fnDispose.mockReset();
 
-      const disposer = store.make(() => {
+      store.make(() => {
         fnEffect("execute2");
         return () => fnDispose("dispose2");
       }, "id1");
@@ -207,13 +236,6 @@ describe("DisposableStore", () => {
       expect(fnEffect).lastCalledWith("execute2");
       expect(fnDispose).toBeCalledTimes(1);
       expect(fnDispose).lastCalledWith("dispose1");
-      expect(store.size()).toBe(1);
-
-      store.add(disposer);
-
-      expect(fnEffect).toBeCalledTimes(1);
-      expect(fnDispose).toBeCalledTimes(2);
-      expect(fnDispose).lastCalledWith("dispose2");
       expect(store.size()).toBe(1);
     });
 
@@ -273,6 +295,13 @@ describe("DisposableStore", () => {
       expect(store.has(() => void 0)).toBe(false);
       expect(store.has("22")).toBe(false);
     });
+
+    it("should return false if checking a disposable by itself but it was added by id", () => {
+      const store = disposable();
+      const disposer = store.add(() => void 0, "id-a");
+      expect(store.has("id-a")).toBe(true);
+      expect(store.has(disposer)).toBe(false);
+    });
   });
 
   describe("get", () => {
@@ -280,7 +309,7 @@ describe("DisposableStore", () => {
       const store = disposable();
       const disposer = store.add(() => void 0, "id-a");
       expect(store.get("id-a")).toBe(disposer);
-      expect(store.get(disposer)).toBe(disposer);
+      expect(store.get(disposer)).toBeUndefined();
     });
 
     it("should get the disposable from store by itself", () => {
@@ -312,7 +341,28 @@ describe("DisposableStore", () => {
       expect(store.size()).toBe(0);
     });
 
-    it("should remove a disposable by id or itself", () => {
+    it("should remove a disposable by id", () => {
+      const store = disposable();
+      const fnEffect = vi.fn();
+      const fnDispose = vi.fn();
+
+      store.make(() => {
+        fnEffect("execute");
+        return () => fnDispose("dispose");
+      }, "a-id");
+
+      expect(fnEffect).toBeCalledTimes(1);
+      expect(fnDispose).toBeCalledTimes(0);
+      expect(store.size()).toBe(1);
+
+      store.remove("a-id");
+
+      expect(fnEffect).toBeCalledTimes(1);
+      expect(fnDispose).toBeCalledTimes(0);
+      expect(store.size()).toBe(0);
+    });
+
+    it("should not remove a disposable by itself if added by id", () => {
       const store = disposable();
       const fnEffect = vi.fn();
       const fnDispose = vi.fn();
@@ -345,7 +395,7 @@ describe("DisposableStore", () => {
 
       expect(fnEffect).toBeCalledTimes(2);
       expect(fnDispose).toBeCalledTimes(0);
-      expect(store.size()).toBe(0);
+      expect(store.size()).toBe(1);
     });
 
     it("should remove disposers added by array", () => {

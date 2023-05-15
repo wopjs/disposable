@@ -55,14 +55,17 @@ export const abortable = (disposer: () => any): DisposableDisposer => {
   };
   abortable.dispose = abortable;
   abortable._d = disposer;
-  abortable.abortable = bindOnDispose;
+  abortable.abortable = abortable$abortable;
   return abortable;
 };
 
-function bindOnDispose(
+function abortable$abortable(
   this: AbortableDisposableImpl,
   onDispose: () => void
 ): void {
+  if (this._o) {
+    invoke(this._o);
+  }
   this._o = onDispose;
 }
 
