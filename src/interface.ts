@@ -1,14 +1,12 @@
 export type DisposableId = number | string;
 
 /**
- * A function form of disposable.
- * It that can be called to dispose resources.
+ * A function that can be called to dispose resources.
  */
 export type Disposer<T = any> = () => T;
 
 /**
- * An object form of disposable.
- * It has a `dispose` method to dispose resources.
+ * An object that has a `dispose` method to dispose resources.
  */
 export interface IDisposable<T = any> {
   dispose(): T;
@@ -29,6 +27,6 @@ export interface DisposableDisposer<T = any> {
 }
 
 /**
- * A valid key of Disposable Store
+ * Valid key types for Disposable Store
  */
 export type DisposableKey = DisposableId | DisposableType;
