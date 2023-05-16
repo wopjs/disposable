@@ -723,6 +723,18 @@ describe("DisposableStore", () => {
 
       spy.mockRestore();
     });
+
+    it("should be able to call dispose outside of store", () => {
+      const store = disposable();
+      const fnDispose = vi.fn();
+
+      store.add(fnDispose);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
+
+      const dispose = store.dispose;
+      dispose();
+      expect(fnDispose).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe("abortable", () => {

@@ -8,7 +8,7 @@ import { invoke } from "./utils";
  */
 interface AbortableDisposable {
   (): any;
-  dispose: () => any;
+  dispose: (this: void) => any;
   abortable: (onDispose: () => void) => void;
 }
 

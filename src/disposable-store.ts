@@ -18,7 +18,9 @@ import { invokeDispose } from "./utils";
  * It implements `DisposableDisposer` interface, so it can be used as both a disposable and a disposer.
  */
 export interface DisposableStore extends DisposableDisposer {
-  /** Invoke `.dispose()`. */
+  /**
+   * Flush and clear all of the disposers/disposables in the store.
+   */
   (): void;
 
   /**
@@ -138,13 +140,18 @@ export interface DisposableStore extends DisposableDisposer {
    * @param key disposer/disposable or store id of the disposer/disposable.
    */
   flush(key: DisposableKey): void;
+
+  /**
+   * Flush and clear all of the disposers/disposables in the store.
+   */
+  dispose(this: void): void;
 }
 
 interface DisposableStoreImpl extends DisposableStore {
   _disposables_: Map<DisposableKey, DisposableType>;
 }
 
-const methods: PickMethods<DisposableStoreImpl> = {
+const methods: Omit<PickMethods<DisposableStoreImpl>, "dispose"> = {
   size(this: DisposableStoreImpl): number {
     return this._disposables_.size;
   },
@@ -196,10 +203,6 @@ const methods: PickMethods<DisposableStoreImpl> = {
       invokeDispose(disposable);
     }
   },
-  dispose(this: DisposableStoreImpl): void {
-    this._disposables_.forEach(invokeDispose);
-    this._disposables_.clear();
-  },
 };
 
 /**
@@ -236,9 +239,14 @@ const methods: PickMethods<DisposableStoreImpl> = {
 export const disposable = (
   disposables?: DisposableType | DisposableType[]
 ): DisposableStore => {
-  const disposer: Disposer & OmitMethods<DisposableStoreImpl> = (): void =>
-    (disposer as unknown as DisposableStore).dispose();
+  const disposer: Disposer &
+    OmitMethods<DisposableStoreImpl> &
+    Pick<DisposableStore, "dispose"> = (): void => {
+    disposer._disposables_.forEach(invokeDispose);
+    disposer._disposables_.clear();
+  };
   disposer._disposables_ = new Map();
+  disposer.dispose = disposer;
   const store = Object.assign(disposer, methods);
   if (disposables) {
     store.add(disposables);
