@@ -259,7 +259,7 @@ store.dispose(); // Logs "disposer" and "disposable"
 
 It is also a disposer! Which means it can be easily composed with other disposables.
 
-```js
+```ts
 import { disposable, type IDisposable } from "@wopjs/disposable";
 
 class A implements IDisposable {
@@ -286,7 +286,7 @@ b.dispose(); // both a and b are disposed
 
 A disposable disposer is both a disposer an a disposable.
 
-This pattern is useful for library authors who want to create disposers that are compatible to the majority of frameworks.
+This pattern is useful if you want to create disposers that are compatible to more frameworks.
 
 ```js
 const addListener = (target, type, listener) => {
@@ -295,19 +295,18 @@ const addListener = (target, type, listener) => {
   disposer.dispose = disposer;
   return disposer;
 };
-
-const dispose = disposable();
-dispose.add(addListener(window, "click"));
 ```
 
-To make it easier to work with TypeScript, `makeDisposable` is provided to create a disposable disposer.
+For type annotation you may use `DisposableDisposer`:
 
 ```ts
-import { makeDisposable } from "@wopjs/disposable";
+import type { DisposableDisposer } from "@wopjs/disposable";
 
-const addListener = (target, type, listener) => {
-  target.addEventListener(type, listener);
-  return makeDisposable(() => target.removeEventListener(type, listener));
+const setInterval = (handler: () => void, timeout: number) => {
+  const ticket = setInterval(handler, timeout);
+  const disposer: DisposableDisposer = () => clearInterval(ticket);
+  disposer.dispose = disposer;
+  return disposer;
 };
 ```
 
@@ -316,6 +315,8 @@ const addListener = (target, type, listener) => {
 Abortable is a special kind of disposable that may be disposed outside of the store (like when `setTimeout` or `once` event finishes). It will notify the store to delete itself from the store when disposed. The signature is the same as a disposable disposer.
 
 ```js
+import { abortable } from "@wopjs/disposable";
+
 const timeout = (handle, timeout) => {
   let id;
   const disposer = abortable(() => clearTimeout(id));

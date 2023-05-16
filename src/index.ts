@@ -11,5 +11,3 @@ export type { DisposableStore } from "./disposable-store";
 export { disposable } from "./disposable-store";
 
 export { abortable } from "./abortable";
-
-export { makeDisposable } from "./make-disposable";
