@@ -7,15 +7,13 @@
 [![Docs](https://img.shields.io/badge/Docs-read-%23fdf9f5)](https://wopjs.github.io/disposable)
 [![Build Status](https://github.com/wopjs/disposable/actions/workflows/build.yml/badge.svg)](https://github.com/wopjs/disposable/actions/workflows/build.yml)
 [![Coverage Status](https://img.shields.io/codeclimate/coverage/wopjs/disposable)](https://codeclimate.com/github/wopjs/disposable)
+
 [![npm-version](https://img.shields.io/npm/v/@wopjs/disposable.svg)](https://www.npmjs.com/package/@wopjs/disposable)
 [![minified-size](https://img.shields.io/bundlephobia/minzip/@wopjs/disposable)](https://bundlephobia.com/package/@wopjs/disposable)
-[![tree-shakable](https://img.shields.io/badge/tree-shakable-success)](https://bundlejs.com/?q=@wopjs/disposable)
+[![core-size](https://runkit.io/crimx/bundlejs-badge/branches/master?q=@wopjs/disposable&exports=disposable&label=core%20size)](https://bundlejs.com/?q=@wopjs/disposable&treeshake=%5B%7Bdisposable%7D%5D)
 [![no-dependencies](https://img.shields.io/badge/dependencies-none-success)](https://bundlejs.com/?q=@wopjs/disposable)
+[![tree-shakable](https://img.shields.io/badge/tree-shakable-success)](https://bundlejs.com/?q=@wopjs/disposable)
 [![side-effect-free](https://img.shields.io/badge/side--effect-free-success)](https://bundlejs.com/?q=@wopjs/disposable)
-
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?maxAge=2592000)](http://commitizen.github.io/cz-cli/)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-brightgreen.svg?maxAge=2592000)](https://conventionalcommits.org)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 Manage side effect disposers in a compact, reusable and testable style. Designed and implemented with efficiency and ergonomics in mind.
 
