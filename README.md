@@ -230,7 +230,7 @@ const myDisposable = {
 
 ### Disposer
 
-A disposer is a function that clean up resources. It is usually created by a factory function.
+A disposer is a function that cleans up resources. It is usually created by a factory function.
 
 ```js
 const addListener = (target, type, listener) => {
