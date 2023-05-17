@@ -32,14 +32,17 @@ import {
   type DisposableStore,
 } from "@wopjs/disposable";
 
+const listen = (type, handler) => {
+  someEventEmitter.on(type, handler);
+  return () => someEventEmitter.off(type, handler);
+};
+
 class A implements IDisposable {
   dispose: DisposableStore;
   constructor() {
     this.dispose = disposable();
     // Add a disposer function via `add`.
-    this.dispose.add(
-      someEvent.addListener("type", event => console.log(event))
-    );
+    this.dispose.add(listen("type", event => console.log(event)));
   }
   someMethod() {
     // Create side effects on demand.
@@ -64,7 +67,7 @@ class B implements IDisposable {
       // A is a disposable so it can be added to the store.
       a,
       // Add a disposer function.
-      someEvent.addListener("type", event => console.log(event)),
+      listen("type", event => console.log(event)),
     ]);
   }
 }
@@ -78,10 +81,15 @@ If you prefer less type annotation and more auto type inference:
 ```ts
 import { disposable } from "@wopjs/disposable";
 
+const listen = (type, handler) => {
+  someEventEmitter.on(type, handler);
+  return () => someEventEmitter.off(type, handler);
+};
+
 class A {
   dispose = disposable();
   constructor() {
-    this.dispose.add(() => console.log("a"));
+    this.dispose.add(listen("type", event => console.log(event)));
   }
   print() {
     console.log("print a");
