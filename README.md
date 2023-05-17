@@ -103,7 +103,7 @@ b.dispose(); // both a and b are disposed
 
 ### Non-invasive
 
-- Disposable adopts both disposer function `() => any` and `.disposer()` contracts which are widely accepted. Implementing these patterns does not require any extra effort.
+- Disposable adopts both disposer function `() => void` and disposable `.dispose()` contracts which are widely accepted. Implementing these patterns does not require any extra effort.
 
   ```js
   // disposer function pattern
