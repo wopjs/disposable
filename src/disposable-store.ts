@@ -146,7 +146,7 @@ export interface DisposableStore extends DisposableDisposer {
   flush(key: DisposableKey): void;
 
   /**
-   * Flush and clear all of the {@link Disposer}s and {@link Disposable}s in the store.
+   * Flush and clear all of the {@link Disposer}s and {@link IDisposable}s in the store.
    */
   dispose(this: void): void;
 }
