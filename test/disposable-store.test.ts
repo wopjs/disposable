@@ -567,7 +567,7 @@ describe("DisposableStore", () => {
       spy.mockRestore();
     });
 
-    it("should be able to call dispose outskeye of store", () => {
+    it("should be able to call dispose outside of store", () => {
       const store = disposable();
       const fnDispose = vi.fn();
 
@@ -617,10 +617,30 @@ describe("DisposableStore", () => {
       store.add(disposer, "key1");
 
       expect(store.size()).toBe(1);
+      expect(fnDispose).toBeCalledTimes(0);
 
       disposer();
 
       expect(store.size()).toBe(0);
+      expect(fnDispose).toBeCalledTimes(1);
+    });
+
+    it("should not rebind abortable to the store when first added with key then added without key", () => {
+      const fnDispose = vi.fn();
+      const disposer = abortable(() => fnDispose("dispose"));
+      const store = disposable();
+
+      store.add(disposer, "key1");
+
+      store.add(disposer);
+
+      expect(store.size()).toBe(1);
+      expect(fnDispose).toBeCalledTimes(0);
+
+      store.flush("key1");
+
+      expect(store.size()).toBe(0);
+      expect(fnDispose).toBeCalledTimes(1);
     });
   });
 

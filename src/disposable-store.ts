@@ -171,7 +171,7 @@ const methods: Omit<PickMethods<DisposableStoreImpl>, "dispose"> = {
         disposable.abortable(() => this.remove(key));
       }
       (this._keys_ || (this._keys_ = new Map())).set(key, disposable);
-    } else {
+    } else if (!this._disposables_.has(disposable)) {
       if (isAbortable(disposable)) {
         disposable.abortable(() => this._disposables_.delete(disposable));
       }
