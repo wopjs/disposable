@@ -54,7 +54,7 @@ export interface DisposableStore extends DisposableDisposer {
   add<T extends DisposableType>(disposable: T, key: DisposableKey): T;
 
   /**
-   * Add an array of {@link DisposableType}s to the store.
+   * Add multiple {@link DisposableType}s to the store.
    *
    * Do nothing if a {@link DisposableType} is already in the store.
    *
