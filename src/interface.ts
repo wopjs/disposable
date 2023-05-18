@@ -1,4 +1,4 @@
-export type DisposableId = number | string;
+export type DisposableKey = number | string;
 
 /**
  * A function that can be called to dispose resources.
@@ -25,8 +25,3 @@ export interface DisposableDisposer<T = any> {
   (): T;
   dispose(): T;
 }
-
-/**
- * Valid key types for Disposable Store
- */
-export type DisposableKey = DisposableId | DisposableType;

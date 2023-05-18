@@ -1,10 +1,9 @@
 export type {
-  DisposableId,
+  DisposableKey,
   Disposer,
   IDisposable,
   DisposableType,
   DisposableDisposer,
-  DisposableKey,
 } from "./interface";
 export type { DisposableStore } from "./disposable-store";
 
