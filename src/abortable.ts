@@ -1,10 +1,16 @@
-import type { DisposableDisposer } from "./interface";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
+import type { DisposableStore } from "./disposable-store";
+import type {
+  DisposableDisposer,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
+  Disposer,
+} from "./interface";
 
 import { invoke } from "./utils";
 
 /**
- * A disposable that can be safely self-disposed.
- * If it is attached to a disposable store, it will be removed from the store automatically when self-disposed.
+ * A {@link DisposableDisposer} that can be safely self-disposed.
+ * If it is attached to a {@link DisposableStore}, it will be removed from the store automatically when self-disposed.
  */
 interface AbortableDisposable {
   (): any;
@@ -20,12 +26,12 @@ interface AbortableDisposableImpl extends AbortableDisposable {
 }
 
 /**
- * Enhance a disposer so that it can be safely self-disposed.
+ * Enhance a {@link Disposer} so that it can be safely self-disposed.
  *
- * If the enhanced disposable is attached to a disposable store, it will be removed from the store automatically when self-disposed.
+ * If it is attached to a {@link DisposableStore}, it will be removed from the store automatically when self-disposed.
  *
- * @param disposer The disposer to be called when the disposable is disposed.
- * @returns An abortable disposable.
+ * @param disposer A {@link Disposer}.
+ * @returns An abortable {@link DisposableDisposer}.
  *
  * @example
  * ```js

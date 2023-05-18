@@ -1,3 +1,6 @@
+/**
+ * Valid key type for {@link DisposableStore}.
+ */
 export type DisposableKey = number | string;
 
 /**
@@ -13,12 +16,12 @@ export interface IDisposable<T = any> {
 }
 
 /**
- * A union type of `Disposer` and `IDisposable` which can be called to dispose resources.
+ * A union type of {@link Disposer} and {@link IDisposable} which can be called to dispose resources.
  */
 export type DisposableType<T = any> = Disposer<T> | IDisposable<T>;
 
 /**
- * A combination of `Disposer` and `IDisposable`.
+ * A combination of {@link Disposer} and {@link IDisposable}.
  * It can be called to dispose resources or call the `dispose` method to dispose resources.
  */
 export interface DisposableDisposer<T = any> {
