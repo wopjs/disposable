@@ -15,12 +15,10 @@ import { invoke } from "./utils";
 interface AbortableDisposable {
   (): any;
   dispose: (this: void) => any;
-  abortable: (onDispose: () => void) => void;
+  abortable: (onDispose?: () => void) => void;
 }
 
 interface AbortableDisposableImpl extends AbortableDisposable {
-  /** disposer */
-  _d?: (() => any) | null;
   /** onDisposer */
   _o?: (() => any) | null;
 }
@@ -47,27 +45,25 @@ interface AbortableDisposableImpl extends AbortableDisposable {
  * disposer(); // setTimeout is cleared and the disposer is removed from the store.
  * ```
  */
-export const abortable = (disposer: () => any): DisposableDisposer => {
+export const abortable: (disposer: () => any) => DisposableDisposer = (
+  disposer: (() => any) | null
+): DisposableDisposer => {
   const abortable: AbortableDisposableImpl = (): void => {
-    if (abortable._d) {
-      invoke(abortable._d);
-      abortable._d = null;
+    if (disposer) {
+      invoke(disposer);
+      disposer = null;
     }
 
-    if (abortable._o) {
-      invoke(abortable._o);
-      abortable._o = null;
-    }
+    abortable.abortable();
   };
   abortable.dispose = abortable;
-  abortable._d = disposer;
   abortable.abortable = abortable$abortable;
   return abortable;
 };
 
 function abortable$abortable(
   this: AbortableDisposableImpl,
-  onDispose: () => void
+  onDispose?: () => void
 ): void {
   if (this._o) {
     invoke(this._o);
