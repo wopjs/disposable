@@ -49,12 +49,11 @@ export const abortable: (disposer: () => any) => DisposableDisposer = (
   disposer: (() => any) | null
 ): DisposableDisposer => {
   const abortable: AbortableDisposableImpl = (): void => {
+    abortable.abortable();
     if (disposer) {
-      invoke(disposer);
+      disposer();
       disposer = null;
     }
-
-    abortable.abortable();
   };
   abortable.dispose = abortable;
   abortable.abortable = abortable$abortable;
