@@ -28,7 +28,7 @@ npm add @wopjs/disposable
 ```ts
 import { disposableStore } from "@wopjs/disposable";
 
-// some lib that returns a disposer function
+// Example lib that returns a disposer function
 const listen = (target, type, listener) => {
   target.addEventListener(type, listener);
   return () => target.removeEventListener(type, listener);
@@ -55,7 +55,7 @@ b.a.print(); // "print a"
 b.dispose(); // both a and b are disposed
 ```
 
-With more tpe annotations:
+With more type annotations:
 
 ```ts
 import {
@@ -65,7 +65,7 @@ import {
   type DisposableStore,
 } from "@wopjs/disposable";
 
-// some lib that returns a disposer function
+// Example lib that returns a disposer function
 const listen = (target, type, listener) => {
   target.addEventListener(type, listener);
   return () => target.removeEventListener(type, listener);
@@ -186,7 +186,7 @@ b.dispose(); // All side effects in both a and b are disposed
 
 ### Refresh-able
 
-- Disposables can use id as key when adding to the `DisposableMap`. Adding a disposable with the same id will dispose (flush) the old one first.
+- Disposables can bind to keys with `DisposableMap`. Setting a disposable with the same key will dispose (flush) the old one first.
 
   ```js
   import { disposableStore, disposableMap } from "@wopjs/disposable";
@@ -210,7 +210,7 @@ b.dispose(); // All side effects in both a and b are disposed
 
 ### Small Footprint
 
-- Designed and implemented with efficiency and ergonomics in mind, not only the (minified) bundle size is less than 1kb, using this library also enables patterns that require way less code to manage side effect disposers.
+- Designed and implemented with efficiency and ergonomics in mind, not only the (minified) bundle size is less than 1kb, using this library also enables patterns that require way less code to manage side effect disposers and module life-cycles.
 
 ## Concepts
 
@@ -293,7 +293,7 @@ b.dispose(); // both a and b are disposed
 
 ### DisposableMap
 
-Like [Disposable Store](#disposablestore), A Disposable Map is a disposable that manages disposers and disposables with key.
+Like [Disposable Store](#disposablestore), a Disposable Map is a disposable that manages disposers and disposables with key.
 
 Key introduces [[Refresh-able](#refresh-able) which makes it more interesting when comes to creating side effects on the fly.
 
