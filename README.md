@@ -26,34 +26,63 @@ npm add @wopjs/disposable
 ## Examples
 
 ```ts
+import { disposableStore } from "@wopjs/disposable";
+
+// some lib that returns a disposer function
+const listen = (target, type, listener) => {
+  target.addEventListener(type, listener);
+  return () => target.removeEventListener(type, listener);
+};
+
+class A {
+  dispose = disposableStore();
+  constructor() {
+    this.dispose.add(listen("type", event => console.log(event)));
+  }
+  print() {
+    console.log("print a");
+  }
+}
+
+class B {
+  dispose = disposableStore();
+  // A is a disposable so it can be added to the store.
+  a = this.dispose.add(new A());
+}
+
+const b = new B();
+b.a.print(); // "print a"
+b.dispose(); // both a and b are disposed
+```
+
+With more tpe annotations:
+
+```ts
 import {
-  disposable,
+  disposableStore,
+  disposableMap,
   type IDisposable,
   type DisposableStore,
 } from "@wopjs/disposable";
 
-const listen = (type, handler) => {
-  someEventEmitter.on(type, handler);
-  return () => someEventEmitter.off(type, handler);
+// some lib that returns a disposer function
+const listen = (target, type, listener) => {
+  target.addEventListener(type, listener);
+  return () => target.removeEventListener(type, listener);
 };
 
 class A implements IDisposable {
-  dispose: DisposableStore;
-  constructor() {
-    this.dispose = disposable();
-    // Add a disposer function via `add`.
-    this.dispose.add(listen("type", event => console.log(event)));
-  }
+  dispose = disposableMap();
   someMethod() {
     // Create side effects on demand.
     this.dispose.make(
+      // Easily implements debounce by providing a id for the disposer.
+      // When adding disposer with the same id to the store, the previous disposer will be disposed.
+      "myIdForThisDebounce",
       () => {
         const timeoutId = setTimeout(() => console.log("timeout"), 1000);
         return () => clearTimeout(timeoutId);
-      },
-      // Easily implements debounce by providing a id for the disposer.
-      // When adding disposer with the same id to the store, the previous disposer will be disposed.
-      "myIdForThisDebounce"
+      }
     );
   }
 }
@@ -63,7 +92,7 @@ class B implements IDisposable {
   a = new A();
   constructor() {
     // Add initial disposables.
-    this.dispose = disposable([
+    this.dispose = disposableStore([
       // A is a disposable so it can be added to the store.
       a,
       // Add a disposer function.
@@ -74,37 +103,6 @@ class B implements IDisposable {
 
 const b = new B();
 b.dispose(); // All side effects in both a and b are disposed
-```
-
-If you prefer less type annotation and more auto type inference:
-
-```ts
-import { disposable } from "@wopjs/disposable";
-
-const listen = (type, handler) => {
-  someEventEmitter.on(type, handler);
-  return () => someEventEmitter.off(type, handler);
-};
-
-class A {
-  dispose = disposable();
-  constructor() {
-    this.dispose.add(listen("type", event => console.log(event)));
-  }
-  print() {
-    console.log("print a");
-  }
-}
-
-class B {
-  dispose = disposable();
-  // A is a disposable so it can be added to the store.
-  a = this.dispose.add(new A());
-}
-
-const b = new B();
-b.a.print(); // "print a"
-b.dispose(); // both a and b are disposed
 ```
 
 ## Features
@@ -144,10 +142,10 @@ b.dispose(); // both a and b are disposed
 - Disposables are designed to be composable and chainable.
 
   ```ts
-  import { disposable, type IDisposable } from "@wopjs/disposable";
+  import { disposableStore, type IDisposable } from "@wopjs/disposable";
 
   class A implements IDisposable {
-    dispose = disposable();
+    dispose = disposableStore();
     constructor() {
       this.dispose.add(() => console.log("a"));
     }
@@ -157,7 +155,7 @@ b.dispose(); // both a and b are disposed
   }
 
   class B implements IDisposable {
-    dispose = disposable();
+    dispose = disposableStore();
     a = this.dispose.add(new A());
   }
 
@@ -169,10 +167,10 @@ b.dispose(); // both a and b are disposed
 - You can also create your own side effects in a compact way.
 
   ```js
-  import { disposable } from "@wopjs/disposable";
+  import { disposableStore } from "@wopjs/disposable";
 
   class A {
-    dispose = disposable();
+    dispose = disposableStore();
     constructor() {
       dispose.make(() => {
         const handler = () => console.log("click");
@@ -188,20 +186,23 @@ b.dispose(); // both a and b are disposed
 
 ### Refresh-able
 
-- Disposables can use id as key when adding to the store. Adding a disposable with the same id will dispose (flush) the old one first.
+- Disposables can use id as key when adding to the `DisposableMap`. Adding a disposable with the same id will dispose (flush) the old one first.
 
   ```js
-  import { disposable } from "@wopjs/disposable";
+  import { disposableStore, disposableMap } from "@wopjs/disposable";
   import { addEventListener } from "@wopjs/dom";
   import { timeout } from "@wopjs/time";
 
-  const dispose = disposable();
-  dispose.add(
+  const store = disposableStore();
+  // let store also manage the DisposableMap
+  const map = store.add(disposableMap());
+
+  store.add(
     addEventListener(window, "click", event => {
       // Clicking within 1s will trigger debounce effect (the pending timeout is cancelled before adding the new one).
-      dispose.add(
-        timeout(() => console.log(event), 1000),
-        "myId"
+      map.set(
+        "myId",
+        timeout(() => console.log(event), 1000)
       );
     })
   );
@@ -252,12 +253,12 @@ disposer(); // listener is removed
 
 ### DisposableStore
 
-A disposable store is a disposable that manages disposers and disposables.
+A Disposable Store is a disposable that manages disposers and disposables.
 
 ```js
-import { disposable } from "@wopjs/disposable";
+import { disposableStore } from "@wopjs/disposable";
 
-const store = disposable();
+const store = disposableStore();
 store.add(() => console.log("disposer"));
 store.make(() => {
   return () => console.log("disposable");
@@ -268,10 +269,10 @@ store.dispose(); // Logs "disposer" and "disposable"
 It is also a disposer! Which means it can be easily composed with other disposables.
 
 ```ts
-import { disposable, type IDisposable } from "@wopjs/disposable";
+import { disposableStore, type IDisposable } from "@wopjs/disposable";
 
 class A implements IDisposable {
-  dispose = disposable();
+  dispose = disposableStore();
   constructor() {
     this.dispose.add(() => console.log("a"));
   }
@@ -281,7 +282,53 @@ class A implements IDisposable {
 }
 
 class B implements IDisposable {
-  dispose = disposable();
+  dispose = disposableStore();
+  a = this.dispose.add(new A());
+}
+
+const b = new B();
+b.a.print(); // "print a"
+b.dispose(); // both a and b are disposed
+```
+
+### DisposableMap
+
+Like [Disposable Store](#disposablestore), A Disposable Map is a disposable that manages disposers and disposables with key.
+
+Key introduces [[Refresh-able](#refresh-able) which makes it more interesting when comes to creating side effects on the fly.
+
+```js
+import { disposableMap } from "@wopjs/disposable";
+
+const store = disposableMap();
+store.set("key1", () => console.log("disposer"));
+store.make("key2", () => {
+  return () => console.log("disposable");
+});
+store.dispose(); // Logs "disposer" and "disposable"
+```
+
+It is also a disposer! Which means it can be easily composed with other disposables.
+
+```ts
+import {
+  disposableMap,
+  disposableStore,
+  type IDisposable,
+} from "@wopjs/disposable";
+
+class A implements IDisposable {
+  dispose = disposableMap();
+  constructor() {
+    this.dispose.add("key1", () => console.log("a"));
+  }
+  print() {
+    console.log("print a");
+  }
+}
+
+class B implements IDisposable {
+  dispose = disposableStore();
   a = this.dispose.add(new A());
 }
 
@@ -323,7 +370,7 @@ const setInterval = (handler: () => void, timeout: number) => {
 Abortable is a special kind of disposable that may be disposed outside of the store (like when `setTimeout` or `once` event finishes). It will notify the store to delete itself from the store when disposed. The signature is the same as a disposable disposer.
 
 ```js
-import { abortable } from "@wopjs/disposable";
+import { abortable, disposableStore } from "@wopjs/disposable";
 
 const timeout = (handle, timeout) => {
   let id;
@@ -335,8 +382,8 @@ const timeout = (handle, timeout) => {
   return disposer;
 };
 
-const dispose = disposable();
-dispose.add(timeout(() => console.log("timeout"), 1000));
+const store = disposableStore();
+store.add(timeout(() => console.log("timeout"), 1000));
 
 // The `timeout` disposer will be removed from the `dispose` after 1s.
 ```

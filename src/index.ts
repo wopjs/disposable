@@ -6,7 +6,9 @@ export type {
   DisposableDisposer,
 } from "./interface";
 export type { DisposableStore } from "./disposable-store";
+export type { DisposableMap } from "./disposable-map";
 
-export { disposable } from "./disposable-store";
+export { disposableStore } from "./disposable-store";
+export { disposableMap } from "./disposable-map";
 
 export { abortable } from "./abortable";

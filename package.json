@@ -26,6 +26,11 @@
     "reactive",
     "side-effects"
   ],
+  "author": {
+    "name": "CRIMX",
+    "email": "straybugs@gmail.com",
+    "url": "https://github.com/crimx/"
+  },
   "maintainers": [
     {
       "name": "CRIMX",
