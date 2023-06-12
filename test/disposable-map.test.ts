@@ -164,6 +164,32 @@ describe("DisposableMap", () => {
     });
   });
 
+  describe("has", () => {
+    it("should return `true` if the disposable is in the store", () => {
+      const map = disposableMap();
+      const d1 = vi.fn();
+      const d2 = vi.fn();
+      map.set("key1", d1);
+      map.set("key2", d2);
+
+      expect(map.has("key1")).toBe(true);
+      expect(map.has("key2")).toBe(true);
+    });
+
+    it("should return `false` if the disposable is not in the store", () => {
+      const map = disposableMap();
+      const d1 = vi.fn();
+      const d2 = vi.fn();
+      map.set("key1", d1);
+      map.set("key2", d2);
+
+      expect(map.has("key1")).toBe(true);
+      expect(map.has("key2")).toBe(true);
+      expect(map.has("key3")).toBe(false);
+      expect(map.has("key4")).toBe(false);
+    });
+  });
+
   describe("remove", () => {
     it("should remove a disposable by key", () => {
       const map = disposableMap();

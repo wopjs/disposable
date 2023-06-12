@@ -78,6 +78,14 @@ export interface DisposableMap extends DisposableDisposer {
   remove(key: DisposableKey): DisposableType | undefined;
 
   /**
+   * Check if a {@link DisposableType} at the specific key is in the Map.
+   *
+   * @param key Map key of the {@link DisposableType}.
+   * @returns `true` if exists, otherwise `false`.
+   */
+  has(key: DisposableKey): boolean;
+
+  /**
    * Invoke the {@link DisposableType} and remove it from the Map at the specific key.
    *
    * @param key Map key of the {@link DisposableType}.
@@ -97,6 +105,9 @@ interface DisposableMapImpl extends DisposableMap {
 const methods: Omit<PickMethods<DisposableMapImpl>, "dispose"> = {
   size(this: DisposableMapImpl): number {
     return this._disposables_.size;
+  },
+  has(this: DisposableMapImpl, key: DisposableKey): boolean {
+    return this._disposables_.has(key);
   },
   set<T extends DisposableType>(
     this: DisposableMapImpl,

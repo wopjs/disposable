@@ -206,6 +206,32 @@ describe("DisposableStore", () => {
     });
   });
 
+  describe("has", () => {
+    it("should return `true` if the disposable is in the store", () => {
+      const store = disposableStore();
+      const d1 = vi.fn();
+      const d2 = vi.fn();
+      store.add(d1);
+      store.add(d2);
+
+      expect(store.has(d1)).toBe(true);
+      expect(store.has(d2)).toBe(true);
+    });
+
+    it("should return `false` if the disposable is not in the store", () => {
+      const store = disposableStore();
+      const d1 = vi.fn();
+      const d2 = vi.fn();
+      store.add(d1);
+      store.add(d2);
+
+      expect(store.has(d1)).toBe(true);
+      expect(store.has(d2)).toBe(true);
+      expect(store.has(vi.fn())).toBe(false);
+      expect(store.has(vi.fn())).toBe(false);
+    });
+  });
+
   describe("remove", () => {
     it("should remove a disposable", () => {
       const store = disposableStore();

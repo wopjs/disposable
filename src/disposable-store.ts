@@ -112,7 +112,15 @@ export interface DisposableStore extends DisposableDisposer {
   ): T | T[] | void;
 
   /**
-   * Remove the {@link DisposableType} at the specific key from the store. Does not invoke the removed {@link DisposableType}.
+   * Check if a {@link DisposableType} is in the store.
+   *
+   * @param disposable The {@link DisposableType}.
+   * @returns `true` if the {@link DisposableType} is in the store, otherwise `false`.
+   */
+  has(disposable: DisposableType): boolean;
+
+  /**
+   * Remove the {@link DisposableType} from the store. Does not invoke the removed {@link DisposableType}.
    *
    * @param disposable The {@link DisposableType} to be flushed.
    * @returns `true` if the {@link DisposableType} is found and removed, otherwise `false`.
@@ -139,6 +147,9 @@ interface DisposableStoreImpl extends DisposableStore {
 const methods: Omit<PickMethods<DisposableStoreImpl>, "dispose"> = {
   size(this: DisposableStoreImpl): number {
     return this._disposables_.size;
+  },
+  has(this: DisposableStoreImpl, disposable: DisposableType): boolean {
+    return this._disposables_.has(disposable);
   },
   add<T extends DisposableType>(
     this: DisposableStoreImpl,
