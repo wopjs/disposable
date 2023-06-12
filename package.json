@@ -16,9 +16,10 @@
     "lint": "eslint --ext .ts,.tsx . && prettier --check .",
     "docs": "typedoc --options typedoc.json",
     "build": "tsup",
+    "build:min": "cross-env NODE_ENV=production MINIFY=true tsup && node scripts/gzip.mjs",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "build:min": "cross-env NODE_ENV=production MINIFY=true tsup && node scripts/gzip.mjs"
+    "release": "standard-version"
   },
   "keywords": [
     "disposable",
@@ -55,6 +56,7 @@
     "gzip-size": "^7.0.0",
     "prettier": "^2.8.7",
     "pretty-bytes": "^6.1.0",
+    "standard-version": "^9.5.0",
     "tsup": "^6.7.0",
     "typedoc": "^0.23.28",
     "typescript": "^5.0.4",
