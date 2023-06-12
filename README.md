@@ -251,92 +251,6 @@ const disposer = addListener(window, "click", () => console.log("click"));
 disposer(); // listener is removed
 ```
 
-### DisposableStore
-
-A Disposable Store is a disposable that manages disposers and disposables.
-
-```js
-import { disposableStore } from "@wopjs/disposable";
-
-const store = disposableStore();
-store.add(() => console.log("disposer"));
-store.make(() => {
-  return () => console.log("disposable");
-});
-store.dispose(); // Logs "disposer" and "disposable"
-```
-
-It is also a disposer! Which means it can be easily composed with other disposables.
-
-```ts
-import { disposableStore, type IDisposable } from "@wopjs/disposable";
-
-class A implements IDisposable {
-  dispose = disposableStore();
-  constructor() {
-    this.dispose.add(() => console.log("a"));
-  }
-  print() {
-    console.log("print a");
-  }
-}
-
-class B implements IDisposable {
-  dispose = disposableStore();
-  a = this.dispose.add(new A());
-}
-
-const b = new B();
-b.a.print(); // "print a"
-b.dispose(); // both a and b are disposed
-```
-
-### DisposableMap
-
-Like [Disposable Store](#disposablestore), a Disposable Map is a disposable that manages disposers and disposables with key.
-
-Key introduces [[Refresh-able](#refresh-able) which makes it more interesting when comes to creating side effects on the fly.
-
-```js
-import { disposableMap } from "@wopjs/disposable";
-
-const store = disposableMap();
-store.set("key1", () => console.log("disposer"));
-store.make("key2", () => {
-  return () => console.log("disposable");
-});
-store.dispose(); // Logs "disposer" and "disposable"
-```
-
-It is also a disposer! Which means it can be easily composed with other disposables.
-
-```ts
-import {
-  disposableMap,
-  disposableStore,
-  type IDisposable,
-} from "@wopjs/disposable";
-
-class A implements IDisposable {
-  dispose = disposableMap();
-  constructor() {
-    this.dispose.add("key1", () => console.log("a"));
-  }
-  print() {
-    console.log("print a");
-  }
-}
-
-class B implements IDisposable {
-  dispose = disposableStore();
-  a = this.dispose.add(new A());
-}
-
-const b = new B();
-b.a.print(); // "print a"
-b.dispose(); // both a and b are disposed
-```
-
 ### DisposableDisposer
 
 A disposable disposer is both a disposer an a disposable.
@@ -363,6 +277,92 @@ const setInterval = (handler: () => void, timeout: number) => {
   disposer.dispose = disposer;
   return disposer;
 };
+```
+
+### DisposableStore
+
+A Disposable Store is a [DisposableDisposer][#DisposableDisposer] that manages other disposers and disposables.
+
+```js
+import { disposableStore } from "@wopjs/disposable";
+
+const store = disposableStore();
+store.add(() => console.log("disposer"));
+store.make(() => {
+  return () => console.log("disposable");
+});
+store.dispose(); // Logs "disposer" and "disposable"
+```
+
+Since it is also a disposer, it can be easily composed with other disposables.
+
+```ts
+import { disposableStore, type IDisposable } from "@wopjs/disposable";
+
+class A implements IDisposable {
+  dispose = disposableStore();
+  constructor() {
+    this.dispose.add(() => console.log("a"));
+  }
+  print() {
+    console.log("print a");
+  }
+}
+
+class B implements IDisposable {
+  dispose = disposableStore();
+  a = this.dispose.add(new A());
+}
+
+const b = new B();
+b.a.print(); // "print a"
+b.dispose(); // both a and b are disposed
+```
+
+### DisposableMap
+
+Like [Disposable Store](#disposablestore), a Disposable Map is a [DisposableDisposer][#DisposableDisposer] that manages disposers and disposables with key.
+
+Key introduces [[Refresh-able](#refresh-able) which makes it more interesting when comes to creating side effects on the fly.
+
+```js
+import { disposableMap } from "@wopjs/disposable";
+
+const store = disposableMap();
+store.set("key1", () => console.log("disposer"));
+store.make("key2", () => {
+  return () => console.log("disposable");
+});
+store.dispose(); // Logs "disposer" and "disposable"
+```
+
+Since it is also a disposer, it can be easily composed with other disposables.
+
+```ts
+import {
+  disposableMap,
+  disposableStore,
+  type IDisposable,
+} from "@wopjs/disposable";
+
+class A implements IDisposable {
+  dispose = disposableMap();
+  constructor() {
+    this.dispose.add("key1", () => console.log("a"));
+  }
+  print() {
+    console.log("print a");
+  }
+}
+
+class B implements IDisposable {
+  dispose = disposableStore();
+  a = this.dispose.add(new A());
+}
+
+const b = new B();
+b.a.print(); // "print a"
+b.dispose(); // both a and b are disposed
 ```
 
 ## Abortable
