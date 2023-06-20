@@ -10,7 +10,7 @@
 
 [![npm-version](https://img.shields.io/npm/v/@wopjs/disposable.svg)](https://www.npmjs.com/package/@wopjs/disposable)
 [![minified-size](https://img.shields.io/bundlephobia/minzip/@wopjs/disposable)](https://bundlephobia.com/package/@wopjs/disposable)
-[![core-size](https://runkit.io/crimx/bundlejs-badge/branches/master?q=@wopjs/disposable&exports=disposable&label=core%20size)](https://bundlejs.com/?q=@wopjs/disposable&treeshake=%5B%7Bdisposable%7D%5D)
+[![core-size](https://runkit.io/crimx/bundlejs-badge/branches/master?q=@wopjs/disposable&exports=disposableStore&label=core%20size)](https://bundlejs.com/?q=@wopjs/disposable&treeshake=%5B%7BdisposableStore%7D%5D)
 [![no-dependencies](https://img.shields.io/badge/dependencies-none-success)](https://bundlejs.com/?q=@wopjs/disposable)
 [![tree-shakable](https://img.shields.io/badge/tree-shakable-success)](https://bundlejs.com/?q=@wopjs/disposable)
 [![side-effect-free](https://img.shields.io/badge/side--effect-free-success)](https://bundlejs.com/?q=@wopjs/disposable)
