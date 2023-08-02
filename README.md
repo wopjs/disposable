@@ -10,7 +10,7 @@
 
 [![npm-version](https://img.shields.io/npm/v/@wopjs/disposable.svg)](https://www.npmjs.com/package/@wopjs/disposable)
 [![minified-size](https://img.shields.io/bundlephobia/minzip/@wopjs/disposable)](https://bundlephobia.com/package/@wopjs/disposable)
-[![core-size](https://runkit.io/crimx/bundlejs-badge/branches/master?q=@wopjs/disposable&exports=disposableStore&label=core%20size)](https://bundlejs.com/?q=@wopjs/disposable&treeshake=%5B%7BdisposableStore%7D%5D)
+[![core-size](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdeno.bundlejs.com%2F%3Fq%3D%40wopjs%2Fdisposable%26treeshake%3D%255B%257B%2520disposableStore%2520%257D%255D&query=%24.size.size&label=core%20size)](https://bundlejs.com/?q=@wopjs/disposable&treeshake=%5B%7BdisposableStore%7D%5D)
 [![no-dependencies](https://img.shields.io/badge/dependencies-none-success)](https://bundlejs.com/?q=@wopjs/disposable)
 [![tree-shakable](https://img.shields.io/badge/tree-shakable-success)](https://bundlejs.com/?q=@wopjs/disposable)
 [![side-effect-free](https://img.shields.io/badge/side--effect-free-success)](https://bundlejs.com/?q=@wopjs/disposable)
