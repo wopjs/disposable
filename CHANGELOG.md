@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com/wopjs/disposable/compare/v0.1.2...v0.1.3) (2023-10-23)
+
+
+### Bug Fixes
+
+* **map:** do not flush all if key is 0 ([573bf31](https://github.com/wopjs/disposable/commit/573bf31fe8ad7d52bdef3f850f7d845336443a3c))
+
 ### [0.1.2](https://github.com/wopjs/disposable/compare/v0.1.1...v0.1.2) (2023-10-23)
 
 ### 0.1.1 (2023-06-12)
