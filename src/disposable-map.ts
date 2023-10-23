@@ -142,7 +142,7 @@ const methods: Omit<PickMethods<DisposableMapImpl>, "dispose"> = {
     }
   },
   flush(this: DisposableMapImpl, key?: DisposableKey): void {
-    if (key) {
+    if (key != null) {
       const disposable = this.remove(key);
       if (disposable) {
         invokeDispose(disposable);

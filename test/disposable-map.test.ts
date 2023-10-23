@@ -449,6 +449,31 @@ describe("DisposableMap", () => {
       expect(fnDispose).toBeCalledTimes(0);
       expect(map.size()).toBe(0);
     });
+
+    it("should not flush all if key is 0", () => {
+      const map = disposableMap();
+      const fnEffect = vi.fn();
+      const fnDispose = vi.fn();
+      const count = 100;
+
+      for (let i = 0; i < count; i++) {
+        map.make(i, () => {
+          fnEffect("execute");
+          return () => fnDispose(`dispose-${i}`);
+        });
+      }
+
+      expect(fnEffect).toBeCalledTimes(count);
+      expect(fnDispose).toBeCalledTimes(0);
+      expect(map.size()).toBe(count);
+
+      fnEffect.mockRestore();
+      fnDispose.mockRestore();
+
+      map.flush(0);
+
+      expect(map.size()).toBe(count - 1);
+    });
   });
 
   describe("dispose", () => {
