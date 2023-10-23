@@ -88,9 +88,9 @@ export interface DisposableMap extends DisposableDisposer {
   /**
    * Invoke the {@link DisposableType} and remove it from the Map at the specific key.
    *
-   * @param key Map key of the {@link DisposableType}.
+   * @param key Map key of the {@link DisposableType}. Flush all if omitted.
    */
-  flush(key: DisposableKey): void;
+  flush(key?: DisposableKey): void;
 
   /**
    * Flush and clear all of the {@link Disposer}s and {@link IDisposable}s in the Map.
@@ -141,10 +141,14 @@ const methods: Omit<PickMethods<DisposableMapImpl>, "dispose"> = {
       return disposable;
     }
   },
-  flush(this: DisposableMapImpl, key: DisposableKey): void {
-    const disposable = this.remove(key);
-    if (disposable) {
-      invokeDispose(disposable);
+  flush(this: DisposableMapImpl, key?: DisposableKey): void {
+    if (key) {
+      const disposable = this.remove(key);
+      if (disposable) {
+        invokeDispose(disposable);
+      }
+    } else {
+      this.dispose();
     }
   },
 };

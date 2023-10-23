@@ -130,9 +130,9 @@ export interface DisposableStore extends DisposableDisposer {
   /**
    * Invoke the {@link DisposableType} and remove it from the store at the specific key.
    *
-   * @param disposable The {@link DisposableType} to be flushed.
+   * @param disposable The {@link DisposableType} to be flushed. Flush all if omitted.
    */
-  flush(disposable: DisposableType): void;
+  flush(disposable?: DisposableType): void;
 
   /**
    * Flush and clear all of the {@link Disposer}s and {@link IDisposable}s in the store.
@@ -180,9 +180,13 @@ const methods: Omit<PickMethods<DisposableStoreImpl>, "dispose"> = {
   remove(this: DisposableStoreImpl, disposable: DisposableType): boolean {
     return this._disposables_.delete(disposable);
   },
-  flush(this: DisposableStoreImpl, disposable: DisposableType): void {
-    if (this.remove(disposable)) {
-      invokeDispose(disposable);
+  flush(this: DisposableStoreImpl, disposable?: DisposableType): void {
+    if (disposable) {
+      if (this.remove(disposable)) {
+        invokeDispose(disposable);
+      }
+    } else {
+      this.dispose();
     }
   },
 };

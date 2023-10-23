@@ -413,6 +413,42 @@ describe("DisposableStore", () => {
 
       spy.mockRestore();
     });
+
+    it("should flush all disposables if no key is provided", () => {
+      const store = disposableStore();
+      const fnEffect = vi.fn();
+      const fnDispose = vi.fn();
+      const count = 100;
+
+      for (let i = 0; i < count; i++) {
+        store.make(() => {
+          fnEffect("execute");
+          return () => fnDispose(`dispose-${i}`);
+        });
+      }
+
+      expect(fnEffect).toBeCalledTimes(count);
+      expect(fnDispose).toBeCalledTimes(0);
+      expect(store.size()).toBe(count);
+
+      fnEffect.mockRestore();
+      fnDispose.mockRestore();
+
+      store.flush();
+
+      expect(fnEffect).toBeCalledTimes(0);
+      expect(fnDispose).toBeCalledTimes(count);
+      expect(store.size()).toBe(0);
+
+      fnEffect.mockRestore();
+      fnDispose.mockRestore();
+
+      store.flush();
+
+      expect(fnEffect).toBeCalledTimes(0);
+      expect(fnDispose).toBeCalledTimes(0);
+      expect(store.size()).toBe(0);
+    });
   });
 
   describe("dispose", () => {
