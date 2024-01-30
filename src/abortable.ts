@@ -65,7 +65,7 @@ function abortable$abortable(
   onDispose?: () => void
 ): void {
   if (this._o) {
-    invoke(this._o);
+    invoke(this._o, this);
   }
   this._o = onDispose;
 }
