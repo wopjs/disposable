@@ -41,6 +41,32 @@ describe("DisposableStore", () => {
       expect(store.size()).toBe(1);
     });
 
+    it("should invoke disposable instance with correct `this`", () => {
+      let self: any;
+      const disposer = {
+        dispose: vi.fn(function () {
+          // eslint-disable-next-line @typescript-eslint/no-this-alias
+          self = this;
+        }),
+      };
+
+      disposer.dispose();
+
+      expect(disposer.dispose).toBeCalledTimes(1);
+      expect(self).toBe(disposer);
+
+      const store = disposableStore();
+      store.add(disposer);
+
+      expect(disposer.dispose).toBeCalledTimes(1);
+      self = null;
+
+      store.flush();
+
+      expect(disposer.dispose).toBeCalledTimes(2);
+      expect(self).toBe(disposer);
+    });
+
     it("should add two disposers", () => {
       const store = disposableStore();
       const disposer1 = vi.fn();

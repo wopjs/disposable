@@ -3,9 +3,10 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
-    "source.fixAll": true,
-    "source.addMissingImports": true
+    "source.fixAll": "explicit",
+    "source.addMissingImports": "explicit"
   },
+  "prettier.enable": true,
   "eslint.validate": ["javascript", "javascriptreact", "html", "vue", "svelte"],
   "typescript.tsdk": "node_modules/typescript/lib",
   "[html]": {

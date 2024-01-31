@@ -6,8 +6,6 @@ import type {
   Disposer,
 } from "./interface";
 
-import { invoke } from "./utils";
-
 /**
  * A {@link DisposableDisposer} that can be safely self-disposed.
  * If it is attached to a {@link DisposableStore}, it will be removed from the store automatically when self-disposed.
@@ -65,7 +63,11 @@ function abortable$abortable(
   onDispose?: () => void
 ): void {
   if (this._o) {
-    invoke(this._o);
+    try {
+      this._o();
+    } catch (e) {
+      console.error(e);
+    }
   }
   this._o = onDispose;
 }
