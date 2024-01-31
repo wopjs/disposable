@@ -16,16 +16,14 @@ export type OmitMethods<T> = Pick<
   }[keyof T]
 >;
 
-export const invoke = (fn: () => any, self: any): void => {
+export const invokeDispose = (disposable: DisposableType): void => {
   try {
-    fn.call(self);
+    if ((disposable as IDisposable).dispose) {
+      (disposable as IDisposable).dispose();
+    } else {
+      (disposable as Disposer)();
+    }
   } catch (e) {
     console.error(e);
   }
 };
-
-export const invokeDispose = (disposable: DisposableType): void =>
-  invoke(
-    (disposable as IDisposable).dispose || (disposable as Disposer),
-    disposable
-  );

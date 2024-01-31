@@ -62,4 +62,37 @@ describe("abortable", () => {
     expect(onDispose1).toHaveBeenCalledTimes(1);
     expect(onDispose2).toHaveBeenCalledTimes(0);
   });
+
+  it("should catch error in abortable disposer", () => {
+    const fnDisposer = vi.fn();
+    const disposer = abortable(fnDisposer);
+
+    const spy = vi
+      .spyOn(globalThis.console, "error")
+      .mockImplementation(() => void 0);
+
+    const error = new Error();
+    const fnOnDispose = vi.fn(() => {
+      throw error;
+    });
+
+    expect(isAbortable(disposer)).toBeTruthy();
+
+    if (isAbortable(disposer)) {
+      disposer.abortable(fnOnDispose);
+    }
+
+    expect(fnDisposer).toHaveBeenCalledTimes(0);
+    expect(fnOnDispose).toHaveBeenCalledTimes(0);
+
+    disposer();
+
+    expect(fnDisposer).toHaveBeenCalledOnce();
+    expect(fnOnDispose).toHaveBeenCalledOnce();
+
+    expect(globalThis.console.error).toBeCalledTimes(1);
+    expect(globalThis.console.error).toBeCalledWith(error);
+
+    spy.mockRestore();
+  });
 });
