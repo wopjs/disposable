@@ -9,7 +9,7 @@ import type {
 import type { OmitMethods, PickMethods } from "./utils";
 
 import { isAbortable } from "./abortable";
-import { invokeDispose } from "./utils";
+import { dispose } from "./utils";
 
 /**
  * A Disposable Map is an {@link IDisposable} store that manages {@link Disposer}s and {@link IDisposable}s with keys.
@@ -145,7 +145,7 @@ const methods: Omit<PickMethods<DisposableMapImpl>, "dispose"> = {
     if (key != null) {
       const disposable = this.remove(key);
       if (disposable) {
-        invokeDispose(disposable);
+        dispose(disposable);
       }
     } else {
       this.dispose();
@@ -186,7 +186,7 @@ export const disposableMap = (): DisposableMap => {
   const disposer: Disposer &
     OmitMethods<DisposableMapImpl> &
     Pick<DisposableMap, "dispose"> = (): void => {
-    disposer._disposables_.forEach(invokeDispose);
+    disposer._disposables_.forEach(dispose);
     disposer._disposables_.clear();
   };
   disposer._disposables_ = new Map();

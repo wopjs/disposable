@@ -8,7 +8,7 @@ import type {
 import type { OmitMethods, PickMethods } from "./utils";
 
 import { isAbortable } from "./abortable";
-import { invokeDispose } from "./utils";
+import { dispose } from "./utils";
 
 /**
  * A Disposable Store is an {@link IDisposable} that manages {@link Disposer}s and {@link IDisposable}s.
@@ -183,7 +183,7 @@ const methods: Omit<PickMethods<DisposableStoreImpl>, "dispose"> = {
   flush(this: DisposableStoreImpl, disposable?: DisposableType): void {
     if (disposable) {
       if (this.remove(disposable)) {
-        invokeDispose(disposable);
+        dispose(disposable);
       }
     } else {
       this.dispose();
@@ -230,7 +230,7 @@ export const disposableStore = (
   const disposableStore: Disposer &
     OmitMethods<DisposableStoreImpl> &
     Pick<DisposableStore, "dispose"> = (): void => {
-    disposableStore._disposables_.forEach(invokeDispose);
+    disposableStore._disposables_.forEach(dispose);
     disposableStore._disposables_.clear();
   };
   disposableStore._disposables_ = new Set();
