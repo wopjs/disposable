@@ -10,5 +10,5 @@ export type { DisposableMap } from "./disposable-map";
 
 export { disposableStore } from "./disposable-store";
 export { disposableMap } from "./disposable-map";
-
 export { abortable } from "./abortable";
+export { dispose } from "./utils";
