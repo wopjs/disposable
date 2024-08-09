@@ -281,17 +281,18 @@ const setInterval = (handler: () => void, timeout: number) => {
 
 ### DisposableStore
 
-A Disposable Store is a [DisposableDisposer](#DisposableDisposer) that manages other disposers and disposables.
+A DisposableStore is a [DisposableDisposer](#DisposableDisposer) that manages other disposers and disposables.
 
 ```js
 import { disposableStore } from "@wopjs/disposable";
 
-const store = disposableStore();
-store.add(() => console.log("disposer"));
-store.make(() => {
-  return () => console.log("disposable");
+const dispose = disposableStore();
+dispose.add(() => console.log("disposed 1"));
+dispose.add(() => console.log("disposed 2"));
+dispose.make(() => {
+  return () => console.log("disposed 3");
 });
-store.dispose(); // Logs "disposer" and "disposable"
+dispose(); // Logs "dispose 1", "dispose 2" and "dispose 3"
 ```
 
 Since it is also a disposer, it can be easily composed with other disposables.
@@ -321,19 +322,19 @@ b.dispose(); // both a and b are disposed
 
 ### DisposableMap
 
-Like [Disposable Store](#disposablestore), a Disposable Map is a [DisposableDisposer](#DisposableDisposer) that manages disposers and disposables with key.
+Like [DisposableStore](#disposablestore), a DisposableMap is a [DisposableDisposer](#DisposableDisposer) that manages disposers and disposables with key.
 
 Map key introduces [Refresh-able](#refresh-able) which makes it more interesting when comes to creating side effects on the fly.
 
 ```js
 import { disposableMap } from "@wopjs/disposable";
 
-const store = disposableMap();
-store.set("key1", () => console.log("disposer"));
-store.make("key2", () => {
-  return () => console.log("disposable");
+const dispose = disposableMap();
+dispose.set("key1", () => console.log("disposed 1"));
+dispose.make("key2", () => {
+  return () => console.log("disposed 2");
 });
-store.dispose(); // Logs "disposer" and "disposable"
+dispose(); // Logs "disposed 1" and "disposed 2"
 ```
 
 Since it is also a disposer, it can be easily composed with other disposables.
@@ -365,7 +366,23 @@ b.a.print(); // "print a"
 b.dispose(); // both a and b are disposed
 ```
 
-## Abortable
+### DisposableOne
+
+DisposableOne is a lightweight [DisposableMap](#DisposableMap). It only manages one disposer or disposable at a time. It is useful if you want [Refresh-able](#refresh-able) but only need to manage one disposer or disposable.
+
+```js
+import { disposableOne } from "@wopjs/disposable";
+
+const dispose = disposableOne();
+
+dispose.set(() => console.log("disposed 1"));
+
+dispose.set(() => console.log("disposed 2")); // Logs "disposed 1"
+
+dispose(); // Logs "disposed 2"
+```
+
+### Abortable
 
 Abortable is a special kind of disposable that may be disposed outside of the store (like when `setTimeout` or `once` event finishes). It will notify the store to delete itself from the store when disposed. The signature is the same as a disposable disposer.
 
@@ -382,8 +399,8 @@ const timeout = (handle, timeout) => {
   return disposer;
 };
 
-const store = disposableStore();
-store.add(timeout(() => console.log("timeout"), 1000));
+const dispose = disposableStore();
+dispose.add(timeout(() => console.log("timeout"), 1000));
 
 // The `timeout` disposer will be removed from the `dispose` after 1s.
 ```
