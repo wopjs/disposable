@@ -1,6 +1,6 @@
 import type {
-  DisposableType,
   DisposableDisposer,
+  DisposableType,
   Disposer,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
   IDisposable,
@@ -73,8 +73,8 @@ export interface DisposableStore extends DisposableDisposer {
    *
    * Do nothing if `null | undefined` is returned or the returned {@link DisposableType} is already in the store.
    *
-   * @param executor A function that returns either a {@link DisposableType} or `null`.
-   * @returns The returned {@link DisposableType}, or `undefined` if the executor returns `null`.
+   * @param executor A function that returns either a {@link DisposableType} or `undefined | null`.
+   * @returns The returned {@link DisposableType}, or `undefined` if the executor returns `undefined | null`.
    */
   make<T extends DisposableType>(
     executor: () => T | null | undefined | void
@@ -122,7 +122,7 @@ export interface DisposableStore extends DisposableDisposer {
   /**
    * Remove the {@link DisposableType} from the store. Does not invoke the removed {@link DisposableType}.
    *
-   * @param disposable The {@link DisposableType} to be flushed.
+   * @param disposable The {@link DisposableType} to be removed.
    * @returns `true` if the {@link DisposableType} is found and removed, otherwise `false`.
    */
   remove(disposable: DisposableType): boolean;
