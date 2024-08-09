@@ -6,7 +6,7 @@
 
 [![Docs](https://img.shields.io/badge/Docs-read-%23fdf9f5)](https://wopjs.github.io/disposable)
 [![Build Status](https://github.com/wopjs/disposable/actions/workflows/build.yml/badge.svg)](https://github.com/wopjs/disposable/actions/workflows/build.yml)
-[![Coverage Status](https://img.shields.io/codeclimate/coverage/wopjs/disposable)](https://codeclimate.com/github/wopjs/disposable)
+[![Coverage Status](https://img.shields.io/coverallsCoverage/github/wopjs/disposable)](https://coveralls.io/github/wopjs/disposable)
 
 [![npm-version](https://img.shields.io/npm/v/@wopjs/disposable.svg)](https://www.npmjs.com/package/@wopjs/disposable)
 [![minified-size](https://img.shields.io/bundlephobia/minzip/@wopjs/disposable)](https://bundlephobia.com/package/@wopjs/disposable)

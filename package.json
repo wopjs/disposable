@@ -18,7 +18,7 @@
     "build": "tsup",
     "build:min": "cross-env NODE_ENV=production MINIFY=true tsup && node scripts/gzip.mjs",
     "test": "vitest",
-    "coverage": "vitest run --coverage",
+    "test:coverage": "vitest run --coverage",
     "release": "standard-version"
   },
   "keywords": [
@@ -63,5 +63,6 @@
     "vite": "^4.2.2",
     "vitest": "^0.31.0",
     "yoctocolors": "^1.0.0"
-  }
+  },
+  "packageManager": "pnpm@9.6.0"
 }
