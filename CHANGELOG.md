@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.6](https://github.com/wopjs/disposable/compare/v0.1.5...v0.1.6) (2024-08-09)
+
+
+### Features
+
+* **abortable:** support IDisposable ([27c835d](https://github.com/wopjs/disposable/commit/27c835dcab075a4dabc17b4301792ba44f9dd500))
+* add disposable-one ([730d50e](https://github.com/wopjs/disposable/commit/730d50e68c075ed8215250560d4759f570ba29be))
+
 ### [0.1.5](https://github.com/wopjs/disposable/compare/v0.1.4...v0.1.5) (2024-02-26)
 
 ### [0.1.4](https://github.com/wopjs/disposable/compare/v0.1.3...v0.1.4) (2024-01-31)
