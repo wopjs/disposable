@@ -2,9 +2,11 @@
 import type { DisposableStore } from "./disposable-store";
 import type {
   DisposableDisposer,
+  DisposableType,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
   Disposer,
 } from "./interface";
+import { dispose } from "./utils";
 
 /**
  * A {@link DisposableDisposer} that can be safely self-disposed.
@@ -43,14 +45,14 @@ interface AbortableDisposableImpl extends AbortableDisposable {
  * disposer(); // setTimeout is cleared and the disposer is removed from the store.
  * ```
  */
-export const abortable: (disposer: () => any) => DisposableDisposer = (
-  disposer: (() => any) | null
+export const abortable: (disposable: DisposableType) => DisposableDisposer = (
+  disposable: DisposableType | null
 ): DisposableDisposer => {
   const abortable: AbortableDisposableImpl = (): void => {
     abortable.abortable();
-    if (disposer) {
-      disposer();
-      disposer = null;
+    if (disposable) {
+      dispose(disposable);
+      disposable = null;
     }
   };
   abortable.dispose = abortable;

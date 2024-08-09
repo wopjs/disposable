@@ -16,6 +16,19 @@ describe("abortable", () => {
     expect(fn).toHaveBeenCalledOnce();
   });
 
+  it("should support IDisposable as param", () => {
+    const d = { dispose: vi.fn() };
+    const disposer = abortable(d);
+    expect(typeof disposer).toBe("function");
+    expect(typeof disposer.dispose).toBe("function");
+    expect(disposer).toBe(disposer.dispose);
+    expect(d.dispose).toHaveBeenCalledTimes(0);
+
+    disposer();
+
+    expect(d.dispose).toHaveBeenCalledOnce();
+  });
+
   it("should notify store when disposed", () => {
     const fnDisposer = vi.fn();
     const disposer = abortable(fnDisposer);
