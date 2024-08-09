@@ -281,7 +281,7 @@ const setInterval = (handler: () => void, timeout: number) => {
 
 ### DisposableStore
 
-A Disposable Store is a [DisposableDisposer][#DisposableDisposer] that manages other disposers and disposables.
+A Disposable Store is a [DisposableDisposer](#DisposableDisposer) that manages other disposers and disposables.
 
 ```js
 import { disposableStore } from "@wopjs/disposable";
@@ -321,9 +321,9 @@ b.dispose(); // both a and b are disposed
 
 ### DisposableMap
 
-Like [Disposable Store](#disposablestore), a Disposable Map is a [DisposableDisposer][#DisposableDisposer] that manages disposers and disposables with key.
+Like [Disposable Store](#disposablestore), a Disposable Map is a [DisposableDisposer](#DisposableDisposer) that manages disposers and disposables with key.
 
-Key introduces [[Refresh-able](#refresh-able) which makes it more interesting when comes to creating side effects on the fly.
+Map key introduces [Refresh-able](#refresh-able) which makes it more interesting when comes to creating side effects on the fly.
 
 ```js
 import { disposableMap } from "@wopjs/disposable";
