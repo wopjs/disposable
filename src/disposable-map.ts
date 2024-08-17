@@ -1,7 +1,7 @@
 import type {
+  DisposableDisposer,
   DisposableKey,
   DisposableType,
-  DisposableDisposer,
   Disposer,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
   IDisposable,
@@ -26,6 +26,11 @@ export interface DisposableMap extends DisposableDisposer {
    * Flush and clear all of the {@link Disposer}s and {@link IDisposable}s in the Map.
    */
   (): void;
+
+  /**
+   * Returns an iterable of {@link DisposableKey}s in the map
+   */
+  keys(): IterableIterator<DisposableKey>;
 
   /**
    * Get the number of {@link DisposableType}s in the Map.
@@ -103,6 +108,9 @@ interface DisposableMapImpl extends DisposableMap {
 }
 
 const methods: Omit<PickMethods<DisposableMapImpl>, "dispose"> = {
+  keys(this: DisposableMapImpl): IterableIterator<DisposableKey> {
+    return this._disposables_.keys();
+  },
   size(this: DisposableMapImpl): number {
     return this._disposables_.size;
   },

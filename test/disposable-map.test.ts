@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { DisposableDisposer, IDisposable } from "../src";
 import { abortable, disposableMap } from "../src";
 
@@ -161,6 +161,21 @@ describe("DisposableMap", () => {
       expect(fnDispose).toBeCalledTimes(1);
       expect(fnDispose).lastCalledWith("dispose1");
       expect(map.size()).toBe(1);
+    });
+  });
+
+  describe("keys", () => {
+    it("should return an iterator of keys", () => {
+      const map = disposableMap();
+      const d1 = vi.fn();
+      const d2 = vi.fn();
+      map.set("key1", d1);
+      map.set("key2", d2);
+
+      const keys = map.keys();
+      expect(keys.next().value).toBe("key1");
+      expect(keys.next().value).toBe("key2");
+      expect(keys.next().done).toBe(true);
     });
   });
 
