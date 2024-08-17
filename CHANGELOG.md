@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.7](https://github.com/wopjs/disposable/compare/v0.1.6...v0.1.7) (2024-08-17)
+
+
+### Features
+
+* **disposable-map:** add keys ([0915239](https://github.com/wopjs/disposable/commit/0915239ce016b789c256cc563477b219df0353a6))
+
 ### [0.1.6](https://github.com/wopjs/disposable/compare/v0.1.5...v0.1.6) (2024-08-09)
 
 
