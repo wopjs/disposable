@@ -14,7 +14,12 @@
 <ul class="tsd-breadcrumb">
 <li><a href="../modules.html">@wopjs/disposable - v0.1.7</a></li>
 <li><a href="DisposableMap.html">DisposableMap</a></li></ul>
-<h1>Interface DisposableMap</h1></div>
+<h1>Interface DisposableMap&lt;TKey&gt;</h1></div> 
+<section class="tsd-panel tsd-type-parameters">
+<h4>Type Parameters</h4>
+<ul class="tsd-type-parameters">
+<li>
+<h4>TKey = <span class="tsd-signature-type">DisposableKey</span></h4></li></ul></section> 
 <section class="tsd-panel tsd-hierarchy">
 <h4>Hierarchy</h4>
 <ul class="tsd-hierarchy">
@@ -29,7 +34,7 @@
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/wopjs/disposable/blob/398a0b1/src/disposable-map.ts#L28">disposable-map.ts:28</a></li></ul></aside></li>
+<li>Defined in <a href="https://github.com/wopjs/disposable/blob/a498df9/src/disposable-map.ts#L31">disposable-map.ts:31</a></li></ul></aside></li>
 <li class="tsd-signature tsd-anchor-link" id="DisposableMap-1">Disposable<wbr/>Map<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><a href="#DisposableMap-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>A Disposable Map is an <a href="IDisposable.html">IDisposable</a> store that manages <a href="../types/Disposer.html">Disposer</a>s and <a href="IDisposable.html">IDisposable</a>s with keys.</p>
@@ -39,7 +44,7 @@
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/wopjs/disposable/blob/398a0b1/src/interface.ts#L28">interface.ts:28</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/wopjs/disposable/blob/a498df9/src/interface.ts#L30">interface.ts:30</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -73,11 +78,11 @@
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="DisposableDisposer.html">DisposableDisposer</a>.<a href="DisposableDisposer.html#dispose">dispose</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/wopjs/disposable/blob/398a0b1/src/disposable-map.ts#L103">disposable-map.ts:103</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/wopjs/disposable/blob/a498df9/src/disposable-map.ts#L106">disposable-map.ts:106</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface"><a id="flush" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>flush</span><a href="#flush" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-<li class="tsd-signature tsd-anchor-link" id="flush.flush-1">flush<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">?: </span><a href="../types/DisposableKey.html" class="tsd-signature-type" data-tsd-kind="Type alias">DisposableKey</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#flush.flush-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="flush.flush-1">flush<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">TKey</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#flush.flush-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Invoke the <a href="../types/DisposableType.html">DisposableType</a> and remove it from the Map at the specific key.</p>
 </div>
@@ -85,16 +90,16 @@
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><code class="tsd-tag ts-flagOptional">Optional</code> key: <a href="../types/DisposableKey.html" class="tsd-signature-type" data-tsd-kind="Type alias">DisposableKey</a></h5>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> key: <span class="tsd-signature-type" data-tsd-kind="Type parameter">TKey</span></h5>
 <div class="tsd-comment tsd-typography"><p>Map key of the <a href="../types/DisposableType.html">DisposableType</a>. Flush all if omitted.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/wopjs/disposable/blob/398a0b1/src/disposable-map.ts#L98">disposable-map.ts:98</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/wopjs/disposable/blob/a498df9/src/disposable-map.ts#L101">disposable-map.ts:101</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface"><a id="has" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>has</span><a href="#has" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-<li class="tsd-signature tsd-anchor-link" id="has.has-1">has<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><a href="../types/DisposableKey.html" class="tsd-signature-type" data-tsd-kind="Type alias">DisposableKey</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><a href="#has.has-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="has.has-1">has<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">TKey</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><a href="#has.has-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Check if a <a href="../types/DisposableType.html">DisposableType</a> at the specific key is in the Map.</p>
 
@@ -104,26 +109,26 @@
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5>key: <a href="../types/DisposableKey.html" class="tsd-signature-type" data-tsd-kind="Type alias">DisposableKey</a></h5>
+<h5>key: <span class="tsd-signature-type" data-tsd-kind="Type parameter">TKey</span></h5>
 <div class="tsd-comment tsd-typography"><p>Map key of the <a href="../types/DisposableType.html">DisposableType</a>.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/wopjs/disposable/blob/398a0b1/src/disposable-map.ts#L91">disposable-map.ts:91</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/wopjs/disposable/blob/a498df9/src/disposable-map.ts#L94">disposable-map.ts:94</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface"><a id="keys" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>keys</span><a href="#keys" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-<li class="tsd-signature tsd-anchor-link" id="keys.keys-1">keys<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><a href="../types/DisposableKey.html" class="tsd-signature-type" data-tsd-kind="Type alias">DisposableKey</a><span class="tsd-signature-symbol">&gt;</span><a href="#keys.keys-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="keys.keys-1">keys<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type" data-tsd-kind="Type parameter">TKey</span><span class="tsd-signature-symbol">&gt;</span><a href="#keys.keys-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Returns an iterable of <a href="../types/DisposableKey.html">DisposableKey</a>s in the map</p>
+<div class="tsd-comment tsd-typography"><p>Returns an iterable of keys in the map</p>
 </div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><a href="../types/DisposableKey.html" class="tsd-signature-type" data-tsd-kind="Type alias">DisposableKey</a><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type" data-tsd-kind="Type parameter">TKey</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/wopjs/disposable/blob/398a0b1/src/disposable-map.ts#L33">disposable-map.ts:33</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/wopjs/disposable/blob/a498df9/src/disposable-map.ts#L36">disposable-map.ts:36</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface"><a id="make" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>make</span><a href="#make" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-<li class="tsd-signature tsd-anchor-link" id="make.make-1">make<span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><a href="../types/DisposableKey.html" class="tsd-signature-type" data-tsd-kind="Type alias">DisposableKey</a>, executor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span><a href="#make.make-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="make.make-1">make<span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">TKey</span>, executor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span><a href="#make.make-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Invoke the executor function and add the returned <a href="../types/DisposableType.html">DisposableType</a> to the Map at the specific key.</p>
 <p>Adding <a href="../types/DisposableType.html">DisposableType</a> to the same key will first invoke(<code>flush</code>) the previous <a href="../types/DisposableType.html">DisposableType</a> at that key.</p>
@@ -139,7 +144,7 @@
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5>key: <a href="../types/DisposableKey.html" class="tsd-signature-type" data-tsd-kind="Type alias">DisposableKey</a></h5>
+<h5>key: <span class="tsd-signature-type" data-tsd-kind="Type parameter">TKey</span></h5>
 <div class="tsd-comment tsd-typography"><p>Key for the <a href="../types/DisposableType.html">DisposableType</a>. Adding with same key will first invoke(<code>flush</code>) the previous <a href="../types/DisposableType.html">DisposableType</a>.</p>
 </div></li>
 <li>
@@ -154,8 +159,8 @@
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span></h4></li></ul></li></ul></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/wopjs/disposable/blob/398a0b1/src/disposable-map.ts#L60">disposable-map.ts:60</a></li></ul></aside></li>
-<li class="tsd-signature tsd-anchor-link" id="make.make-2">make<span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><a href="../types/DisposableKey.html" class="tsd-signature-type" data-tsd-kind="Type alias">DisposableKey</a>, executor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span><a href="#make.make-2" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li>Defined in <a href="https://github.com/wopjs/disposable/blob/a498df9/src/disposable-map.ts#L63">disposable-map.ts:63</a></li></ul></aside></li>
+<li class="tsd-signature tsd-anchor-link" id="make.make-2">make<span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">TKey</span>, executor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span><a href="#make.make-2" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Invoke the executor function and add the returned <a href="../types/DisposableType.html">DisposableType</a> to the Map at the specific key.</p>
 <p>Do nothing if <code>null | undefined</code> is returned or the returned <a href="../types/DisposableType.html">DisposableType</a> is already in the Map.</p>
@@ -172,7 +177,7 @@
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5>key: <a href="../types/DisposableKey.html" class="tsd-signature-type" data-tsd-kind="Type alias">DisposableKey</a></h5>
+<h5>key: <span class="tsd-signature-type" data-tsd-kind="Type parameter">TKey</span></h5>
 <div class="tsd-comment tsd-typography"><p>Key for the <a href="../types/DisposableType.html">DisposableType</a>. Adding with same key will first invoke(<code>flush</code>) the previous <a href="../types/DisposableType.html">DisposableType</a>.</p>
 </div></li>
 <li>
@@ -187,11 +192,11 @@
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span></h4></li></ul></li></ul></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/wopjs/disposable/blob/398a0b1/src/disposable-map.ts#L72">disposable-map.ts:72</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/wopjs/disposable/blob/a498df9/src/disposable-map.ts#L75">disposable-map.ts:75</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface"><a id="remove" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>remove</span><a href="#remove" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-<li class="tsd-signature tsd-anchor-link" id="remove.remove-1">remove<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><a href="../types/DisposableKey.html" class="tsd-signature-type" data-tsd-kind="Type alias">DisposableKey</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../types/DisposableType.html" class="tsd-signature-type" data-tsd-kind="Type alias">DisposableType</a><a href="#remove.remove-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="remove.remove-1">remove<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">TKey</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../types/DisposableType.html" class="tsd-signature-type" data-tsd-kind="Type alias">DisposableType</a><a href="#remove.remove-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Remove the <a href="../types/DisposableType.html">DisposableType</a> at the specific key from the Map. Does not invoke the removed <a href="../types/DisposableType.html">DisposableType</a>.</p>
 
@@ -201,16 +206,16 @@
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5>key: <a href="../types/DisposableKey.html" class="tsd-signature-type" data-tsd-kind="Type alias">DisposableKey</a></h5>
+<h5>key: <span class="tsd-signature-type" data-tsd-kind="Type parameter">TKey</span></h5>
 <div class="tsd-comment tsd-typography"><p>Map key of the <a href="../types/DisposableType.html">DisposableType</a>.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../types/DisposableType.html" class="tsd-signature-type" data-tsd-kind="Type alias">DisposableType</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/wopjs/disposable/blob/398a0b1/src/disposable-map.ts#L83">disposable-map.ts:83</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/wopjs/disposable/blob/a498df9/src/disposable-map.ts#L86">disposable-map.ts:86</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface"><a id="set" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>set</span><a href="#set" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-<li class="tsd-signature tsd-anchor-link" id="set.set-1">set<span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><a href="../types/DisposableKey.html" class="tsd-signature-type" data-tsd-kind="Type alias">DisposableKey</a>, disposable<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span><a href="#set.set-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="set.set-1">set<span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">TKey</span>, disposable<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span><a href="#set.set-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Set a <a href="../types/DisposableType.html">DisposableType</a> to the Map at the specific key.</p>
 <p>Adding <a href="../types/DisposableType.html">DisposableType</a> to the same key will first invoke(<code>flush</code>) the previous <a href="../types/DisposableType.html">DisposableType</a> at that key.</p>
@@ -226,7 +231,7 @@
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5>key: <a href="../types/DisposableKey.html" class="tsd-signature-type" data-tsd-kind="Type alias">DisposableKey</a></h5>
+<h5>key: <span class="tsd-signature-type" data-tsd-kind="Type parameter">TKey</span></h5>
 <div class="tsd-comment tsd-typography"><p>Key for the <a href="../types/DisposableType.html">DisposableType</a>. Adding with same key will first invoke(<code>flush</code>) the previous <a href="../types/DisposableType.html">DisposableType</a>.</p>
 </div></li>
 <li>
@@ -235,7 +240,7 @@
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type" data-tsd-kind="Type parameter">T</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/wopjs/disposable/blob/398a0b1/src/disposable-map.ts#L49">disposable-map.ts:49</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/wopjs/disposable/blob/a498df9/src/disposable-map.ts#L52">disposable-map.ts:52</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface"><a id="size" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>size</span><a href="#size" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
@@ -245,7 +250,7 @@
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/wopjs/disposable/blob/398a0b1/src/disposable-map.ts#L38">disposable-map.ts:38</a></li></ul></aside></li></ul></section></section></div>
+<li>Defined in <a href="https://github.com/wopjs/disposable/blob/a498df9/src/disposable-map.ts#L41">disposable-map.ts:41</a></li></ul></aside></li></ul></section></section></div>
 <div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 <div class="tsd-navigation settings">
 <details class="tsd-index-accordion"><summary class="tsd-accordion-summary">
