@@ -1,6 +1,5 @@
 import type {
   DisposableDisposer,
-  DisposableKey,
   DisposableType,
   Disposer,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
@@ -10,6 +9,9 @@ import type { OmitMethods, PickMethods } from "./utils";
 
 import { isAbortable } from "./abortable";
 import { dispose } from "./utils";
+
+/** @internal */
+type DisposableKey = any;
 
 /**
  * A Disposable Map is an {@link IDisposable} store that manages {@link Disposer}s and {@link IDisposable}s with keys.
@@ -21,16 +23,17 @@ import { dispose } from "./utils";
  * A {@link DisposableMap} is also an {@link IDisposable}, which means it can be managed by another {@link DisposableMap}.
  *
  */
-export interface DisposableMap extends DisposableDisposer {
+export interface DisposableMap<TKey = DisposableKey>
+  extends DisposableDisposer {
   /**
    * Flush and clear all of the {@link Disposer}s and {@link IDisposable}s in the Map.
    */
   (): void;
 
   /**
-   * Returns an iterable of {@link DisposableKey}s in the map
+   * Returns an iterable of keys in the map
    */
-  keys(): IterableIterator<DisposableKey>;
+  keys(): IterableIterator<TKey>;
 
   /**
    * Get the number of {@link DisposableType}s in the Map.
@@ -46,7 +49,7 @@ export interface DisposableMap extends DisposableDisposer {
    * @param disposable A {@link DisposableType} .
    * @returns The same {@link DisposableType} .
    */
-  set<T extends DisposableType>(key: DisposableKey, disposable: T): T;
+  set<T extends DisposableType>(key: TKey, disposable: T): T;
 
   /**
    * Invoke the executor function and add the returned {@link DisposableType} to the Map at the specific key.
@@ -57,7 +60,7 @@ export interface DisposableMap extends DisposableDisposer {
    * @param executor A function that returns a {@link DisposableType}.
    * @returns The returned {@link DisposableType}.
    */
-  make<T extends DisposableType>(key: DisposableKey, executor: () => T): T;
+  make<T extends DisposableType>(key: TKey, executor: () => T): T;
   /**
    * Invoke the executor function and add the returned {@link DisposableType} to the Map at the specific key.
    *
@@ -70,7 +73,7 @@ export interface DisposableMap extends DisposableDisposer {
    * @returns The returned {@link DisposableType}, or `undefined` if the executor returns `null | undefined`.
    */
   make<T extends DisposableType>(
-    key: DisposableKey,
+    key: TKey,
     executor: () => T | null | undefined | void
   ): T | void;
 
@@ -80,7 +83,7 @@ export interface DisposableMap extends DisposableDisposer {
    * @param key Map key of the {@link DisposableType}.
    * @returns The removed {@link DisposableType} if exists, `undefined` if the {@link DisposableType} is not found.
    */
-  remove(key: DisposableKey): DisposableType | undefined;
+  remove(key: TKey): DisposableType | undefined;
 
   /**
    * Check if a {@link DisposableType} at the specific key is in the Map.
@@ -88,14 +91,14 @@ export interface DisposableMap extends DisposableDisposer {
    * @param key Map key of the {@link DisposableType}.
    * @returns `true` if exists, otherwise `false`.
    */
-  has(key: DisposableKey): boolean;
+  has(key: TKey): boolean;
 
   /**
    * Invoke the {@link DisposableType} and remove it from the Map at the specific key.
    *
    * @param key Map key of the {@link DisposableType}. Flush all if omitted.
    */
-  flush(key?: DisposableKey): void;
+  flush(key?: TKey): void;
 
   /**
    * Flush and clear all of the {@link Disposer}s and {@link IDisposable}s in the Map.
@@ -103,8 +106,8 @@ export interface DisposableMap extends DisposableDisposer {
   dispose(this: void): void;
 }
 
-interface DisposableMapImpl extends DisposableMap {
-  _disposables_: Map<DisposableKey, DisposableType>;
+interface DisposableMapImpl<TKey = any> extends DisposableMap<TKey> {
+  _disposables_: Map<TKey, DisposableType>;
 }
 
 const methods: Omit<PickMethods<DisposableMapImpl>, "dispose"> = {
@@ -190,10 +193,10 @@ const methods: Omit<PickMethods<DisposableMapImpl>, "dispose"> = {
  *
  * @returns A disposable Map.
  */
-export const disposableMap = (): DisposableMap => {
+export const disposableMap = <TKey = DisposableKey>(): DisposableMap<TKey> => {
   const disposer: Disposer &
-    OmitMethods<DisposableMapImpl> &
-    Pick<DisposableMap, "dispose"> = (): void => {
+    OmitMethods<DisposableMapImpl<TKey>> &
+    Pick<DisposableMap<TKey>, "dispose"> = (): void => {
     disposer._disposables_.forEach(dispose);
     disposer._disposables_.clear();
   };

@@ -1,5 +1,7 @@
 /**
  * Valid key type for {@link DisposableStore}.
+ * @deprecated
+ * @ignore
  */
 export type DisposableKey = number | string;
 
