@@ -1,11 +1,9 @@
 import type {
   DisposableDisposer,
   DisposableType,
-  Disposer,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
   IDisposable,
 } from "./interface";
-import type { OmitMethods, PickMethods } from "./utils";
 
 import { isAbortable } from "./abortable";
 import { dispose } from "./utils";
@@ -110,59 +108,63 @@ interface DisposableMapImpl<TKey = any> extends DisposableMap<TKey> {
   _disposables_: Map<TKey, DisposableType>;
 }
 
-const methods: Omit<PickMethods<DisposableMapImpl>, "dispose"> = {
-  keys(this: DisposableMapImpl): IterableIterator<DisposableKey> {
-    return this._disposables_.keys();
-  },
-  size(this: DisposableMapImpl): number {
-    return this._disposables_.size;
-  },
-  has(this: DisposableMapImpl, key: DisposableKey): boolean {
-    return this._disposables_.has(key);
-  },
-  set<T extends DisposableType>(
-    this: DisposableMapImpl,
-    key: DisposableKey,
-    disposable: T
-  ): T {
-    this.flush(key);
-    if (isAbortable(disposable)) {
-      disposable.abortable(() => this.remove(key));
-    }
-    this._disposables_.set(key, disposable);
+function keys(this: DisposableMapImpl): IterableIterator<DisposableKey> {
+  return this._disposables_.keys();
+}
+
+function size(this: DisposableMapImpl): number {
+  return this._disposables_.size;
+}
+
+function has(this: DisposableMapImpl, key: DisposableKey): boolean {
+  return this._disposables_.has(key);
+}
+
+function set<T extends DisposableType>(
+  this: DisposableMapImpl,
+  key: DisposableKey,
+  disposable: T
+): T {
+  this.flush(key);
+  if (isAbortable(disposable)) {
+    disposable.abortable(() => this.remove(key));
+  }
+  this._disposables_.set(key, disposable);
+  return disposable;
+}
+
+function make<T extends DisposableType>(
+  this: DisposableMapImpl,
+  key: DisposableKey,
+  executor: () => T | null
+): T | void {
+  const disposable = executor();
+  if (disposable) {
+    return this.set(key, disposable);
+  }
+}
+
+function remove(
+  this: DisposableMapImpl,
+  key: DisposableKey
+): DisposableType | undefined {
+  const disposable = this._disposables_.get(key);
+  if (disposable) {
+    this._disposables_.delete(key);
     return disposable;
-  },
-  make<T extends DisposableType>(
-    this: DisposableMapImpl,
-    key: DisposableKey,
-    executor: () => T | null
-  ): T | void {
-    const disposable = executor();
+  }
+}
+
+function flush(this: DisposableMapImpl, key?: DisposableKey): void {
+  if (key != null) {
+    const disposable = this.remove(key);
     if (disposable) {
-      return this.set(key, disposable);
+      dispose(disposable);
     }
-  },
-  remove(
-    this: DisposableMapImpl,
-    key: DisposableKey
-  ): DisposableType | undefined {
-    const disposable = this._disposables_.get(key);
-    if (disposable) {
-      this._disposables_.delete(key);
-      return disposable;
-    }
-  },
-  flush(this: DisposableMapImpl, key?: DisposableKey): void {
-    if (key != null) {
-      const disposable = this.remove(key);
-      if (disposable) {
-        dispose(disposable);
-      }
-    } else {
-      this.dispose();
-    }
-  },
-};
+  } else {
+    this.dispose();
+  }
+}
 
 /**
  * Create a {@link DisposableMap} that manages {@link Disposer}s and {@link IDisposable}s with key.
@@ -193,14 +195,19 @@ const methods: Omit<PickMethods<DisposableMapImpl>, "dispose"> = {
  *
  * @returns A disposable Map.
  */
-export const disposableMap = <TKey = DisposableKey>(): DisposableMap<TKey> => {
-  const disposer: Disposer &
-    OmitMethods<DisposableMapImpl<TKey>> &
-    Pick<DisposableMap<TKey>, "dispose"> = (): void => {
+export function disposableMap<TKey = DisposableKey>(): DisposableMap<TKey> {
+  function disposer(): void {
     disposer._disposables_.forEach(dispose);
     disposer._disposables_.clear();
-  };
+  }
   disposer._disposables_ = new Map();
   disposer.dispose = disposer;
-  return Object.assign(disposer, methods);
-};
+  disposer.keys = keys;
+  disposer.size = size;
+  disposer.has = has;
+  disposer.set = set;
+  disposer.make = make;
+  disposer.remove = remove;
+  disposer.flush = flush;
+  return disposer;
+}

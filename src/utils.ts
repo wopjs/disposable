@@ -20,7 +20,7 @@ export type OmitMethods<T> = Pick<
  * Dispose a disposable object or a disposer function. Log the error if any.
  * @param disposable A disposable object or a disposer function. Do nothing otherwise.
  */
-export const dispose = (disposable: any): void => {
+export function dispose(disposable: any): void {
   try {
     if (disposable) {
       if ((disposable as IDisposable).dispose) {
@@ -38,4 +38,4 @@ export const dispose = (disposable: any): void => {
   } catch (e) {
     console.error(e);
   }
-};
+}
