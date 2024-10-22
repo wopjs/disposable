@@ -1,6 +1,6 @@
 import { gzipSizeFromFileSync } from "gzip-size";
-import { green, gray } from "yoctocolors";
 import prettyBytes from "pretty-bytes";
+import { green, gray } from "yoctocolors";
 
 console.log();
 console.log(
