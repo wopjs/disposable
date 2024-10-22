@@ -177,6 +177,12 @@ describe("DisposableMap", () => {
       expect(keys.next().value).toBe("key2");
       expect(keys.next().done).toBe(true);
     });
+
+    it("should return an iterator of keys if empty", () => {
+      const map = disposableMap();
+      const keys = map.keys();
+      expect(keys.next().done).toBe(true);
+    });
   });
 
   describe("has", () => {
