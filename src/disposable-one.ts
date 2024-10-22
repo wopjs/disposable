@@ -1,11 +1,9 @@
 import type {
   DisposableDisposer,
   DisposableType,
-  Disposer,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
   IDisposable,
 } from "./interface";
-import type { OmitMethods, PickMethods } from "./utils";
 
 import { isAbortable } from "./abortable";
 import { dispose } from "./utils";
@@ -100,43 +98,44 @@ export interface DisposableOne extends DisposableDisposer {
 
 interface DisposableOneImpl extends DisposableOne {}
 
-const methods: Omit<PickMethods<DisposableOneImpl>, "dispose"> = {
-  is(this: DisposableOneImpl, disposable: DisposableType): boolean {
-    return Object.is(this.current, disposable);
-  },
-  set<T extends DisposableType>(this: DisposableOneImpl, disposable: T): T {
-    if (!this.is(disposable)) {
-      this.flush();
-      this.current = disposable;
-      if (isAbortable(disposable)) {
-        disposable.abortable(() => {
-          if (this.is(disposable)) {
-            this.remove();
-          }
-        });
-      }
-    }
+function is(this: DisposableOneImpl, disposable: DisposableType): boolean {
+  return Object.is(this.current, disposable);
+}
 
-    return disposable;
-  },
-  make<T extends DisposableType>(
-    this: DisposableOneImpl,
-    executor: () => T | null | undefined | void
-  ): T | void {
-    const disposable = executor();
-    if (disposable) {
-      return this.set(disposable);
+function set<T extends DisposableType>(
+  this: DisposableOneImpl,
+  disposable: T
+): T {
+  if (!this.is(disposable)) {
+    this.flush();
+    this.current = disposable;
+    if (isAbortable(disposable)) {
+      disposable.abortable(() => {
+        if (this.is(disposable)) {
+          this.remove();
+        }
+      });
     }
-  },
-  remove(this: DisposableOneImpl): boolean {
-    const exists = !!this.current;
-    this.current = undefined;
-    return exists;
-  },
-  flush(this: DisposableOneImpl): void {
-    this.dispose();
-  },
-};
+  }
+
+  return disposable;
+}
+
+function make<T extends DisposableType>(
+  this: DisposableOneImpl,
+  executor: () => T | null | undefined | void
+): T | void {
+  const disposable = executor();
+  if (disposable) {
+    return this.set(disposable);
+  }
+}
+
+function remove(this: DisposableOneImpl): boolean {
+  const exists = !!this.current;
+  this.current = undefined;
+  return exists;
+}
 
 /**
  * Create a {@link DisposableOne} that manages a single {@link Disposer} or {@link IDisposable}.
@@ -161,16 +160,16 @@ const methods: Omit<PickMethods<DisposableOneImpl>, "dispose"> = {
  * @param disposables Optional array of {@link DisposableType}s added to the store.
  * @returns A disposable store.
  */
-export const disposableOne = (disposable?: DisposableType): DisposableOne => {
-  const disposableOne: Disposer &
-    OmitMethods<DisposableOneImpl> &
-    Pick<DisposableOne, "dispose"> = (): void => {
-    if (disposableOne.current) {
-      dispose(disposableOne.current);
-      disposableOne.current = undefined;
-    }
-  };
+export function disposableOne(disposable?: DisposableType): DisposableOne {
+  function disposableOne(): void {
+    disposableOne.current &&= dispose(disposableOne.current) as undefined;
+  }
   disposableOne.current = disposable;
   disposableOne.dispose = disposableOne;
-  return Object.assign(disposableOne, methods);
-};
+  disposableOne.is = is;
+  disposableOne.set = set;
+  disposableOne.make = make;
+  disposableOne.remove = remove;
+  disposableOne.flush = disposableOne;
+  return disposableOne;
+}

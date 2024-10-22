@@ -1,11 +1,4 @@
 /**
- * Valid key type for {@link DisposableStore}.
- * @deprecated
- * @ignore
- */
-export type DisposableKey = number | string;
-
-/**
  * A function that can be called to dispose resources.
  */
 export type Disposer<T = any> = () => T;

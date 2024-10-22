@@ -1,6 +1,5 @@
 export type {
   DisposableDisposer,
-  DisposableKey,
   DisposableType,
   Disposer,
   IDisposable,

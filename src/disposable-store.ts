@@ -1,11 +1,9 @@
 import type {
   DisposableDisposer,
   DisposableType,
-  Disposer,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
   IDisposable,
 } from "./interface";
-import type { OmitMethods, PickMethods } from "./utils";
 
 import { isAbortable } from "./abortable";
 import { dispose } from "./utils";
@@ -21,6 +19,11 @@ import { dispose } from "./utils";
  *
  */
 export interface DisposableStore extends DisposableDisposer {
+  /**
+   * @internal
+   */
+  _disposables_?: Set<DisposableType>;
+
   /**
    * Flush and clear all of the {@link Disposer}s and {@link IDisposable}s in the store.
    */
@@ -140,56 +143,53 @@ export interface DisposableStore extends DisposableDisposer {
   dispose(this: void): void;
 }
 
-interface DisposableStoreImpl extends DisposableStore {
-  _disposables_: Set<DisposableType>;
+function size(this: DisposableStore): number {
+  return this._disposables_?.size || 0;
 }
 
-const methods: Omit<PickMethods<DisposableStoreImpl>, "dispose"> = {
-  size(this: DisposableStoreImpl): number {
-    return this._disposables_.size;
-  },
-  has(this: DisposableStoreImpl, disposable: DisposableType): boolean {
-    return this._disposables_.has(disposable);
-  },
-  add<T extends DisposableType>(
-    this: DisposableStoreImpl,
-    disposable: T | T[]
-  ): T | T[] | void {
-    const disposables = Array.isArray(disposable) ? disposable : [disposable];
+function has(this: DisposableStore, disposable: DisposableType): boolean {
+  return this._disposables_?.has(disposable) || false;
+}
 
-    for (const disposable of disposables) {
-      if (!this._disposables_.has(disposable)) {
-        this._disposables_.add(disposable);
-        if (isAbortable(disposable)) {
-          disposable.abortable(() => this.remove(disposable));
-        }
+function add<T extends DisposableType>(
+  this: DisposableStore,
+  disposable: T | T[]
+): T | T[] {
+  const disposables = Array.isArray(disposable) ? disposable : [disposable];
+
+  for (const disposable of disposables) {
+    if (!this._disposables_?.has(disposable)) {
+      (this._disposables_ ||= new Set()).add(disposable);
+      if (isAbortable(disposable)) {
+        disposable.abortable(() => this.remove(disposable));
       }
     }
+  }
 
-    return disposable;
-  },
-  make<T extends DisposableType>(
-    this: DisposableStoreImpl,
-    executor: () => T | T[] | null
-  ): T | T[] | void {
-    const disposable = executor();
-    if (disposable) {
-      return this.add(disposable);
+  return disposable;
+}
+
+function make<T extends DisposableType>(
+  this: DisposableStore,
+  executor: () => T | T[] | null
+): T | T[] | null {
+  const disposable = executor();
+  return disposable && this.add(disposable);
+}
+
+function remove(this: DisposableStore, disposable: DisposableType): boolean {
+  return this._disposables_?.delete(disposable) || false;
+}
+
+function flush(this: DisposableStore, disposable?: DisposableType): void {
+  if (disposable) {
+    if (this.remove(disposable)) {
+      dispose(disposable);
     }
-  },
-  remove(this: DisposableStoreImpl, disposable: DisposableType): boolean {
-    return this._disposables_.delete(disposable);
-  },
-  flush(this: DisposableStoreImpl, disposable?: DisposableType): void {
-    if (disposable) {
-      if (this.remove(disposable)) {
-        dispose(disposable);
-      }
-    } else {
-      this.dispose();
-    }
-  },
-};
+  } else {
+    this.dispose();
+  }
+}
 
 /**
  * Create a {@link DisposableStore} that manages {@link Disposer}s and {@link IDisposable}s.
@@ -224,20 +224,20 @@ const methods: Omit<PickMethods<DisposableStoreImpl>, "dispose"> = {
  * @param disposables Optional array of {@link DisposableType}s added to the store.
  * @returns A disposable store.
  */
-export const disposableStore = (
+export function disposableStore(
   disposables?: DisposableType[]
-): DisposableStore => {
-  const disposableStore: Disposer &
-    OmitMethods<DisposableStoreImpl> &
-    Pick<DisposableStore, "dispose"> = (): void => {
-    disposableStore._disposables_.forEach(dispose);
-    disposableStore._disposables_.clear();
-  };
-  disposableStore._disposables_ = new Set();
-  disposableStore.dispose = disposableStore;
-  const store = Object.assign(disposableStore, methods);
-  if (disposables) {
-    store.add(disposables);
+): DisposableStore {
+  function disposableStore(): void {
+    (disposableStore as DisposableStore)._disposables_?.forEach(dispose);
+    (disposableStore as DisposableStore)._disposables_?.clear();
   }
-  return store;
-};
+  disposableStore.dispose = disposableStore;
+  disposableStore.size = size;
+  disposableStore.has = has;
+  disposableStore.add = add;
+  disposableStore.make = make;
+  disposableStore.remove = remove;
+  disposableStore.flush = flush;
+  disposables && disposableStore.add(disposables);
+  return disposableStore;
+}

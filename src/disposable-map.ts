@@ -1,17 +1,12 @@
 import type {
   DisposableDisposer,
   DisposableType,
-  Disposer,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
   IDisposable,
 } from "./interface";
-import type { OmitMethods, PickMethods } from "./utils";
 
 import { isAbortable } from "./abortable";
 import { dispose } from "./utils";
-
-/** @internal */
-type DisposableKey = any;
 
 /**
  * A Disposable Map is an {@link IDisposable} store that manages {@link Disposer}s and {@link IDisposable}s with keys.
@@ -23,8 +18,12 @@ type DisposableKey = any;
  * A {@link DisposableMap} is also an {@link IDisposable}, which means it can be managed by another {@link DisposableMap}.
  *
  */
-export interface DisposableMap<TKey = DisposableKey>
-  extends DisposableDisposer {
+export interface DisposableMap<TKey = any> extends DisposableDisposer {
+  /**
+   * @internal
+   */
+  _disposables_?: Map<TKey, DisposableType>;
+
   /**
    * Flush and clear all of the {@link Disposer}s and {@link IDisposable}s in the Map.
    */
@@ -103,66 +102,60 @@ export interface DisposableMap<TKey = DisposableKey>
   /**
    * Flush and clear all of the {@link Disposer}s and {@link IDisposable}s in the Map.
    */
-  dispose(this: void): void;
+  dispose(): void;
 }
 
-interface DisposableMapImpl<TKey = any> extends DisposableMap<TKey> {
-  _disposables_: Map<TKey, DisposableType>;
+function keys<K>(this: DisposableMap<K>): IterableIterator<K> {
+  return (this._disposables_ || []).keys() as IterableIterator<K>;
 }
 
-const methods: Omit<PickMethods<DisposableMapImpl>, "dispose"> = {
-  keys(this: DisposableMapImpl): IterableIterator<DisposableKey> {
-    return this._disposables_.keys();
-  },
-  size(this: DisposableMapImpl): number {
-    return this._disposables_.size;
-  },
-  has(this: DisposableMapImpl, key: DisposableKey): boolean {
-    return this._disposables_.has(key);
-  },
-  set<T extends DisposableType>(
-    this: DisposableMapImpl,
-    key: DisposableKey,
-    disposable: T
-  ): T {
-    this.flush(key);
-    if (isAbortable(disposable)) {
-      disposable.abortable(() => this.remove(key));
-    }
-    this._disposables_.set(key, disposable);
+function size<K>(this: DisposableMap<K>): number {
+  return this._disposables_?.size || 0;
+}
+
+function has<K>(this: DisposableMap<K>, key: K): boolean {
+  return this._disposables_?.has(key) || false;
+}
+
+function set<T extends DisposableType, K>(
+  this: DisposableMap<K>,
+  key: K,
+  disposable: T
+): T {
+  this.flush(key);
+  if (isAbortable(disposable)) {
+    disposable.abortable(() => this.remove(key));
+  }
+  (this._disposables_ ||= new Map()).set(key, disposable);
+  return disposable;
+}
+
+function make<T extends DisposableType, K>(
+  this: DisposableMap<K>,
+  key: K,
+  executor: () => T | null
+): T | void {
+  const disposable = executor();
+  if (disposable) {
+    return this.set(key, disposable);
+  }
+}
+
+function remove<K>(this: DisposableMap<K>, key: K): DisposableType | undefined {
+  const disposable = this._disposables_?.get(key);
+  if (disposable) {
+    this._disposables_?.delete(key);
     return disposable;
-  },
-  make<T extends DisposableType>(
-    this: DisposableMapImpl,
-    key: DisposableKey,
-    executor: () => T | null
-  ): T | void {
-    const disposable = executor();
-    if (disposable) {
-      return this.set(key, disposable);
-    }
-  },
-  remove(
-    this: DisposableMapImpl,
-    key: DisposableKey
-  ): DisposableType | undefined {
-    const disposable = this._disposables_.get(key);
-    if (disposable) {
-      this._disposables_.delete(key);
-      return disposable;
-    }
-  },
-  flush(this: DisposableMapImpl, key?: DisposableKey): void {
-    if (key != null) {
-      const disposable = this.remove(key);
-      if (disposable) {
-        dispose(disposable);
-      }
-    } else {
-      this.dispose();
-    }
-  },
-};
+  }
+}
+
+function flush<K>(this: DisposableMap<K>, key?: K): void {
+  if (key == null) {
+    this.dispose();
+  } else {
+    dispose(this.remove(key));
+  }
+}
 
 /**
  * Create a {@link DisposableMap} that manages {@link Disposer}s and {@link IDisposable}s with key.
@@ -193,14 +186,18 @@ const methods: Omit<PickMethods<DisposableMapImpl>, "dispose"> = {
  *
  * @returns A disposable Map.
  */
-export const disposableMap = <TKey = DisposableKey>(): DisposableMap<TKey> => {
-  const disposer: Disposer &
-    OmitMethods<DisposableMapImpl<TKey>> &
-    Pick<DisposableMap<TKey>, "dispose"> = (): void => {
-    disposer._disposables_.forEach(dispose);
-    disposer._disposables_.clear();
-  };
-  disposer._disposables_ = new Map();
+export function disposableMap<TKey = any>(): DisposableMap<TKey> {
+  function disposer(): void {
+    (disposer as DisposableMap<TKey>)._disposables_?.forEach(dispose);
+    (disposer as DisposableMap<TKey>)._disposables_?.clear();
+  }
   disposer.dispose = disposer;
-  return Object.assign(disposer, methods);
-};
+  disposer.keys = keys;
+  disposer.size = size;
+  disposer.has = has;
+  disposer.set = set;
+  disposer.make = make;
+  disposer.remove = remove;
+  disposer.flush = flush;
+  return disposer;
+}
