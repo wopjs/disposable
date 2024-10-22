@@ -6,6 +6,7 @@ import type {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
   Disposer,
 } from "./interface";
+
 import { dispose } from "./utils";
 
 /**

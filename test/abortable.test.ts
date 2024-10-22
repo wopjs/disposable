@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
+
 import { abortable } from "../src";
 import { isAbortable } from "../src/abortable";
 

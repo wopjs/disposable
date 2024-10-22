@@ -1,5 +1,7 @@
-import { describe, it, expect, vi } from "vitest";
 import type { DisposableDisposer, IDisposable } from "../src";
+
+import { describe, it, expect, vi } from "vitest";
+
 import { abortable, disposableStore } from "../src";
 
 describe("DisposableStore", () => {

@@ -96,16 +96,11 @@ export interface DisposableOne extends DisposableDisposer {
   dispose(this: void): void;
 }
 
-interface DisposableOneImpl extends DisposableOne {}
-
-function is(this: DisposableOneImpl, disposable: DisposableType): boolean {
+function is(this: DisposableOne, disposable: DisposableType): boolean {
   return Object.is(this.current, disposable);
 }
 
-function set<T extends DisposableType>(
-  this: DisposableOneImpl,
-  disposable: T
-): T {
+function set<T extends DisposableType>(this: DisposableOne, disposable: T): T {
   if (!this.is(disposable)) {
     this.flush();
     this.current = disposable;
@@ -122,7 +117,7 @@ function set<T extends DisposableType>(
 }
 
 function make<T extends DisposableType>(
-  this: DisposableOneImpl,
+  this: DisposableOne,
   executor: () => T | null | undefined | void
 ): T | void {
   const disposable = executor();
@@ -131,7 +126,7 @@ function make<T extends DisposableType>(
   }
 }
 
-function remove(this: DisposableOneImpl): boolean {
+function remove(this: DisposableOne): boolean {
   const exists = !!this.current;
   this.current = undefined;
   return exists;

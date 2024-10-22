@@ -69,6 +69,7 @@ export default tsEslint.config(
       parser: tsEslint.parser,
     },
     rules: {
+      "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/consistent-type-imports": "error",
       "@typescript-eslint/no-empty-interface": "off",
       "@typescript-eslint/no-non-null-assertion": "off",

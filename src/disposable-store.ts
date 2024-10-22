@@ -238,6 +238,8 @@ export function disposableStore(
   disposableStore.make = make;
   disposableStore.remove = remove;
   disposableStore.flush = flush;
-  disposables && disposableStore.add(disposables);
+  if (disposables) {
+    disposableStore.add(disposables);
+  }
   return disposableStore;
 }
