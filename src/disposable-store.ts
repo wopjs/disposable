@@ -153,20 +153,25 @@ function has(this: DisposableStore, disposable: DisposableType): boolean {
 
 function add<T extends DisposableType>(
   this: DisposableStore,
-  disposable: T | T[]
+  disposables: T | T[]
 ): T | T[] {
-  const disposables = Array.isArray(disposable) ? disposable : [disposable];
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+  Array.isArray(disposables)
+    ? disposables.forEach(_addOne, this)
+    : _addOne.call(this, disposables);
+  return disposables;
+}
 
-  for (const disposable of disposables) {
-    if (!this._disposables_?.has(disposable)) {
-      (this._disposables_ ||= new Set()).add(disposable);
-      if (isAbortable(disposable)) {
-        disposable.abortable(() => this.remove(disposable));
-      }
+function _addOne<T extends DisposableType>(
+  this: DisposableStore,
+  disposable: T
+): void {
+  if (!this._disposables_?.has(disposable)) {
+    (this._disposables_ ??= new Set()).add(disposable);
+    if (isAbortable(disposable)) {
+      disposable.abortable(() => this.remove(disposable));
     }
   }
-
-  return disposable;
 }
 
 function make<T extends DisposableType>(

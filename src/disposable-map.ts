@@ -126,7 +126,7 @@ function set<T extends DisposableType, K>(
   if (isAbortable(disposable)) {
     disposable.abortable(() => this.remove(key));
   }
-  (this._disposables_ ||= new Map()).set(key, disposable);
+  (this._disposables_ ??= new Map()).set(key, disposable);
   return disposable;
 }
 
