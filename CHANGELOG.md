@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.11](https://github.com/wopjs/disposable/compare/v0.1.10...v0.1.11) (2024-11-13)
+
+
+### Features
+
+* **disposableOne:** add set undefined or null ([cab0812](https://github.com/wopjs/disposable/commit/cab08124db2c346ed018570ee5d68e4da19416f0))
+
 ## [0.1.10](https://github.com/wopjs/disposable/compare/v0.1.9...v0.1.10) (2024-11-12)
 
 ## [0.1.9](https://github.com/wopjs/disposable/compare/v0.1.8...v0.1.9) (2024-10-22)
