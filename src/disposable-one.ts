@@ -24,7 +24,7 @@ export interface DisposableOne extends DisposableDisposer {
   /**
    * The current {@link DisposableType}.
    */
-  current?: DisposableType;
+  current?: DisposableType | null | void;
 
   /**
    * Set a {@link DisposableType}.
@@ -36,7 +36,20 @@ export interface DisposableOne extends DisposableDisposer {
    * @param disposable A {@link DisposableType} .
    * @returns The same {@link DisposableType} .
    */
-  set<T extends DisposableType>(disposable: T): T;
+  set<T extends DisposableType | undefined | null | void>(disposable: T): T;
+  /**
+   * Set a {@link DisposableType}.
+   *
+   * Do nothing if the same {@link DisposableType} already exists.
+   *
+   * Existing {@link DisposableType} will be flushed before setting a new one.
+   *
+   * @param disposable A {@link DisposableType} .
+   * @returns The same {@link DisposableType} .
+   */
+  set<T extends DisposableType | undefined | null | void>(
+    disposable?: T
+  ): T | undefined;
 
   /**
    * Invoke the executor function and set the returned {@link DisposableType}.
@@ -56,7 +69,7 @@ export interface DisposableOne extends DisposableDisposer {
    * @returns The returned {@link DisposableType}, or `undefined` if the executor returns `undefined | null`.
    */
   make<T extends DisposableType>(
-    executor: () => T | null | undefined | void
+    executor: () => T | undefined | null | void
   ): T | void;
   /**
    * Invoke the executor function and set the returned {@link DisposableType}. Do nothing if `undefined | null` is returned.
@@ -67,7 +80,7 @@ export interface DisposableOne extends DisposableDisposer {
    * @returns The {@link DisposableType}, or `undefined` if the executor returns `undefined | null`.
    */
   make<T extends DisposableType[]>(
-    executor: () => T | null | void | undefined
+    executor: () => T | undefined | null | void
   ): T | void;
 
   /**
@@ -100,8 +113,11 @@ function is(this: DisposableOne, disposable: DisposableType): boolean {
   return Object.is(this.current, disposable);
 }
 
-function set<T extends DisposableType>(this: DisposableOne, disposable: T): T {
-  if (!this.is(disposable)) {
+function set<T extends DisposableType | undefined | null | void>(
+  this: DisposableOne,
+  disposable?: T
+): T | undefined {
+  if (!disposable || !this.is(disposable)) {
     this.flush();
     this.current = disposable;
     if (isAbortable(disposable)) {
@@ -118,7 +134,7 @@ function set<T extends DisposableType>(this: DisposableOne, disposable: T): T {
 
 function make<T extends DisposableType>(
   this: DisposableOne,
-  executor: () => T | null | undefined | void
+  executor: () => T | undefined | null | void
 ): T | void {
   const disposable = executor();
   if (disposable) {
@@ -155,9 +171,11 @@ function remove(this: DisposableOne): boolean {
  * @param disposables Optional array of {@link DisposableType}s added to the store.
  * @returns A disposable store.
  */
-export function disposableOne(disposable?: DisposableType): DisposableOne {
+export function disposableOne(
+  disposable?: DisposableType | undefined | null | void
+): DisposableOne {
   function disposableOne(): void {
-    disposableOne.current &&= dispose(disposableOne.current) as undefined;
+    disposableOne.current &&= dispose(disposableOne.current);
   }
   disposableOne.current = disposable;
   disposableOne.dispose = disposableOne;

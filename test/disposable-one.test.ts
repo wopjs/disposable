@@ -89,6 +89,29 @@ describe("DisposableOne", () => {
       expect(disposer).toBeCalledTimes(1);
       expect(dispose.current).toBeUndefined();
     });
+
+    it("should dispose previous disposer when setting null or undefiend", () => {
+      const dispose = disposableOne();
+      const disposer = vi.fn();
+
+      dispose.set(disposer);
+
+      expect(disposer).toBeCalledTimes(0);
+
+      dispose.set(null);
+
+      expect(disposer).toBeCalledTimes(1);
+
+      disposer.mockClear();
+
+      dispose.set(disposer);
+
+      expect(disposer).toBeCalledTimes(0);
+
+      dispose.set();
+
+      expect(disposer).toBeCalledTimes(1);
+    });
   });
 
   describe("make", () => {
