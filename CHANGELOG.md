@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.12](https://github.com/wopjs/disposable/compare/v0.1.11...v0.1.12) (2024-11-20)
+
+
+### Features
+
+* add join ([841d945](https://github.com/wopjs/disposable/commit/841d945ef89b4633658f39bc23e378cbd0ae1891))
+
 ## [0.1.11](https://github.com/wopjs/disposable/compare/v0.1.10...v0.1.11) (2024-11-13)
 
 
