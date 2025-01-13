@@ -7,7 +7,7 @@ import type {
   Disposer,
 } from "./interface";
 
-import { dispose } from "./utils";
+import { dispose, isFn } from "./utils";
 
 /**
  * A {@link DisposableDisposer} that can be safely self-disposed.
@@ -16,12 +16,13 @@ import { dispose } from "./utils";
 interface AbortableDisposable {
   (): any;
   dispose: (this: void) => any;
-  abortable: (onDispose?: () => void) => void;
+  abortable: (onDispose: () => void) => void;
 }
 
 interface AbortableDisposableImpl extends AbortableDisposable {
-  /** onDisposer */
-  _o?: (() => any) | null;
+  abortable: (onDispose?: () => void) => void;
+  /** deps */
+  _o?: (() => any) | null | void;
 }
 
 /**
@@ -47,14 +48,11 @@ interface AbortableDisposableImpl extends AbortableDisposable {
  * ```
  */
 export const abortable: (disposable: DisposableType) => DisposableDisposer = (
-  disposable: DisposableType | null
+  disposable: DisposableType | void
 ): DisposableDisposer => {
   const abortable: AbortableDisposableImpl = (): void => {
     abortable.abortable();
-    if (disposable) {
-      dispose(disposable);
-      disposable = null;
-    }
+    disposable = dispose(disposable);
   };
   abortable.dispose = abortable;
   abortable.abortable = abortable$abortable;
@@ -65,16 +63,13 @@ function abortable$abortable(
   this: AbortableDisposableImpl,
   onDispose?: () => void
 ): void {
-  if (this._o) {
-    try {
-      this._o();
-    } catch (e) {
-      console.error(e);
-    }
-  }
+  dispose(this?._o);
   this._o = onDispose;
 }
 
 export const isAbortable = (
   disposable: any
-): disposable is AbortableDisposable => disposable && disposable.abortable;
+): disposable is AbortableDisposable =>
+  isFn(disposable) &&
+  isFn((disposable as AbortableDisposable).dispose) &&
+  isFn((disposable as AbortableDisposable).abortable);

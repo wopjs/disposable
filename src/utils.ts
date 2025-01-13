@@ -1,20 +1,19 @@
-import type { Disposer, IDisposable } from "./interface";
+import type { DisposableType, Disposer, IDisposable } from "./interface";
+
+export const isFn = (value: any): value is (...args: any[]) => any =>
+  !!(value && value.constructor && value.call && value.apply);
 
 /**
  * Dispose a disposable object or a disposer function. Log the error if any.
  * @param disposable A disposable object or a disposer function. Do nothing otherwise.
  */
-export function dispose(disposable: any): void {
+export function dispose(disposable?: DisposableType | null | void): void {
   try {
     if (disposable) {
-      if ((disposable as IDisposable).dispose) {
+      if (isFn((disposable as IDisposable).dispose)) {
         // isDisposableObject
         (disposable as IDisposable).dispose();
-      } else if (
-        disposable.constructor &&
-        disposable.call &&
-        disposable.apply
-      ) {
+      } else if (isFn(disposable)) {
         // isFunction
         (disposable as Disposer)();
       }
