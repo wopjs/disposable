@@ -1,11 +1,10 @@
-import type {
-  DisposableDisposer,
-  DisposableType,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
-  IDisposable,
-} from "./interface";
-
 import { isAbortable } from "./abortable";
+import {
+  type DisposableDisposer,
+  type DisposableType,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
+  type IDisposable,
+} from "./interface";
 import { dispose } from "./utils";
 
 /**
@@ -27,30 +26,21 @@ export interface DisposableOne extends DisposableDisposer {
   current?: DisposableType | null | void;
 
   /**
-   * Set a {@link DisposableType}.
-   *
-   * Do nothing if the same {@link DisposableType} already exists.
-   *
-   * Existing {@link DisposableType} will be flushed before setting a new one.
-   *
-   * @param disposable A {@link DisposableType} .
-   * @returns The same {@link DisposableType} .
+   * Flush the current {@link Disposer} and {@link IDisposable} and remove it.
    */
-  set<T extends DisposableType | undefined | null | void>(disposable: T): T;
+  dispose(this: void): void;
   /**
-   * Set a {@link DisposableType}.
-   *
-   * Do nothing if the same {@link DisposableType} already exists.
-   *
-   * Existing {@link DisposableType} will be flushed before setting a new one.
-   *
-   * @param disposable A {@link DisposableType} .
-   * @returns The same {@link DisposableType} .
+   * Invoke the current {@link DisposableType} and remove it.
    */
-  set<T extends DisposableType | undefined | null | void>(
-    disposable?: T
-  ): T | undefined;
+  flush(): void;
 
+  /**
+   * Check if the {@link DisposableType} is the current one.
+   *
+   * @param disposable The {@link DisposableType}.
+   * @returns `true` if the {@link DisposableType} is the current one, otherwise `false`.
+   */
+  is(disposable: DisposableType): boolean;
   /**
    * Invoke the executor function and set the returned {@link DisposableType}.
    *
@@ -69,8 +59,9 @@ export interface DisposableOne extends DisposableDisposer {
    * @returns The returned {@link DisposableType}, or `undefined` if the executor returns `undefined | null`.
    */
   make<T extends DisposableType>(
-    executor: () => T | undefined | null | void
+    executor: () => null | T | undefined | void
   ): T | void;
+
   /**
    * Invoke the executor function and set the returned {@link DisposableType}. Do nothing if `undefined | null` is returned.
    *
@@ -80,16 +71,8 @@ export interface DisposableOne extends DisposableDisposer {
    * @returns The {@link DisposableType}, or `undefined` if the executor returns `undefined | null`.
    */
   make<T extends DisposableType[]>(
-    executor: () => T | undefined | null | void
+    executor: () => null | T | undefined | void
   ): T | void;
-
-  /**
-   * Check if the {@link DisposableType} is the current one.
-   *
-   * @param disposable The {@link DisposableType}.
-   * @returns `true` if the {@link DisposableType} is the current one, otherwise `false`.
-   */
-  is(disposable: DisposableType): boolean;
 
   /**
    * Remove the current {@link DisposableType}. Does not invoke the removed {@link DisposableType}.
@@ -99,53 +82,30 @@ export interface DisposableOne extends DisposableDisposer {
   remove(): boolean;
 
   /**
-   * Invoke the current {@link DisposableType} and remove it.
+   * Set a {@link DisposableType}.
+   *
+   * Do nothing if the same {@link DisposableType} already exists.
+   *
+   * Existing {@link DisposableType} will be flushed before setting a new one.
+   *
+   * @param disposable A {@link DisposableType} .
+   * @returns The same {@link DisposableType} .
    */
-  flush(): void;
+  set<T extends DisposableType | null | undefined | void>(disposable: T): T;
 
   /**
-   * Flush the current {@link Disposer} and {@link IDisposable} and remove it.
+   * Set a {@link DisposableType}.
+   *
+   * Do nothing if the same {@link DisposableType} already exists.
+   *
+   * Existing {@link DisposableType} will be flushed before setting a new one.
+   *
+   * @param disposable A {@link DisposableType} .
+   * @returns The same {@link DisposableType} .
    */
-  dispose(this: void): void;
-}
-
-function is(this: DisposableOne, disposable: DisposableType): boolean {
-  return Object.is(this.current, disposable);
-}
-
-function set<T extends DisposableType | undefined | null | void>(
-  this: DisposableOne,
-  disposable?: T
-): T | undefined {
-  if (!disposable || !this.is(disposable)) {
-    this.flush();
-    this.current = disposable;
-    if (isAbortable(disposable)) {
-      disposable.abortable(() => {
-        if (this.is(disposable)) {
-          this.remove();
-        }
-      });
-    }
-  }
-
-  return disposable;
-}
-
-function make<T extends DisposableType>(
-  this: DisposableOne,
-  executor: () => T | undefined | null | void
-): T | void {
-  const disposable = executor();
-  if (disposable) {
-    return this.set(disposable);
-  }
-}
-
-function remove(this: DisposableOne): boolean {
-  const exists = !!this.current;
-  this.current = undefined;
-  return exists;
+  set<T extends DisposableType | null | undefined | void>(
+    disposable?: T
+  ): T | undefined;
 }
 
 /**
@@ -172,7 +132,7 @@ function remove(this: DisposableOne): boolean {
  * @returns A disposable store.
  */
 export function disposableOne(
-  disposable?: DisposableType | undefined | null | void
+  disposable?: DisposableType | null | undefined | void
 ): DisposableOne {
   function disposableOne(): void {
     disposableOne.current &&= dispose(disposableOne.current);
@@ -185,4 +145,43 @@ export function disposableOne(
   disposableOne.remove = remove;
   disposableOne.flush = disposableOne;
   return disposableOne;
+}
+
+function is(this: DisposableOne, disposable: DisposableType): boolean {
+  return Object.is(this.current, disposable);
+}
+
+function make<T extends DisposableType>(
+  this: DisposableOne,
+  executor: () => null | T | undefined | void
+): T | void {
+  const disposable = executor();
+  if (disposable) {
+    return this.set(disposable);
+  }
+}
+
+function remove(this: DisposableOne): boolean {
+  const exists = !!this.current;
+  this.current = undefined;
+  return exists;
+}
+
+function set<T extends DisposableType | null | undefined | void>(
+  this: DisposableOne,
+  disposable?: T
+): T | undefined {
+  if (!disposable || !this.is(disposable)) {
+    this.flush();
+    this.current = disposable;
+    if (isAbortable(disposable)) {
+      disposable.abortable(() => {
+        if (this.is(disposable)) {
+          this.remove();
+        }
+      });
+    }
+  }
+
+  return disposable;
 }

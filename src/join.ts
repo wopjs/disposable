@@ -1,5 +1,4 @@
-import type { DisposableType, Disposer } from "./interface";
-
+import { type DisposableType, type Disposer } from "./interface";
 import { dispose } from "./utils";
 
 export const join =

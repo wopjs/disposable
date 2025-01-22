@@ -1,8 +1,11 @@
-import type { DisposableDisposer, IDisposable } from "../src";
-
 import { describe, expect, it, vi } from "vitest";
 
-import { abortable, disposableMap } from "../src";
+import {
+  abortable,
+  type DisposableDisposer,
+  disposableMap,
+  type IDisposable,
+} from "../src";
 
 describe("DisposableMap", () => {
   describe("new", () => {
@@ -628,15 +631,15 @@ describe("DisposableMap", () => {
       const spyB = vi.fn();
 
       class A implements IDisposable {
-        public dispose = disposableMap();
+        public readonly dispose = disposableMap();
+        public print = vi.fn();
         public constructor() {
           this.dispose.set("spyA", spyA);
         }
-        public print = vi.fn();
       }
 
       class B implements IDisposable {
-        public dispose = disposableMap();
+        public readonly dispose = disposableMap();
         public a = this.dispose.set("A", new A());
         public constructor() {
           this.dispose.set("spyB", spyB);

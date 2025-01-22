@@ -1,8 +1,11 @@
-import type { DisposableDisposer, IDisposable } from "../src";
+import { describe, expect, it, vi } from "vitest";
 
-import { describe, it, expect, vi } from "vitest";
-
-import { abortable, disposableStore } from "../src";
+import {
+  abortable,
+  type DisposableDisposer,
+  disposableStore,
+  type IDisposable,
+} from "../src";
 
 describe("DisposableStore", () => {
   describe("new", () => {
@@ -595,15 +598,15 @@ describe("DisposableStore", () => {
       const spyB = vi.fn();
 
       class A implements IDisposable {
-        public dispose = disposableStore();
+        public readonly dispose = disposableStore();
+        public print = vi.fn();
         public constructor() {
           this.dispose.add(spyA);
         }
-        public print = vi.fn();
       }
 
       class B implements IDisposable {
-        public dispose = disposableStore();
+        public readonly dispose = disposableStore();
         public a = this.dispose.add(new A());
         public constructor() {
           this.dispose.add(spyB);

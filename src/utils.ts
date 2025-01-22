@@ -1,4 +1,8 @@
-import type { DisposableType, Disposer, IDisposable } from "./interface";
+import {
+  type DisposableType,
+  type Disposer,
+  type IDisposable,
+} from "./interface";
 
 export const isFn = (value: any): value is (...args: any[]) => any =>
   !!(value && value.constructor && value.call && value.apply);

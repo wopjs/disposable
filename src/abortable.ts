@@ -1,12 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
-import type { DisposableStore } from "./disposable-store";
-import type {
-  DisposableDisposer,
-  DisposableType,
+import { type DisposableStore } from "./disposable-store";
+import {
+  type DisposableDisposer,
+  type DisposableType,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
-  Disposer,
+  type Disposer,
 } from "./interface";
-
 import { dispose, isFn } from "./utils";
 
 /**
@@ -15,14 +14,14 @@ import { dispose, isFn } from "./utils";
  */
 interface AbortableDisposable {
   (): any;
-  dispose: (this: void) => any;
   abortable: (onDispose: () => void) => void;
+  dispose: (this: void) => any;
 }
 
 interface AbortableDisposableImpl extends AbortableDisposable {
-  abortable: (onDispose?: () => void) => void;
   /** deps */
   _o?: (() => any) | null | void;
+  abortable: (onDispose?: () => void) => void;
 }
 
 /**
