@@ -401,6 +401,23 @@ dispose.add(timeout(() => console.log("timeout"), 1000));
 // The `timeout` disposer will be removed from the `dispose` after 1s.
 ```
 
+## Eslint Plugin
+
+This package comes with a eslint plugin:
+
+```
+// eslint.config.mjs
+import disposable from "@wopjs/disposable/eslint-plugin.js";
+
+export default [
+  disposable.recommended
+]
+```
+
+Rules:
+
+- `disposable/readonly-dispose`: Enforce `dispose` method to be `readonly`.
+
 ## License
 
 MIT @ [wopjs](https://github.com/wopjs)

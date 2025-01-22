@@ -1,12 +1,9 @@
 /**
- * A function that can be called to dispose resources.
+ * A combination of {@link Disposer} and {@link IDisposable}.
+ * It can be called to dispose resources or call the `dispose` method to dispose resources.
  */
-export type Disposer<T = any> = () => T;
-
-/**
- * An object that has a `dispose` method to dispose resources.
- */
-export interface IDisposable<T = any> {
+export interface DisposableDisposer<T = any> {
+  (): T;
   dispose(): T;
 }
 
@@ -16,10 +13,13 @@ export interface IDisposable<T = any> {
 export type DisposableType<T = any> = Disposer<T> | IDisposable<T>;
 
 /**
- * A combination of {@link Disposer} and {@link IDisposable}.
- * It can be called to dispose resources or call the `dispose` method to dispose resources.
+ * A function that can be called to dispose resources.
  */
-export interface DisposableDisposer<T = any> {
-  (): T;
+export type Disposer<T = any> = () => T;
+
+/**
+ * An object that has a `dispose` method to dispose resources.
+ */
+export interface IDisposable<T = any> {
   dispose(): T;
 }
