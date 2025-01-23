@@ -6,7 +6,7 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
   type Disposer,
 } from "./interface";
-import { dispose, isFn } from "./utils";
+import { dispose, isDisposable, isFn } from "./utils";
 
 /**
  * A {@link DisposableDisposer} that can be safely self-disposed.
@@ -69,6 +69,5 @@ function abortable$abortable(
 export const isAbortable = (
   disposable: any
 ): disposable is AbortableDisposable =>
-  isFn(disposable) &&
-  isFn((disposable as AbortableDisposable).dispose) &&
+  isDisposable(disposable) &&
   isFn((disposable as AbortableDisposable).abortable);

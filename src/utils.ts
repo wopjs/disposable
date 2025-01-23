@@ -1,7 +1,14 @@
-import { type Disposer, type IDisposable } from "./interface";
+import {
+  type DisposableType,
+  type Disposer,
+  type IDisposable,
+} from "./interface";
 
 export const isFn = (value: any): value is (...args: any[]) => any =>
   !!(value && value.constructor && value.call && value.apply);
+
+export const isDisposable = (value: any): value is DisposableType =>
+  isFn(value as Disposer) || isFn((value as IDisposable)?.dispose);
 
 /**
  * Dispose a disposable object or a disposer function. Log the error if any.
