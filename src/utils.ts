@@ -7,7 +7,7 @@ export const isFn = (value: any): value is (...args: any[]) => any =>
  * Dispose a disposable object or a disposer function. Log the error if any.
  * @param disposable A disposable object or a disposer function. Do nothing otherwise.
  */
-export function dispose(disposable: unknown): void {
+export function dispose(disposable: any): void {
   try {
     if (disposable) {
       if (isFn((disposable as IDisposable).dispose)) {
