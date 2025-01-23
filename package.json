@@ -8,7 +8,7 @@
   "types": "./dist/index.d.ts",
   "sideEffects": false,
   "files": [
-    "eslint-plugin.d.js",
+    "eslint-plugin.d.ts",
     "eslint-plugin.js",
     "src",
     "dist"
