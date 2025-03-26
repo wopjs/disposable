@@ -662,4 +662,22 @@ describe("DisposableMap", () => {
       expect(spyB).toBeCalledTimes(1);
     });
   });
+
+  it("should prevent cycle", () => {
+    const a = disposableMap();
+    const b = disposableMap();
+    const c = disposableMap();
+    const d = disposableMap();
+
+    a.set("b", b);
+    b.set("c", c);
+    c.set("d", d);
+    d.set("a", a);
+
+    a.dispose();
+    expect(a._disposables_?.size).toBe(0);
+    expect(b._disposables_?.size).toBe(0);
+    expect(c._disposables_?.size).toBe(0);
+    expect(d._disposables_?.size).toBe(0);
+  });
 });

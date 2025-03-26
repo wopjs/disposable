@@ -179,9 +179,13 @@ export function disposableStore(
   disposables?: DisposableType[]
 ): DisposableStore {
   function disposableStore(): void {
+    if (disposableStore._isDisposing_) return;
+    disposableStore._isDisposing_ = 1;
     (disposableStore as DisposableStore)._disposables_?.forEach(dispose);
     (disposableStore as DisposableStore)._disposables_?.clear();
+    disposableStore._isDisposing_ = 0;
   }
+  disposableStore._isDisposing_ = 0;
   disposableStore.dispose = disposableStore;
   disposableStore.size = size;
   disposableStore.has = has;

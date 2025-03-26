@@ -134,19 +134,23 @@ export interface DisposableMap<TKey = any> extends DisposableDisposer {
  * @returns A disposable Map.
  */
 export function disposableMap<TKey = any>(): DisposableMap<TKey> {
-  function disposer(): void {
-    (disposer as DisposableMap<TKey>)._disposables_?.forEach(dispose);
-    (disposer as DisposableMap<TKey>)._disposables_?.clear();
+  function disposableMap(): void {
+    if (disposableMap._isDisposing_) return;
+    disposableMap._isDisposing_ = 1;
+    (disposableMap as DisposableMap<TKey>)._disposables_?.forEach(dispose);
+    (disposableMap as DisposableMap<TKey>)._disposables_?.clear();
+    disposableMap._isDisposing_ = 0;
   }
-  disposer.dispose = disposer;
-  disposer.keys = keys;
-  disposer.size = size;
-  disposer.has = has;
-  disposer.set = set;
-  disposer.make = make;
-  disposer.remove = remove;
-  disposer.flush = flush;
-  return disposer;
+  disposableMap._isDisposing_ = 0;
+  disposableMap.dispose = disposableMap;
+  disposableMap.keys = keys;
+  disposableMap.size = size;
+  disposableMap.has = has;
+  disposableMap.set = set;
+  disposableMap.make = make;
+  disposableMap.remove = remove;
+  disposableMap.flush = flush;
+  return disposableMap;
 }
 
 function flush<K>(this: DisposableMap<K>, key?: K): void {

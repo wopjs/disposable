@@ -6,7 +6,7 @@ describe("DisposableOne", () => {
   describe("new", () => {
     it("should create a empty instance", () => {
       const dispose = disposableOne();
-      expect(dispose.current).toBeUndefined();
+      expect(dispose.current).toBeFalsy();
     });
 
     it("should add an initial disposable", () => {
@@ -15,7 +15,7 @@ describe("DisposableOne", () => {
       expect(dispose.current).toBe(spy);
       dispose();
       expect(spy).toBeCalledTimes(1);
-      expect(dispose.current).toBeUndefined();
+      expect(dispose.current).toBeFalsy();
     });
   });
 
@@ -85,7 +85,7 @@ describe("DisposableOne", () => {
       dispose.dispose();
 
       expect(disposer).toBeCalledTimes(1);
-      expect(dispose.current).toBeUndefined();
+      expect(dispose.current).toBeFalsy();
     });
 
     it("should dispose previous disposer when setting null or undefiend", () => {
@@ -136,7 +136,7 @@ describe("DisposableOne", () => {
         return null;
       });
 
-      expect(dispose.current).toBeUndefined();
+      expect(dispose.current).toBeFalsy();
     });
 
     it("should return the disposable", () => {
@@ -175,9 +175,9 @@ describe("DisposableOne", () => {
   describe("remove", () => {
     it("should do nothing if empty", () => {
       const dispose = disposableOne();
-      expect(dispose.current).toBeUndefined();
+      expect(dispose.current).toBeFalsy();
       dispose.remove();
-      expect(dispose.current).toBeUndefined();
+      expect(dispose.current).toBeFalsy();
     });
 
     it("should remove the disposable", () => {
@@ -192,7 +192,7 @@ describe("DisposableOne", () => {
       dispose.remove();
 
       expect(disposer).toBeCalledTimes(0);
-      expect(dispose.current).toBeUndefined();
+      expect(dispose.current).toBeFalsy();
     });
 
     it("should return true if exists otherwise false", () => {
@@ -216,7 +216,7 @@ describe("DisposableOne", () => {
       dispose.flush();
 
       expect(disposer).toBeCalledTimes(1);
-      expect(dispose.current).toBeUndefined();
+      expect(dispose.current).toBeFalsy();
     });
 
     it("should call `.dispose()` instead if exist", () => {
@@ -234,7 +234,7 @@ describe("DisposableOne", () => {
 
       expect(disposer).toBeCalledTimes(0);
       expect(disposer.dispose).toBeCalledTimes(1);
-      expect(dispose.current).toBeUndefined();
+      expect(dispose.current).toBeFalsy();
     });
 
     it("should be able to call flush on a flushed disposable", () => {
@@ -249,12 +249,12 @@ describe("DisposableOne", () => {
       dispose.flush();
 
       expect(disposer).toBeCalledTimes(1);
-      expect(dispose.current).toBeUndefined();
+      expect(dispose.current).toBeFalsy();
 
       dispose.flush();
 
       expect(disposer).toBeCalledTimes(1);
-      expect(dispose.current).toBeUndefined();
+      expect(dispose.current).toBeFalsy();
     });
 
     it("should catch error in disposer", () => {
@@ -297,7 +297,7 @@ describe("DisposableOne", () => {
 
       expect(fnEffect).toBeCalledTimes(count);
       expect(fnDispose).toBeCalledTimes(count - 1);
-      expect(dispose.current).not.toBeUndefined();
+      expect(dispose.current).not.toBeFalsy();
 
       fnEffect.mockRestore();
       fnDispose.mockRestore();
@@ -306,7 +306,7 @@ describe("DisposableOne", () => {
 
       expect(fnEffect).toBeCalledTimes(0);
       expect(fnDispose).toBeCalledTimes(1);
-      expect(dispose.current).toBeUndefined();
+      expect(dispose.current).toBeFalsy();
 
       fnEffect.mockRestore();
       fnDispose.mockRestore();
@@ -315,7 +315,7 @@ describe("DisposableOne", () => {
 
       expect(fnEffect).toBeCalledTimes(0);
       expect(fnDispose).toBeCalledTimes(0);
-      expect(dispose.current).toBeUndefined();
+      expect(dispose.current).toBeFalsy();
     });
 
     it("should catch error in disposer", () => {
@@ -371,7 +371,7 @@ describe("DisposableOne", () => {
 
       disposer();
 
-      expect(dispose.current).toBeUndefined();
+      expect(dispose.current).toBeFalsy();
     });
 
     it("should not rebind abortable when setting again", () => {
@@ -388,8 +388,23 @@ describe("DisposableOne", () => {
 
       store.flush();
 
-      expect(store.current).toBeUndefined();
+      expect(store.current).toBeFalsy();
       expect(fnDispose).toBeCalledTimes(1);
     });
+  });
+
+  it("should prevent cycle", () => {
+    const a = disposableOne();
+    const b = disposableOne();
+    const c = disposableOne();
+    const d = disposableOne();
+
+    a.set(b);
+    b.set(c);
+    c.set(d);
+    d.set(a);
+
+    a.dispose();
+    expect(a.current).toBeFalsy();
   });
 });

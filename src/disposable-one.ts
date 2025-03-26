@@ -135,7 +135,11 @@ export function disposableOne(
   disposable?: DisposableType | null | undefined | void
 ): DisposableOne {
   function disposableOne(): void {
-    disposableOne.current &&= dispose(disposableOne.current);
+    const { current } = disposableOne;
+    if (current) {
+      disposableOne.current = null;
+      dispose(current);
+    }
   }
   disposableOne.current = disposable;
   disposableOne.dispose = disposableOne;

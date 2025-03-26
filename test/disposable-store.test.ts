@@ -629,4 +629,22 @@ describe("DisposableStore", () => {
       expect(spyB).toBeCalledTimes(1);
     });
   });
+
+  it("should prevent cycle", () => {
+    const a = disposableStore();
+    const b = disposableStore();
+    const c = disposableStore();
+    const d = disposableStore();
+
+    a.add(b);
+    b.add(c);
+    c.add(d);
+    d.add(a);
+
+    a.dispose();
+    expect(a._disposables_?.size).toBe(0);
+    expect(b._disposables_?.size).toBe(0);
+    expect(c._disposables_?.size).toBe(0);
+    expect(d._disposables_?.size).toBe(0);
+  });
 });
