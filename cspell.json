@@ -10,6 +10,7 @@
     "Parens",
     "pnpm",
     "preinstall",
+    "Refreshable",
     "treeshake",
     "tsup",
     "typedoc",

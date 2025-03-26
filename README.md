@@ -180,7 +180,7 @@ b.dispose(); // All side effects in both a and b are disposed
   a.dispose(); // clear all disposers
   ```
 
-### Refresh-able
+### Refreshable
 
 - Disposables can bind to keys with `DisposableMap`. Setting a disposable with the same key will dispose (flush) the old one first.
 
@@ -320,7 +320,7 @@ b.dispose(); // both a and b are disposed
 
 Like [DisposableStore](#disposablestore), a DisposableMap is a [DisposableDisposer](#DisposableDisposer) that manages disposers and disposables with key.
 
-Map key introduces [Refresh-able](#refresh-able) which makes it more interesting when comes to creating side effects on the fly.
+Map key introduces [Refreshable](#refreshable) which makes it more interesting when comes to creating side effects on the fly.
 
 ```js
 import { disposableMap } from "@wopjs/disposable";
@@ -364,7 +364,7 @@ b.dispose(); // both a and b are disposed
 
 ### DisposableOne
 
-DisposableOne is a lightweight [DisposableMap](#DisposableMap). It only manages one disposer or disposable at a time. It is useful if you want [Refresh-able](#refresh-able) but only need to manage one disposer or disposable.
+DisposableOne is a lightweight [DisposableMap](#DisposableMap). It only manages one disposer or disposable at a time. It is useful if you want [Refreshable](#refreshable) but only need to manage one disposer or disposable.
 
 ```js
 import { disposableOne } from "@wopjs/disposable";
