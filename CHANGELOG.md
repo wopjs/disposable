@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.19](https://github.com/wopjs/disposable/compare/v0.1.18...v0.1.19) (2025-03-26)
+
+
+### Bug Fixes
+
+* prevent cycle ([ff7694b](https://github.com/wopjs/disposable/commit/ff7694b6e5cc7b49330e3f7b8c3b8cd1ef68d07a))
+
 ## [0.1.12](https://github.com/wopjs/disposable/compare/v0.1.11...v0.1.12) (2024-11-20)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@wopjs/disposable",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "description": "Manage side effect disposers in a compact, reusable and testable style.",
   "repository": "wopjs/disposable",
   "main": "./dist/index.js",
