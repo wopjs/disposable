@@ -49,7 +49,7 @@ describe("DisposableStore", () => {
     it("should invoke disposable instance with correct `this`", () => {
       let self: any;
       const disposer = {
-        dispose: vi.fn(function () {
+        dispose: vi.fn(function (this: IDisposable) {
           // eslint-disable-next-line @typescript-eslint/no-this-alias
           self = this;
         }),

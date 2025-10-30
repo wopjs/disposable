@@ -128,8 +128,8 @@ export interface DisposableOne extends DisposableDisposer {
  * dispose(); // prints "foo"
  * ```
  *
- * @param disposables Optional array of {@link DisposableType}s added to the store.
- * @returns A disposable store.
+ * @param disposable Optional {@link DisposableType} to set as the initial value.
+ * @returns The created {@link DisposableOne}.
  */
 export function disposableOne(
   disposable?: DisposableType | null | undefined | void
