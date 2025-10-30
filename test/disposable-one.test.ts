@@ -1,6 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { abortable, type DisposableDisposer, disposableOne } from "../src";
+import {
+  abortable,
+  type DisposableDisposer,
+  disposableOne,
+  type IDisposable,
+} from "../src";
 
 describe("DisposableOne", () => {
   describe("new", () => {
@@ -45,7 +50,7 @@ describe("DisposableOne", () => {
     it("should invoke disposable instance with correct `this`", () => {
       let self: any;
       const disposer = {
-        dispose: vi.fn(function () {
+        dispose: vi.fn(function (this: IDisposable) {
           // eslint-disable-next-line @typescript-eslint/no-this-alias
           self = this;
         }),

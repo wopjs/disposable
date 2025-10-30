@@ -9,5 +9,4 @@ export type {
   Disposer,
   IDisposable,
 } from "./interface";
-export { join } from "./join";
-export { dispose, isDisposable } from "./utils";
+export { dispose, isDisposable, extend, join } from "./utils";

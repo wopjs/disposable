@@ -29,7 +29,7 @@ interface AbortableDisposableImpl extends AbortableDisposable {
  *
  * If it is attached to a {@link DisposableStore}, it will be removed from the store automatically when self-disposed.
  *
- * @param disposer A {@link Disposer}.
+ * @param disposable A {@link DisposableType}.
  * @returns An abortable {@link DisposableDisposer}.
  *
  * @example
