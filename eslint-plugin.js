@@ -29,6 +29,7 @@ const plugin = {
   },
 };
 
+/* global module */
 module.exports = {
   plugin,
   recommended: {
