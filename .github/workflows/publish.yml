@@ -1,8 +1,9 @@
-name: Node.js Package
+name: Publish NPM Package
 
 on:
   push:
-    tags: "v**"
+    tags:
+      - "v**"
   workflow_dispatch:
 
 jobs:
@@ -32,5 +33,3 @@ jobs:
 
       - name: Publish Package 🚀
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
