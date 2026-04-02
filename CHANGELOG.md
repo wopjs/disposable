@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.21](https://github.com/wopjs/disposable/compare/v0.1.20...v0.1.21) (2026-04-02)
+
+
+### Features
+
+* implement DisposableArray and related utilities with comprehensive tests ([2800225](https://github.com/wopjs/disposable/commit/2800225e45eac5ec109beb7884896f13d4290b0c))
+
 ## [0.1.20](https://github.com/wopjs/disposable/compare/v0.1.19...v0.1.20) (2025-10-30)
 
 ## [0.1.19](https://github.com/wopjs/disposable/compare/v0.1.18...v0.1.19) (2025-03-26)
