@@ -167,7 +167,7 @@ function make<T extends DisposableType>(
 
 function remove(this: DisposableOne): boolean {
   const exists = !!this.current;
-  this.current = undefined;
+  this.current = null;
   return exists;
 }
 

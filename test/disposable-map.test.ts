@@ -675,9 +675,9 @@ describe("DisposableMap", () => {
     d.set("a", a);
 
     a.dispose();
-    expect(a._disposables_?.size).toBe(0);
-    expect(b._disposables_?.size).toBe(0);
-    expect(c._disposables_?.size).toBe(0);
-    expect(d._disposables_?.size).toBe(0);
+    expect(a.size()).toBe(0);
+    expect(b.size()).toBe(0);
+    expect(c.size()).toBe(0);
+    expect(d.size()).toBe(0);
   });
 });

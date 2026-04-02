@@ -1,12 +1,76 @@
 import { describe, expect, it, vi } from "vitest";
 
 import {
+  dispose,
   type Disposer,
   extend,
   type IDisposable,
   isDisposable,
   join,
 } from "../src";
+
+describe("dispose", () => {
+  it("should call function disposer", () => {
+    const fn = vi.fn();
+
+    dispose(fn);
+
+    expect(fn).toHaveBeenCalledOnce();
+  });
+
+  it("should call .dispose() on disposable object", () => {
+    const disposable = {
+      dispose: vi.fn(),
+    };
+
+    dispose(disposable);
+
+    expect(disposable.dispose).toHaveBeenCalledOnce();
+  });
+
+  it("should prefer .dispose() when both function and .dispose exist", () => {
+    const fn = vi.fn() as unknown as Disposer & IDisposable;
+    fn.dispose = vi.fn();
+
+    dispose(fn);
+
+    expect(fn).not.toHaveBeenCalled();
+    expect(fn.dispose).toHaveBeenCalledOnce();
+  });
+
+  it("should catch and log error from disposer", () => {
+    const error = new Error("dispose error");
+    const logSpy = vi
+      .spyOn(globalThis.console, "error")
+      .mockImplementation(() => void 0);
+
+    dispose(() => {
+      throw error;
+    });
+
+    expect(logSpy).toHaveBeenCalledOnce();
+    expect(logSpy).toHaveBeenCalledWith(error);
+
+    logSpy.mockRestore();
+  });
+
+  it("should do nothing for non-disposable values", () => {
+    const logSpy = vi
+      .spyOn(globalThis.console, "error")
+      .mockImplementation(() => void 0);
+
+    dispose(undefined);
+    dispose(null);
+    dispose(0);
+    dispose(false);
+    dispose("text");
+    dispose({});
+
+    expect(logSpy).not.toHaveBeenCalled();
+
+    logSpy.mockRestore();
+  });
+});
 
 describe("isDisposable", () => {
   it("should returns true for Disposer", () => {

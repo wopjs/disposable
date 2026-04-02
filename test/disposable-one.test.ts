@@ -173,7 +173,7 @@ describe("DisposableOne", () => {
       dispose.set(disposer);
 
       expect(dispose.is(disposer)).toBe(true);
-      expect(dispose.is(vi.fn())).toBe(false);
+      expect(dispose.is(() => void 0)).toBe(false);
     });
   });
 
@@ -201,7 +201,7 @@ describe("DisposableOne", () => {
     });
 
     it("should return true if exists otherwise false", () => {
-      const dispose = disposableOne(vi.fn());
+      const dispose = disposableOne(() => void 0);
 
       expect(dispose.remove()).toBe(true);
       expect(dispose.remove()).toBe(false);

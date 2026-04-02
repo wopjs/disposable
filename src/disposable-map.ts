@@ -21,7 +21,7 @@ export interface DisposableMap<TKey = any> extends DisposableDisposer {
   /**
    * @internal
    */
-  _disposables_?: Map<TKey, DisposableType>;
+  _disposables_?: Map<TKey, DisposableType> | void;
 
   /**
    * Flush and clear all of the {@link Disposer}s and {@link IDisposable}s in the Map.
@@ -134,14 +134,15 @@ export interface DisposableMap<TKey = any> extends DisposableDisposer {
  * @returns A disposable Map.
  */
 export function disposableMap<TKey = any>(): DisposableMap<TKey> {
+  let isDisposing: 1 | void;
   function disposableMap(): void {
-    if (disposableMap._isDisposing_) return;
-    disposableMap._isDisposing_ = 1;
-    (disposableMap as DisposableMap<TKey>)._disposables_?.forEach(dispose);
-    (disposableMap as DisposableMap<TKey>)._disposables_?.clear();
-    disposableMap._isDisposing_ = 0;
+    if (!isDisposing) {
+      isDisposing = 1;
+      isDisposing = (disposableMap as DisposableMap<TKey>)._disposables_ = (
+        disposableMap as DisposableMap<TKey>
+      )._disposables_?.forEach(dispose);
+    }
   }
-  disposableMap._isDisposing_ = 0;
   disposableMap.dispose = disposableMap;
   disposableMap.keys = keys;
   disposableMap.size = size;
@@ -154,15 +155,11 @@ export function disposableMap<TKey = any>(): DisposableMap<TKey> {
 }
 
 function flush<K>(this: DisposableMap<K>, key?: K): void {
-  if (key == null) {
-    this.dispose();
-  } else {
-    dispose(this.remove(key));
-  }
+  dispose(key == null ? this : this.remove(key));
 }
 
 function has<K>(this: DisposableMap<K>, key: K): boolean {
-  return this._disposables_?.has(key) || false;
+  return !!this._disposables_?.has(key);
 }
 
 function keys<K>(this: DisposableMap<K>): IterableIterator<K> {

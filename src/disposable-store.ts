@@ -21,7 +21,7 @@ export interface DisposableStore extends DisposableDisposer {
   /**
    * @internal
    */
-  _disposables_?: Set<DisposableType>;
+  _disposables_?: Set<DisposableType> | void;
 
   /**
    * Flush and clear all of the {@link Disposer}s and {@link IDisposable}s in the store.
@@ -178,14 +178,15 @@ export interface DisposableStore extends DisposableDisposer {
 export function disposableStore(
   disposables?: DisposableType[]
 ): DisposableStore {
+  let isDisposing: 1 | void;
   function disposableStore(): void {
-    if (disposableStore._isDisposing_) return;
-    disposableStore._isDisposing_ = 1;
-    (disposableStore as DisposableStore)._disposables_?.forEach(dispose);
-    (disposableStore as DisposableStore)._disposables_?.clear();
-    disposableStore._isDisposing_ = 0;
+    if (!isDisposing) {
+      isDisposing = 1;
+      isDisposing = (disposableStore as DisposableStore)._disposables_ = (
+        disposableStore as DisposableStore
+      )._disposables_?.forEach(dispose);
+    }
   }
-  disposableStore._isDisposing_ = 0;
   disposableStore.dispose = disposableStore;
   disposableStore.size = size;
   disposableStore.has = has;
@@ -206,7 +207,7 @@ function _addOne<T extends DisposableType>(
   if (!this._disposables_?.has(disposable)) {
     (this._disposables_ ??= new Set()).add(disposable);
     if (isAbortable(disposable)) {
-      disposable.abortable(() => this.remove(disposable));
+      disposable.abortable(remove.bind(this, disposable));
     }
   }
 }
@@ -223,17 +224,11 @@ function add<T extends DisposableType>(
 }
 
 function flush(this: DisposableStore, disposable?: DisposableType): void {
-  if (disposable) {
-    if (this.remove(disposable)) {
-      dispose(disposable);
-    }
-  } else {
-    this.dispose();
-  }
+  dispose(disposable ? this.remove(disposable) && disposable : this);
 }
 
 function has(this: DisposableStore, disposable: DisposableType): boolean {
-  return this._disposables_?.has(disposable) || false;
+  return !!this._disposables_?.has(disposable);
 }
 
 function make<T extends DisposableType>(
@@ -245,7 +240,7 @@ function make<T extends DisposableType>(
 }
 
 function remove(this: DisposableStore, disposable: DisposableType): boolean {
-  return this._disposables_?.delete(disposable) || false;
+  return !!this._disposables_?.delete(disposable);
 }
 
 function size(this: DisposableStore): number {

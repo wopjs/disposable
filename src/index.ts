@@ -1,5 +1,6 @@
 export { abortable } from "./abortable";
 
+export { disposableArray, type DisposableArray } from "./disposable-array";
 export { disposableMap, type DisposableMap } from "./disposable-map";
 export { disposableOne, type DisposableOne } from "./disposable-one";
 export { disposableStore, type DisposableStore } from "./disposable-store";
