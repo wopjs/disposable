@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.22](https://github.com/wopjs/disposable/compare/v0.1.21...v0.1.22) (2026-04-24)
+
+
+### Bug Fixes
+
+* update regex patterns in readonly-dispose rule to include DisposableArray ([85ee186](https://github.com/wopjs/disposable/commit/85ee186e945f8e4bd7b896ad9f05cf2eac5a659d))
+
 ## [0.1.21](https://github.com/wopjs/disposable/compare/v0.1.20...v0.1.21) (2026-04-02)
 
 
