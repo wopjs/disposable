@@ -16,9 +16,9 @@ const plugin = {
         }
 
         return {
-          "PropertyDefinition[readonly!=true][key.name=dispose][typeAnnotation.typeAnnotation.typeName.name=/Disposer|IDisposable|DisposableType|DisposableDisposer|DisposableStore|DisposableMap|DisposableOne/]":
+          "PropertyDefinition[readonly!=true][key.name=dispose][typeAnnotation.typeAnnotation.typeName.name=/Disposer|IDisposable|DisposableType|DisposableDisposer|DisposableArray|DisposableStore|DisposableMap|DisposableOne/]":
             checkProperty,
-          "PropertyDefinition[readonly!=true][key.name=dispose][value.type=CallExpression][value.callee.name=/disposableStore|disposableMap|disposableOne/]":
+          "PropertyDefinition[readonly!=true][key.name=dispose][value.type=CallExpression][value.callee.name=/disposableArray|disposableStore|disposableMap|disposableOne/]":
             checkProperty,
         };
       },
