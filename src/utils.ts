@@ -1,8 +1,4 @@
-import {
-  type DisposableType,
-  type Disposer,
-  type IDisposable,
-} from "./interface";
+import type { DisposableType, Disposer, IDisposable } from "./interface";
 
 export const isFn = (value: any): value is (...args: any[]) => any =>
   !!(value && value.constructor && value.call && value.apply);
@@ -20,8 +16,7 @@ export const isDisposable = (value: any): value is DisposableType =>
  * @param disposables The disposables to join.
  * @returns A disposer function that disposes all the given disposables when called.
  */
-export const join = (...disposables: DisposableType[]): Disposer =>
-  disposables.forEach.bind(disposables, dispose);
+export const join = (...disposables: DisposableType[]): Disposer => disposables.forEach.bind(disposables, dispose);
 
 /**
  * Dispose a disposable object or a disposer function. Log the error if any.
@@ -60,10 +55,7 @@ export function dispose(disposable: any): void {
  *
  * extend(disposable, () => console.log("extended dispose 1"), () => console.log("extended dispose 2"));
  */
-export function extend<T extends IDisposable>(
-  disposable: T,
-  ...disposables: DisposableType[]
-): T {
+export function extend<T extends IDisposable>(disposable: T, ...disposables: DisposableType[]): T {
   const oldDispose = disposable.dispose.bind(disposable);
   disposable.dispose = join(oldDispose, ...disposables);
   return disposable;

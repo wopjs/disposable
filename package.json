@@ -3,9 +3,22 @@
   "version": "0.1.22",
   "description": "Manage side effect disposers in a compact, reusable and testable style.",
   "repository": "wopjs/disposable",
-  "main": "./dist/index.js",
+  "type": "module",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      },
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      }
+    }
+  },
   "sideEffects": false,
   "files": [
     "eslint-plugin.d.ts",
@@ -15,15 +28,16 @@
   ],
   "scripts": {
     "prepublishOnly": "npm run build",
-    "lint": "eslint && prettier --check .",
-    "lint:fix": "eslint --fix && prettier --write .",
+    "lint": "biome check",
+    "lint:fix": "biome check --write",
+    "lint:ci": "biome ci",
     "ts-check": "tsc --noEmit",
-    "docs": "typedoc --options typedoc.json",
+    "docs": "typedoc --options typedoc.json && biome format --write --config-path=biome.docs.json --files-ignore-unknown=true docs",
     "test": "vitest",
-    "test:coverage": "vitest --coverage --coverage.include=src/**",
-    "test:ci": "tsc --noEmit && vitest --coverage --coverage.reporter=lcov --coverage.include=src/**",
-    "build": "tsup",
-    "build:min": "MINIFY=true tsup && echo '' && gzip-size dist/index.mjs dist/index.js",
+    "test:coverage": "vitest --coverage",
+    "test:ci": "vitest run --coverage",
+    "build": "tsdown",
+    "build:min": "MINIFY=true tsdown && echo '' && gzip-size dist/index.mjs dist/index.js",
     "release": "commit-and-tag-version"
   },
   "keywords": [
@@ -46,16 +60,15 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^25.5.0",
-    "@vitest/coverage-v8": "^4.1.0",
-    "@wopjs/eslint-config": "^0.1.63",
+    "@biomejs/biome": "^2.4.10",
+    "@types/node": "^25.6.0",
+    "@vitest/coverage-v8": "^4.1.5",
     "@wopjs/gzip-size": "^0.1.5",
-    "commit-and-tag-version": "^12.6.1",
-    "eslint": "^10.0.3",
-    "prettier": "^3.8.1",
-    "tsup": "^8.5.1",
-    "typedoc": "^0.28.17",
-    "typescript": "^5.9.3",
-    "vitest": "^4.0.6"
+    "commit-and-tag-version": "^12.7.1",
+    "eslint": "^10.3.0",
+    "tsdown": "^0.21.7",
+    "typedoc": "^0.28.18",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.5"
   }
 }

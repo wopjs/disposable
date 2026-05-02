@@ -1,10 +1,5 @@
 import { isAbortable } from "./abortable";
-import {
-  type DisposableDisposer,
-  type DisposableType,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
-  type IDisposable,
-} from "./interface";
+import type { DisposableDisposer, DisposableType, IDisposable } from "./interface";
 import { dispose } from "./utils";
 
 /**
@@ -74,10 +69,7 @@ export interface DisposableMap<TKey = any> extends DisposableDisposer {
    * @param executor A function that returns either a {@link DisposableType} or `null | undefined`.
    * @returns The returned {@link DisposableType}, or `undefined` if the executor returns `null | undefined`.
    */
-  make<T extends DisposableType>(
-    key: TKey,
-    executor: () => null | T | undefined | void
-  ): T | void;
+  make<T extends DisposableType>(key: TKey, executor: () => null | T | undefined | void): T | void;
 
   /**
    * Remove the {@link DisposableType} at the specific key from the Map. Does not invoke the removed {@link DisposableType}.
@@ -166,11 +158,7 @@ function keys<K>(this: DisposableMap<K>): IterableIterator<K> {
   return (this._disposables_ || []).keys() as IterableIterator<K>;
 }
 
-function make<T extends DisposableType, K>(
-  this: DisposableMap<K>,
-  key: K,
-  executor: () => null | T
-): T | void {
+function make<T extends DisposableType, K>(this: DisposableMap<K>, key: K, executor: () => null | T): T | void {
   const disposable = executor();
   if (disposable) {
     return this.set(key, disposable);
@@ -185,11 +173,7 @@ function remove<K>(this: DisposableMap<K>, key: K): DisposableType | undefined {
   }
 }
 
-function set<T extends DisposableType, K>(
-  this: DisposableMap<K>,
-  key: K,
-  disposable: T
-): T {
+function set<T extends DisposableType, K>(this: DisposableMap<K>, key: K, disposable: T): T {
   this.flush(key);
   if (isAbortable(disposable)) {
     disposable.abortable(() => this.remove(key));

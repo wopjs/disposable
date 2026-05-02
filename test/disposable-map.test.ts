@@ -1,11 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import {
-  abortable,
-  type DisposableDisposer,
-  disposableMap,
-  type IDisposable,
-} from "../src";
+import { abortable, type DisposableDisposer, disposableMap, type IDisposable } from "../src";
 
 describe("DisposableMap", () => {
   describe("new", () => {
@@ -23,7 +18,7 @@ describe("DisposableMap", () => {
       const returnedDisposer = map.set("key1", disposer);
 
       expect(returnedDisposer).toBe(disposer);
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(1);
     });
 
@@ -34,7 +29,7 @@ describe("DisposableMap", () => {
       const returnedDisposable = map.set("key1", disposer);
 
       expect(returnedDisposable).toBe(disposer);
-      expect(disposer.dispose).toBeCalledTimes(0);
+      expect(disposer.dispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(1);
     });
 
@@ -45,12 +40,12 @@ describe("DisposableMap", () => {
 
       map.set("key1", disposer1);
 
-      expect(disposer1).toBeCalledTimes(0);
+      expect(disposer1).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(1);
 
       map.set("key2", disposer2);
 
-      expect(disposer2).toBeCalledTimes(0);
+      expect(disposer2).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(2);
     });
 
@@ -60,14 +55,14 @@ describe("DisposableMap", () => {
 
       map.set("key1", disposer1);
 
-      expect(disposer1).toBeCalledTimes(0);
+      expect(disposer1).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(1);
 
       const disposer2 = vi.fn();
       map.set("key1", disposer2);
 
-      expect(disposer1).toBeCalledTimes(1);
-      expect(disposer2).toBeCalledTimes(0);
+      expect(disposer1).toHaveBeenCalledTimes(1);
+      expect(disposer2).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(1);
     });
   });
@@ -83,9 +78,9 @@ describe("DisposableMap", () => {
         return () => fnDispose("dispose");
       });
 
-      expect(fnEffect).toBeCalledTimes(1);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
       expect(fnEffect).lastCalledWith("execute");
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(1);
     });
 
@@ -99,9 +94,9 @@ describe("DisposableMap", () => {
         return () => fnDispose("dispose");
       });
 
-      expect(fnEffect).toBeCalledTimes(1);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
       expect(fnEffect).lastCalledWith("execute1");
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(1);
 
       map.make("key2", () => {
@@ -109,9 +104,9 @@ describe("DisposableMap", () => {
         return () => fnDispose("dispose");
       });
 
-      expect(fnEffect).toBeCalledTimes(2);
+      expect(fnEffect).toHaveBeenCalledTimes(2);
       expect(fnEffect).lastCalledWith("execute2");
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(2);
     });
 
@@ -133,7 +128,7 @@ describe("DisposableMap", () => {
         return disposer;
       });
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(1);
       expect(returnedDisposer).toBe(disposer);
     });
@@ -148,9 +143,9 @@ describe("DisposableMap", () => {
         return () => fnDispose("dispose1");
       });
 
-      expect(fnEffect).toBeCalledTimes(1);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
       expect(fnEffect).lastCalledWith("execute1");
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(1);
 
       fnEffect.mockReset();
@@ -161,9 +156,9 @@ describe("DisposableMap", () => {
         return () => fnDispose("dispose2");
       });
 
-      expect(fnEffect).toBeCalledTimes(1);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
       expect(fnEffect).lastCalledWith("execute2");
-      expect(fnDispose).toBeCalledTimes(1);
+      expect(fnDispose).toHaveBeenCalledTimes(1);
       expect(fnDispose).lastCalledWith("dispose1");
       expect(map.size()).toBe(1);
     });
@@ -227,14 +222,14 @@ describe("DisposableMap", () => {
         return () => fnDispose("dispose");
       });
 
-      expect(fnEffect).toBeCalledTimes(1);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(1);
 
       map.remove("a-key");
 
-      expect(fnEffect).toBeCalledTimes(1);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(0);
     });
 
@@ -248,20 +243,20 @@ describe("DisposableMap", () => {
         return () => fnDispose("dispose");
       });
 
-      expect(fnEffect).toBeCalledTimes(1);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(1);
 
       map.remove("a-key");
 
-      expect(fnEffect).toBeCalledTimes(1);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(0);
 
       map.remove("a-key");
 
-      expect(fnEffect).toBeCalledTimes(1);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(0);
     });
 
@@ -275,8 +270,8 @@ describe("DisposableMap", () => {
         return () => fnDispose("dispose1");
       });
 
-      expect(fnEffect).toBeCalledTimes(1);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(fnEffect).lastCalledWith("execute1");
       expect(map.size()).toBe(1);
 
@@ -285,21 +280,21 @@ describe("DisposableMap", () => {
         return () => fnDispose("dispose2");
       });
 
-      expect(fnEffect).toBeCalledTimes(2);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(2);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(fnEffect).lastCalledWith("execute2");
       expect(map.size()).toBe(2);
 
       map.remove("disposer1");
 
-      expect(fnEffect).toBeCalledTimes(2);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(2);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(1);
 
       map.remove("disposer2");
 
-      expect(fnEffect).toBeCalledTimes(2);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(2);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(0);
     });
 
@@ -325,14 +320,14 @@ describe("DisposableMap", () => {
         return () => fnDispose("dispose");
       });
 
-      expect(fnEffect).toBeCalledTimes(1);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(1);
 
       map.flush("key1");
 
-      expect(fnEffect).toBeCalledTimes(1);
-      expect(fnDispose).toBeCalledTimes(1);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
+      expect(fnDispose).toHaveBeenCalledTimes(1);
       expect(map.size()).toBe(0);
     });
 
@@ -343,14 +338,14 @@ describe("DisposableMap", () => {
 
       map.set("key1", disposer);
 
-      expect(disposer).toBeCalledTimes(0);
-      expect(disposer.dispose).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
+      expect(disposer.dispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(1);
 
       map.flush("key1");
 
-      expect(disposer).toBeCalledTimes(0);
-      expect(disposer.dispose).toBeCalledTimes(1);
+      expect(disposer).toHaveBeenCalledTimes(0);
+      expect(disposer.dispose).toHaveBeenCalledTimes(1);
       expect(map.size()).toBe(0);
     });
 
@@ -364,20 +359,20 @@ describe("DisposableMap", () => {
         return () => fnDispose("dispose");
       });
 
-      expect(fnEffect).toBeCalledTimes(1);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(1);
 
       map.flush("aKey");
 
-      expect(fnEffect).toBeCalledTimes(1);
-      expect(fnDispose).toBeCalledTimes(1);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
+      expect(fnDispose).toHaveBeenCalledTimes(1);
       expect(map.size()).toBe(0);
 
       map.flush("aKey");
 
-      expect(fnEffect).toBeCalledTimes(1);
-      expect(fnDispose).toBeCalledTimes(1);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
+      expect(fnDispose).toHaveBeenCalledTimes(1);
       expect(map.size()).toBe(0);
     });
 
@@ -391,8 +386,8 @@ describe("DisposableMap", () => {
         return () => fnDispose("dispose1");
       });
 
-      expect(fnEffect).toBeCalledTimes(1);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(fnEffect).lastCalledWith("execute1");
       expect(map.size()).toBe(1);
 
@@ -401,40 +396,38 @@ describe("DisposableMap", () => {
         return () => fnDispose("dispose2");
       });
 
-      expect(fnEffect).toBeCalledTimes(2);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(2);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(fnEffect).lastCalledWith("execute2");
       expect(map.size()).toBe(2);
 
       map.flush("disposer1");
 
-      expect(fnEffect).toBeCalledTimes(2);
-      expect(fnDispose).toBeCalledTimes(1);
+      expect(fnEffect).toHaveBeenCalledTimes(2);
+      expect(fnDispose).toHaveBeenCalledTimes(1);
       expect(map.size()).toBe(1);
 
       map.flush("disposer2");
 
-      expect(fnEffect).toBeCalledTimes(2);
-      expect(fnDispose).toBeCalledTimes(2);
+      expect(fnEffect).toHaveBeenCalledTimes(2);
+      expect(fnDispose).toHaveBeenCalledTimes(2);
       expect(map.size()).toBe(0);
     });
 
     it("should catch error in disposer", () => {
       const map = disposableMap();
-      const spy = vi
-        .spyOn(globalThis.console, "error")
-        .mockImplementation(() => void 0);
+      const spy = vi.spyOn(globalThis.console, "error").mockImplementation(() => void 0);
       const error = new Error();
 
       map.set("disposer", () => {
         throw error;
       });
 
-      expect(globalThis.console.error).toBeCalledTimes(0);
+      expect(globalThis.console.error).toHaveBeenCalledTimes(0);
 
       map.flush("disposer");
 
-      expect(globalThis.console.error).toBeCalledTimes(1);
+      expect(globalThis.console.error).toHaveBeenCalledTimes(1);
       expect(globalThis.console.error).toBeCalledWith(error);
 
       spy.mockRestore();
@@ -453,8 +446,8 @@ describe("DisposableMap", () => {
         });
       }
 
-      expect(fnEffect).toBeCalledTimes(count);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(count);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(count);
 
       fnEffect.mockRestore();
@@ -462,8 +455,8 @@ describe("DisposableMap", () => {
 
       map.flush();
 
-      expect(fnEffect).toBeCalledTimes(0);
-      expect(fnDispose).toBeCalledTimes(count);
+      expect(fnEffect).toHaveBeenCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(count);
       expect(map.size()).toBe(0);
 
       fnEffect.mockRestore();
@@ -471,8 +464,8 @@ describe("DisposableMap", () => {
 
       map.flush();
 
-      expect(fnEffect).toBeCalledTimes(0);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(0);
     });
 
@@ -489,8 +482,8 @@ describe("DisposableMap", () => {
         });
       }
 
-      expect(fnEffect).toBeCalledTimes(count);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(count);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(count);
 
       fnEffect.mockRestore();
@@ -516,8 +509,8 @@ describe("DisposableMap", () => {
         });
       }
 
-      expect(fnEffect).toBeCalledTimes(count);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(count);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(count);
 
       fnEffect.mockRestore();
@@ -525,8 +518,8 @@ describe("DisposableMap", () => {
 
       map.dispose();
 
-      expect(fnEffect).toBeCalledTimes(0);
-      expect(fnDispose).toBeCalledTimes(count);
+      expect(fnEffect).toHaveBeenCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(count);
       expect(map.size()).toBe(0);
 
       fnEffect.mockRestore();
@@ -534,16 +527,14 @@ describe("DisposableMap", () => {
 
       map.dispose();
 
-      expect(fnEffect).toBeCalledTimes(0);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(map.size()).toBe(0);
     });
 
     it("should catch error in disposer", () => {
       const map = disposableMap();
-      const spy = vi
-        .spyOn(globalThis.console, "error")
-        .mockImplementation(() => void 0);
+      const spy = vi.spyOn(globalThis.console, "error").mockImplementation(() => void 0);
       const error1 = new Error();
       const error2 = new Error();
 
@@ -555,11 +546,11 @@ describe("DisposableMap", () => {
         throw error2;
       });
 
-      expect(globalThis.console.error).toBeCalledTimes(0);
+      expect(globalThis.console.error).toHaveBeenCalledTimes(0);
 
       map.dispose();
 
-      expect(globalThis.console.error).toBeCalledTimes(2);
+      expect(globalThis.console.error).toHaveBeenCalledTimes(2);
       expect(globalThis.console.error).toBeCalledWith(error1);
       expect(globalThis.console.error).toBeCalledWith(error2);
 
@@ -616,12 +607,12 @@ describe("DisposableMap", () => {
       map.set("key1", disposer);
 
       expect(map.size()).toBe(1);
-      expect(fnDispose).toBeCalledTimes(1);
+      expect(fnDispose).toHaveBeenCalledTimes(1);
 
       disposer();
 
       expect(map.size()).toBe(0);
-      expect(fnDispose).toBeCalledTimes(1);
+      expect(fnDispose).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -648,18 +639,18 @@ describe("DisposableMap", () => {
 
       const b = new B();
 
-      expect(spyA).toBeCalledTimes(0);
-      expect(spyB).toBeCalledTimes(0);
-      expect(b.a.print).toBeCalledTimes(0);
+      expect(spyA).toHaveBeenCalledTimes(0);
+      expect(spyB).toHaveBeenCalledTimes(0);
+      expect(b.a.print).toHaveBeenCalledTimes(0);
 
       b.a.print("hello");
-      expect(b.a.print).toBeCalledTimes(1);
+      expect(b.a.print).toHaveBeenCalledTimes(1);
       expect(b.a.print).toBeCalledWith("hello");
 
       b.dispose();
 
-      expect(spyA).toBeCalledTimes(1);
-      expect(spyB).toBeCalledTimes(1);
+      expect(spyA).toHaveBeenCalledTimes(1);
+      expect(spyB).toHaveBeenCalledTimes(1);
     });
   });
 

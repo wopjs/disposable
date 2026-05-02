@@ -1,10 +1,5 @@
 import { isAbortable } from "./abortable";
-import {
-  type DisposableDisposer,
-  type DisposableType,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
-  type IDisposable,
-} from "./interface";
+import type { DisposableDisposer, DisposableType, IDisposable } from "./interface";
 import { dispose } from "./utils";
 
 /**
@@ -58,9 +53,7 @@ export interface DisposableOne extends DisposableDisposer {
    * @param executor A function that returns either a {@link DisposableType} or `undefined | null`.
    * @returns The returned {@link DisposableType}, or `undefined` if the executor returns `undefined | null`.
    */
-  make<T extends DisposableType>(
-    executor: () => null | T | undefined | void
-  ): T | void;
+  make<T extends DisposableType>(executor: () => null | T | undefined | void): T | void;
 
   /**
    * Invoke the executor function and set the returned {@link DisposableType}. Do nothing if `undefined | null` is returned.
@@ -70,9 +63,7 @@ export interface DisposableOne extends DisposableDisposer {
    * @param executor A function that returns either a {@link DisposableType} or `undefined | null`.
    * @returns The {@link DisposableType}, or `undefined` if the executor returns `undefined | null`.
    */
-  make<T extends DisposableType[]>(
-    executor: () => null | T | undefined | void
-  ): T | void;
+  make<T extends DisposableType[]>(executor: () => null | T | undefined | void): T | void;
 
   /**
    * Remove the current {@link DisposableType}. Does not invoke the removed {@link DisposableType}.
@@ -103,9 +94,7 @@ export interface DisposableOne extends DisposableDisposer {
    * @param disposable A {@link DisposableType} .
    * @returns The same {@link DisposableType} .
    */
-  set<T extends DisposableType | null | undefined | void>(
-    disposable?: T
-  ): T | undefined;
+  set<T extends DisposableType | null | undefined | void>(disposable?: T): T | undefined;
 }
 
 /**
@@ -131,9 +120,7 @@ export interface DisposableOne extends DisposableDisposer {
  * @param disposable Optional {@link DisposableType} to set as the initial value.
  * @returns The created {@link DisposableOne}.
  */
-export function disposableOne(
-  disposable?: DisposableType | null | undefined | void
-): DisposableOne {
+export function disposableOne(disposable?: DisposableType | null | undefined | void): DisposableOne {
   function disposableOne(): void {
     const { current } = disposableOne;
     if (current) {
@@ -155,10 +142,7 @@ function is(this: DisposableOne, disposable: DisposableType): boolean {
   return Object.is(this.current, disposable);
 }
 
-function make<T extends DisposableType>(
-  this: DisposableOne,
-  executor: () => null | T | undefined | void
-): T | void {
+function make<T extends DisposableType>(this: DisposableOne, executor: () => null | T | undefined | void): T | void {
   const disposable = executor();
   if (disposable) {
     return this.set(disposable);
@@ -171,10 +155,7 @@ function remove(this: DisposableOne): boolean {
   return exists;
 }
 
-function set<T extends DisposableType | null | undefined | void>(
-  this: DisposableOne,
-  disposable?: T
-): T | undefined {
+function set<T extends DisposableType | null | undefined | void>(this: DisposableOne, disposable?: T): T | undefined {
   if (!disposable || !this.is(disposable)) {
     this.flush();
     this.current = disposable;

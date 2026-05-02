@@ -1,10 +1,5 @@
 import { isAbortable } from "./abortable";
-import {
-  type DisposableDisposer,
-  type DisposableType,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
-  type IDisposable,
-} from "./interface";
+import type { DisposableDisposer, DisposableType, IDisposable } from "./interface";
 import { dispose } from "./utils";
 
 /**
@@ -63,9 +58,7 @@ export interface DisposableArray extends DisposableDisposer {
    * @param executor A function that returns either a disposable or `null | undefined`.
    * @returns The returned disposable, or `undefined`.
    */
-  make<T extends DisposableType>(
-    executor: () => null | T | undefined | void
-  ): T | void;
+  make<T extends DisposableType>(executor: () => null | T | undefined | void): T | void;
 
   /**
    * Invoke the executor and push each returned disposable to the array.
@@ -83,9 +76,7 @@ export interface DisposableArray extends DisposableDisposer {
    * @param executor A function that returns an array of disposables or `null | undefined`.
    * @returns The returned array, or `undefined`.
    */
-  make<T extends DisposableType[]>(
-    executor: () => null | T | undefined | void
-  ): T | void;
+  make<T extends DisposableType[]>(executor: () => null | T | undefined | void): T | void;
 
   /**
    * Push a disposable to the end of the array.
@@ -133,9 +124,7 @@ export interface DisposableArray extends DisposableDisposer {
  * @param disposables Optional initial disposables.
  * @returns A disposable array.
  */
-export function disposableArray(
-  disposables?: DisposableType[]
-): DisposableArray {
+export function disposableArray(disposables?: DisposableType[]): DisposableArray {
   let isDisposing: 1 | void;
   function disposableArray(): void {
     if (!isDisposing) {
@@ -158,24 +147,16 @@ export function disposableArray(
   return disposableArray;
 }
 
-function _pushOne<T extends DisposableType>(
-  this: DisposableArray,
-  disposable: T
-): void {
+function _pushOne<T extends DisposableType>(this: DisposableArray, disposable: T): void {
   (this._disposables_ ??= []).push(disposable);
   if (isAbortable(disposable)) {
     disposable.abortable(remove.bind(this, disposable));
   }
 }
 
-function push<T extends DisposableType>(
-  this: DisposableArray,
-  disposables: T | T[]
-): T | T[] {
+function push<T extends DisposableType>(this: DisposableArray, disposables: T | T[]): T | T[] {
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-  Array.isArray(disposables)
-    ? disposables.forEach(_pushOne, this)
-    : _pushOne.call(this, disposables);
+  Array.isArray(disposables) ? disposables.forEach(_pushOne, this) : _pushOne.call(this, disposables);
   return disposables;
 }
 
@@ -187,10 +168,7 @@ function has(this: DisposableArray, disposable: DisposableType): boolean {
   return !!this._disposables_?.includes(disposable);
 }
 
-function make<T extends DisposableType>(
-  this: DisposableArray,
-  executor: () => null | T | T[]
-): null | T | T[] {
+function make<T extends DisposableType>(this: DisposableArray, executor: () => null | T | T[]): null | T | T[] {
   const disposable = executor();
   return disposable && this.push(disposable);
 }

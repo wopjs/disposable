@@ -81,9 +81,7 @@ describe("abortable", () => {
     const fnDisposer = vi.fn();
     const disposer = abortable(fnDisposer);
 
-    const spy = vi
-      .spyOn(globalThis.console, "error")
-      .mockImplementation(() => void 0);
+    const spy = vi.spyOn(globalThis.console, "error").mockImplementation(() => void 0);
 
     const error = new Error();
     const fnOnDispose = vi.fn(() => {

@@ -1,11 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
-import { type DisposableStore } from "./disposable-store";
-import {
-  type DisposableDisposer,
-  type DisposableType,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
-  type Disposer,
-} from "./interface";
+import type { DisposableStore } from "./disposable-store";
+import type { DisposableDisposer, DisposableType, Disposer } from "./interface";
 import { dispose, isDisposable, isFn } from "./utils";
 
 /**
@@ -47,7 +41,7 @@ interface AbortableDisposableImpl extends AbortableDisposable {
  * ```
  */
 export const abortable: (disposable: DisposableType) => DisposableDisposer = (
-  disposable: DisposableType | void
+  disposable: DisposableType | void,
 ): DisposableDisposer => {
   const abortable: AbortableDisposableImpl = (): void => {
     abortable.abortable();
@@ -58,16 +52,10 @@ export const abortable: (disposable: DisposableType) => DisposableDisposer = (
   return abortable;
 };
 
-function abortable$abortable(
-  this: AbortableDisposableImpl,
-  onDispose?: () => void
-): void {
+function abortable$abortable(this: AbortableDisposableImpl, onDispose?: () => void): void {
   dispose(this?._o);
   this._o = onDispose;
 }
 
-export const isAbortable = (
-  disposable: any
-): disposable is AbortableDisposable =>
-  isDisposable(disposable) &&
-  isFn((disposable as AbortableDisposable).abortable);
+export const isAbortable = (disposable: any): disposable is AbortableDisposable =>
+  isDisposable(disposable) && isFn((disposable as AbortableDisposable).abortable);

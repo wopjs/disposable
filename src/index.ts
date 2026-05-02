@@ -1,13 +1,13 @@
 export { abortable } from "./abortable";
 
-export { disposableArray, type DisposableArray } from "./disposable-array";
-export { disposableMap, type DisposableMap } from "./disposable-map";
-export { disposableOne, type DisposableOne } from "./disposable-one";
-export { disposableStore, type DisposableStore } from "./disposable-store";
+export { type DisposableArray, disposableArray } from "./disposable-array";
+export { type DisposableMap, disposableMap } from "./disposable-map";
+export { type DisposableOne, disposableOne } from "./disposable-one";
+export { type DisposableStore, disposableStore } from "./disposable-store";
 export type {
   DisposableDisposer,
   DisposableType,
   Disposer,
   IDisposable,
 } from "./interface";
-export { dispose, isDisposable, extend, join } from "./utils";
+export { dispose, extend, isDisposable, join } from "./utils";

@@ -1,10 +1,5 @@
 import { isAbortable } from "./abortable";
-import {
-  type DisposableDisposer,
-  type DisposableType,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in type doc
-  type IDisposable,
-} from "./interface";
+import type { DisposableDisposer, DisposableType, IDisposable } from "./interface";
 import { dispose } from "./utils";
 
 /**
@@ -91,9 +86,7 @@ export interface DisposableStore extends DisposableDisposer {
    * @param executor A function that returns either a {@link DisposableType} or `undefined | null`.
    * @returns The returned {@link DisposableType}, or `undefined` if the executor returns `undefined | null`.
    */
-  make<T extends DisposableType>(
-    executor: () => null | T | undefined | void
-  ): T | void;
+  make<T extends DisposableType>(executor: () => null | T | undefined | void): T | void;
   /**
    * Invoke the executor function and add each {@link DisposableType} in the returned array to the store.
    *
@@ -112,9 +105,7 @@ export interface DisposableStore extends DisposableDisposer {
    * @param executor A function that returns either an array of {@link DisposableType}s or `undefined | null`.
    * @returns The returned array of {@link DisposableType}s, or `undefined` if the executor returns `undefined | null`.
    */
-  make<T extends DisposableType[]>(
-    executor: () => null | T | undefined | void
-  ): T | void;
+  make<T extends DisposableType[]>(executor: () => null | T | undefined | void): T | void;
 
   /**
    * Invoke the executor function and the returned {@link DisposableType}s to the store. Do nothing if `undefined | null` is returned.
@@ -124,9 +115,7 @@ export interface DisposableStore extends DisposableDisposer {
    * @param executor A function that returns either an array of {@link DisposableType}s or `undefined | null`.
    * @returns The returned array of {@link DisposableType}s, or `undefined` if the executor returns `undefined | null`.
    */
-  make<T extends DisposableType>(
-    executor: () => null | T | T[] | undefined | void
-  ): T | T[] | void;
+  make<T extends DisposableType>(executor: () => null | T | T[] | undefined | void): T | T[] | void;
 
   /**
    * Remove the {@link DisposableType} from the store. Does not invoke the removed {@link DisposableType}.
@@ -175,9 +164,7 @@ export interface DisposableStore extends DisposableDisposer {
  * @param disposables Optional array of {@link DisposableType}s added to the store.
  * @returns A disposable store.
  */
-export function disposableStore(
-  disposables?: DisposableType[]
-): DisposableStore {
+export function disposableStore(disposables?: DisposableType[]): DisposableStore {
   let isDisposing: 1 | void;
   function disposableStore(): void {
     if (!isDisposing) {
@@ -200,10 +187,7 @@ export function disposableStore(
   return disposableStore;
 }
 
-function _addOne<T extends DisposableType>(
-  this: DisposableStore,
-  disposable: T
-): void {
+function _addOne<T extends DisposableType>(this: DisposableStore, disposable: T): void {
   if (!this._disposables_?.has(disposable)) {
     (this._disposables_ ??= new Set()).add(disposable);
     if (isAbortable(disposable)) {
@@ -212,14 +196,9 @@ function _addOne<T extends DisposableType>(
   }
 }
 
-function add<T extends DisposableType>(
-  this: DisposableStore,
-  disposables: T | T[]
-): T | T[] {
+function add<T extends DisposableType>(this: DisposableStore, disposables: T | T[]): T | T[] {
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-  Array.isArray(disposables)
-    ? disposables.forEach(_addOne, this)
-    : _addOne.call(this, disposables);
+  Array.isArray(disposables) ? disposables.forEach(_addOne, this) : _addOne.call(this, disposables);
   return disposables;
 }
 
@@ -231,10 +210,7 @@ function has(this: DisposableStore, disposable: DisposableType): boolean {
   return !!this._disposables_?.has(disposable);
 }
 
-function make<T extends DisposableType>(
-  this: DisposableStore,
-  executor: () => null | T | T[]
-): null | T | T[] {
+function make<T extends DisposableType>(this: DisposableStore, executor: () => null | T | T[]): null | T | T[] {
   const disposable = executor();
   return disposable && this.add(disposable);
 }

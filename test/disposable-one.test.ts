@@ -1,11 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import {
-  abortable,
-  type DisposableDisposer,
-  disposableOne,
-  type IDisposable,
-} from "../src";
+import { abortable, type DisposableDisposer, disposableOne, type IDisposable } from "../src";
 
 describe("DisposableOne", () => {
   describe("new", () => {
@@ -19,7 +14,7 @@ describe("DisposableOne", () => {
       const dispose = disposableOne(spy);
       expect(dispose.current).toBe(spy);
       dispose();
-      expect(spy).toBeCalledTimes(1);
+      expect(spy).toHaveBeenCalledTimes(1);
       expect(dispose.current).toBeFalsy();
     });
   });
@@ -32,7 +27,7 @@ describe("DisposableOne", () => {
       const returnedDisposer = dispose.set(spy);
 
       expect(returnedDisposer).toBe(spy);
-      expect(spy).toBeCalledTimes(0);
+      expect(spy).toHaveBeenCalledTimes(0);
       expect(dispose.current).toBe(spy);
     });
 
@@ -43,7 +38,7 @@ describe("DisposableOne", () => {
       const returnedDisposable = dispose.set(disposer);
 
       expect(returnedDisposable).toBe(disposer);
-      expect(disposer.dispose).toBeCalledTimes(0);
+      expect(disposer.dispose).toHaveBeenCalledTimes(0);
       expect(dispose.current).toBe(disposer);
     });
 
@@ -58,18 +53,18 @@ describe("DisposableOne", () => {
 
       disposer.dispose();
 
-      expect(disposer.dispose).toBeCalledTimes(1);
+      expect(disposer.dispose).toHaveBeenCalledTimes(1);
       expect(self).toBe(disposer);
 
       const dispose = disposableOne();
       dispose.set(disposer);
 
-      expect(disposer.dispose).toBeCalledTimes(1);
+      expect(disposer.dispose).toHaveBeenCalledTimes(1);
       self = null;
 
       dispose.flush();
 
-      expect(disposer.dispose).toBeCalledTimes(2);
+      expect(disposer.dispose).toHaveBeenCalledTimes(2);
       expect(self).toBe(disposer);
     });
 
@@ -79,17 +74,17 @@ describe("DisposableOne", () => {
 
       dispose.set(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(dispose.current).toBe(disposer);
 
       dispose.set(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(dispose.current).toBe(disposer);
 
       dispose.dispose();
 
-      expect(disposer).toBeCalledTimes(1);
+      expect(disposer).toHaveBeenCalledTimes(1);
       expect(dispose.current).toBeFalsy();
     });
 
@@ -99,21 +94,21 @@ describe("DisposableOne", () => {
 
       dispose.set(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
 
       dispose.set(null);
 
-      expect(disposer).toBeCalledTimes(1);
+      expect(disposer).toHaveBeenCalledTimes(1);
 
       disposer.mockClear();
 
       dispose.set(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
 
       dispose.set();
 
-      expect(disposer).toBeCalledTimes(1);
+      expect(disposer).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -128,9 +123,9 @@ describe("DisposableOne", () => {
         return fnDispose;
       });
 
-      expect(fnEffect).toBeCalledTimes(1);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
       expect(fnEffect).lastCalledWith("execute");
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(dispose.current).toBe(fnDispose);
     });
 
@@ -152,7 +147,7 @@ describe("DisposableOne", () => {
         return disposer;
       });
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(dispose.current).toBe(disposer);
       expect(returnedDisposer).toBe(disposer);
     });
@@ -191,12 +186,12 @@ describe("DisposableOne", () => {
 
       dispose.set(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(dispose.current).toBe(disposer);
 
       dispose.remove();
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(dispose.current).toBeFalsy();
     });
 
@@ -215,12 +210,12 @@ describe("DisposableOne", () => {
 
       dispose.set(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(dispose.current).toBe(disposer);
 
       dispose.flush();
 
-      expect(disposer).toBeCalledTimes(1);
+      expect(disposer).toHaveBeenCalledTimes(1);
       expect(dispose.current).toBeFalsy();
     });
 
@@ -231,14 +226,14 @@ describe("DisposableOne", () => {
 
       dispose.set(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
-      expect(disposer.dispose).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
+      expect(disposer.dispose).toHaveBeenCalledTimes(0);
       expect(dispose.current).toBe(disposer);
 
       dispose.flush();
 
-      expect(disposer).toBeCalledTimes(0);
-      expect(disposer.dispose).toBeCalledTimes(1);
+      expect(disposer).toHaveBeenCalledTimes(0);
+      expect(disposer.dispose).toHaveBeenCalledTimes(1);
       expect(dispose.current).toBeFalsy();
     });
 
@@ -248,25 +243,23 @@ describe("DisposableOne", () => {
 
       dispose.set(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(dispose.current).toBe(disposer);
 
       dispose.flush();
 
-      expect(disposer).toBeCalledTimes(1);
+      expect(disposer).toHaveBeenCalledTimes(1);
       expect(dispose.current).toBeFalsy();
 
       dispose.flush();
 
-      expect(disposer).toBeCalledTimes(1);
+      expect(disposer).toHaveBeenCalledTimes(1);
       expect(dispose.current).toBeFalsy();
     });
 
     it("should catch error in disposer", () => {
       const dispose = disposableOne();
-      const spy = vi
-        .spyOn(globalThis.console, "error")
-        .mockImplementation(() => void 0);
+      const spy = vi.spyOn(globalThis.console, "error").mockImplementation(() => void 0);
       const error = new Error();
 
       const disposer = dispose.set(() => {
@@ -275,11 +268,11 @@ describe("DisposableOne", () => {
 
       dispose.set(disposer);
 
-      expect(globalThis.console.error).toBeCalledTimes(0);
+      expect(globalThis.console.error).toHaveBeenCalledTimes(0);
 
       dispose.flush();
 
-      expect(globalThis.console.error).toBeCalledTimes(1);
+      expect(globalThis.console.error).toHaveBeenCalledTimes(1);
       expect(globalThis.console.error).toBeCalledWith(error);
 
       spy.mockRestore();
@@ -300,8 +293,8 @@ describe("DisposableOne", () => {
         });
       }
 
-      expect(fnEffect).toBeCalledTimes(count);
-      expect(fnDispose).toBeCalledTimes(count - 1);
+      expect(fnEffect).toHaveBeenCalledTimes(count);
+      expect(fnDispose).toHaveBeenCalledTimes(count - 1);
       expect(dispose.current).not.toBeFalsy();
 
       fnEffect.mockRestore();
@@ -309,8 +302,8 @@ describe("DisposableOne", () => {
 
       dispose.dispose();
 
-      expect(fnEffect).toBeCalledTimes(0);
-      expect(fnDispose).toBeCalledTimes(1);
+      expect(fnEffect).toHaveBeenCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(1);
       expect(dispose.current).toBeFalsy();
 
       fnEffect.mockRestore();
@@ -318,16 +311,14 @@ describe("DisposableOne", () => {
 
       dispose.dispose();
 
-      expect(fnEffect).toBeCalledTimes(0);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(dispose.current).toBeFalsy();
     });
 
     it("should catch error in disposer", () => {
       const dispose = disposableOne();
-      const spy = vi
-        .spyOn(globalThis.console, "error")
-        .mockImplementation(() => void 0);
+      const spy = vi.spyOn(globalThis.console, "error").mockImplementation(() => void 0);
       const error1 = new Error();
       const error2 = new Error();
 
@@ -335,18 +326,18 @@ describe("DisposableOne", () => {
         throw error1;
       });
 
-      expect(globalThis.console.error).toBeCalledTimes(0);
+      expect(globalThis.console.error).toHaveBeenCalledTimes(0);
 
       dispose.set(() => {
         throw error2;
       });
 
-      expect(globalThis.console.error).toBeCalledTimes(1);
+      expect(globalThis.console.error).toHaveBeenCalledTimes(1);
       expect(globalThis.console.error).lastCalledWith(error1);
 
       dispose.dispose();
 
-      expect(globalThis.console.error).toBeCalledTimes(2);
+      expect(globalThis.console.error).toHaveBeenCalledTimes(2);
       expect(globalThis.console.error).lastCalledWith(error2);
 
       spy.mockRestore();
@@ -389,12 +380,12 @@ describe("DisposableOne", () => {
       store.set(disposer);
 
       expect(store.current).toBe(disposer);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
 
       store.flush();
 
       expect(store.current).toBeFalsy();
-      expect(fnDispose).toBeCalledTimes(1);
+      expect(fnDispose).toHaveBeenCalledTimes(1);
     });
   });
 

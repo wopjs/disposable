@@ -1,13 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import {
-  dispose,
-  type Disposer,
-  extend,
-  type IDisposable,
-  isDisposable,
-  join,
-} from "../src";
+import { type Disposer, dispose, extend, type IDisposable, isDisposable, join } from "../src";
 
 describe("dispose", () => {
   it("should call function disposer", () => {
@@ -40,9 +33,7 @@ describe("dispose", () => {
 
   it("should catch and log error from disposer", () => {
     const error = new Error("dispose error");
-    const logSpy = vi
-      .spyOn(globalThis.console, "error")
-      .mockImplementation(() => void 0);
+    const logSpy = vi.spyOn(globalThis.console, "error").mockImplementation(() => void 0);
 
     dispose(() => {
       throw error;
@@ -55,9 +46,7 @@ describe("dispose", () => {
   });
 
   it("should do nothing for non-disposable values", () => {
-    const logSpy = vi
-      .spyOn(globalThis.console, "error")
-      .mockImplementation(() => void 0);
+    const logSpy = vi.spyOn(globalThis.console, "error").mockImplementation(() => void 0);
 
     dispose(undefined);
     dispose(null);

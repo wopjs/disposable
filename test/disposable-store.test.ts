@@ -1,11 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import {
-  abortable,
-  type DisposableDisposer,
-  disposableStore,
-  type IDisposable,
-} from "../src";
+import { abortable, type DisposableDisposer, disposableStore, type IDisposable } from "../src";
 
 describe("DisposableStore", () => {
   describe("new", () => {
@@ -31,7 +26,7 @@ describe("DisposableStore", () => {
       const returnedDisposer = store.add(disposer);
 
       expect(returnedDisposer).toBe(disposer);
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(1);
     });
 
@@ -42,7 +37,7 @@ describe("DisposableStore", () => {
       const returnedDisposable = store.add(disposer);
 
       expect(returnedDisposable).toBe(disposer);
-      expect(disposer.dispose).toBeCalledTimes(0);
+      expect(disposer.dispose).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(1);
     });
 
@@ -57,18 +52,18 @@ describe("DisposableStore", () => {
 
       disposer.dispose();
 
-      expect(disposer.dispose).toBeCalledTimes(1);
+      expect(disposer.dispose).toHaveBeenCalledTimes(1);
       expect(self).toBe(disposer);
 
       const store = disposableStore();
       store.add(disposer);
 
-      expect(disposer.dispose).toBeCalledTimes(1);
+      expect(disposer.dispose).toHaveBeenCalledTimes(1);
       self = null;
 
       store.flush();
 
-      expect(disposer.dispose).toBeCalledTimes(2);
+      expect(disposer.dispose).toHaveBeenCalledTimes(2);
       expect(self).toBe(disposer);
     });
 
@@ -79,12 +74,12 @@ describe("DisposableStore", () => {
 
       store.add(disposer1);
 
-      expect(disposer1).toBeCalledTimes(0);
+      expect(disposer1).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(1);
 
       store.add(disposer2);
 
-      expect(disposer2).toBeCalledTimes(0);
+      expect(disposer2).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(2);
     });
 
@@ -94,17 +89,17 @@ describe("DisposableStore", () => {
 
       store.add(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(1);
 
       store.add(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(1);
 
       store.dispose();
 
-      expect(disposer).toBeCalledTimes(1);
+      expect(disposer).toHaveBeenCalledTimes(1);
       expect(store.size()).toBe(0);
     });
 
@@ -116,8 +111,8 @@ describe("DisposableStore", () => {
 
       expect(returnedValue).toBe(disposers);
 
-      disposers.forEach(disposer => {
-        expect(disposer).toBeCalledTimes(0);
+      disposers.forEach((disposer) => {
+        expect(disposer).toHaveBeenCalledTimes(0);
       });
       expect(store.size()).toBe(5);
     });
@@ -134,9 +129,9 @@ describe("DisposableStore", () => {
         return () => fnDispose("dispose");
       });
 
-      expect(fnEffect).toBeCalledTimes(1);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
       expect(fnEffect).lastCalledWith("execute");
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(1);
     });
 
@@ -150,9 +145,9 @@ describe("DisposableStore", () => {
         return () => fnDispose("dispose");
       });
 
-      expect(fnEffect).toBeCalledTimes(1);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
       expect(fnEffect).lastCalledWith("execute1");
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(1);
 
       store.make(() => {
@@ -160,9 +155,9 @@ describe("DisposableStore", () => {
         return () => fnDispose("dispose");
       });
 
-      expect(fnEffect).toBeCalledTimes(2);
+      expect(fnEffect).toHaveBeenCalledTimes(2);
       expect(fnEffect).lastCalledWith("execute2");
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(2);
     });
 
@@ -184,7 +179,7 @@ describe("DisposableStore", () => {
         return disposer;
       });
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(1);
       expect(returnedDisposer).toBe(disposer);
     });
@@ -200,10 +195,10 @@ describe("DisposableStore", () => {
         return [disposer1, disposer2];
       });
 
-      expect(fnEffect).toBeCalledTimes(1);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
       expect(fnEffect).lastCalledWith("execute1");
-      expect(disposer1).toBeCalledTimes(0);
-      expect(disposer2).toBeCalledTimes(0);
+      expect(disposer1).toHaveBeenCalledTimes(0);
+      expect(disposer2).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(2);
 
       const disposer3 = vi.fn();
@@ -214,12 +209,12 @@ describe("DisposableStore", () => {
         return [disposer3, disposer4];
       });
 
-      expect(fnEffect).toBeCalledTimes(2);
+      expect(fnEffect).toHaveBeenCalledTimes(2);
       expect(fnEffect).lastCalledWith("execute2");
-      expect(disposer1).toBeCalledTimes(0);
-      expect(disposer2).toBeCalledTimes(0);
-      expect(disposer3).toBeCalledTimes(0);
-      expect(disposer4).toBeCalledTimes(0);
+      expect(disposer1).toHaveBeenCalledTimes(0);
+      expect(disposer2).toHaveBeenCalledTimes(0);
+      expect(disposer3).toHaveBeenCalledTimes(0);
+      expect(disposer4).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(4);
 
       store.make(() => {
@@ -227,12 +222,12 @@ describe("DisposableStore", () => {
         return [disposer1, disposer3];
       });
 
-      expect(fnEffect).toBeCalledTimes(3);
+      expect(fnEffect).toHaveBeenCalledTimes(3);
       expect(fnEffect).lastCalledWith("execute3");
-      expect(disposer1).toBeCalledTimes(0);
-      expect(disposer2).toBeCalledTimes(0);
-      expect(disposer3).toBeCalledTimes(0);
-      expect(disposer4).toBeCalledTimes(0);
+      expect(disposer1).toHaveBeenCalledTimes(0);
+      expect(disposer2).toHaveBeenCalledTimes(0);
+      expect(disposer3).toHaveBeenCalledTimes(0);
+      expect(disposer4).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(4);
     });
   });
@@ -270,12 +265,12 @@ describe("DisposableStore", () => {
 
       store.add(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(1);
 
       store.remove(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(0);
     });
 
@@ -285,17 +280,17 @@ describe("DisposableStore", () => {
 
       store.add(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(1);
 
       store.remove(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(0);
 
       store.remove(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(0);
     });
 
@@ -305,27 +300,27 @@ describe("DisposableStore", () => {
 
       store.add(disposer1);
 
-      expect(disposer1).toBeCalledTimes(0);
+      expect(disposer1).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(1);
 
       const disposer2 = vi.fn();
 
       store.add(disposer2);
 
-      expect(disposer1).toBeCalledTimes(0);
-      expect(disposer2).toBeCalledTimes(0);
+      expect(disposer1).toHaveBeenCalledTimes(0);
+      expect(disposer2).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(2);
 
       store.remove(disposer1);
 
-      expect(disposer1).toBeCalledTimes(0);
-      expect(disposer2).toBeCalledTimes(0);
+      expect(disposer1).toHaveBeenCalledTimes(0);
+      expect(disposer2).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(1);
 
       store.remove(disposer2);
 
-      expect(disposer1).toBeCalledTimes(0);
-      expect(disposer2).toBeCalledTimes(0);
+      expect(disposer1).toHaveBeenCalledTimes(0);
+      expect(disposer2).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(0);
     });
 
@@ -347,12 +342,12 @@ describe("DisposableStore", () => {
 
       store.add(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(1);
 
       store.flush(disposer);
 
-      expect(disposer).toBeCalledTimes(1);
+      expect(disposer).toHaveBeenCalledTimes(1);
       expect(store.size()).toBe(0);
     });
 
@@ -363,14 +358,14 @@ describe("DisposableStore", () => {
 
       store.add(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
-      expect(disposer.dispose).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
+      expect(disposer.dispose).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(1);
 
       store.flush(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
-      expect(disposer.dispose).toBeCalledTimes(1);
+      expect(disposer).toHaveBeenCalledTimes(0);
+      expect(disposer.dispose).toHaveBeenCalledTimes(1);
       expect(store.size()).toBe(0);
     });
 
@@ -380,17 +375,17 @@ describe("DisposableStore", () => {
 
       store.add(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(1);
 
       store.flush(disposer);
 
-      expect(disposer).toBeCalledTimes(1);
+      expect(disposer).toHaveBeenCalledTimes(1);
       expect(store.size()).toBe(0);
 
       store.flush(disposer);
 
-      expect(disposer).toBeCalledTimes(1);
+      expect(disposer).toHaveBeenCalledTimes(1);
       expect(store.size()).toBe(0);
     });
 
@@ -400,46 +395,44 @@ describe("DisposableStore", () => {
 
       store.add(disposer1);
 
-      expect(disposer1).toBeCalledTimes(0);
+      expect(disposer1).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(1);
 
       const disposer2 = vi.fn();
 
       store.add(disposer2);
 
-      expect(disposer1).toBeCalledTimes(0);
-      expect(disposer2).toBeCalledTimes(0);
+      expect(disposer1).toHaveBeenCalledTimes(0);
+      expect(disposer2).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(2);
 
       store.flush(disposer1);
 
-      expect(disposer1).toBeCalledTimes(1);
-      expect(disposer2).toBeCalledTimes(0);
+      expect(disposer1).toHaveBeenCalledTimes(1);
+      expect(disposer2).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(1);
 
       store.flush(disposer2);
 
-      expect(disposer1).toBeCalledTimes(1);
-      expect(disposer2).toBeCalledTimes(1);
+      expect(disposer1).toHaveBeenCalledTimes(1);
+      expect(disposer2).toHaveBeenCalledTimes(1);
       expect(store.size()).toBe(0);
     });
 
     it("should catch error in disposer", () => {
       const store = disposableStore();
-      const spy = vi
-        .spyOn(globalThis.console, "error")
-        .mockImplementation(() => void 0);
+      const spy = vi.spyOn(globalThis.console, "error").mockImplementation(() => void 0);
       const error = new Error();
 
       const disposer = store.add(() => {
         throw error;
       });
 
-      expect(globalThis.console.error).toBeCalledTimes(0);
+      expect(globalThis.console.error).toHaveBeenCalledTimes(0);
 
       store.flush(disposer);
 
-      expect(globalThis.console.error).toBeCalledTimes(1);
+      expect(globalThis.console.error).toHaveBeenCalledTimes(1);
       expect(globalThis.console.error).toBeCalledWith(error);
 
       spy.mockRestore();
@@ -458,8 +451,8 @@ describe("DisposableStore", () => {
         });
       }
 
-      expect(fnEffect).toBeCalledTimes(count);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(count);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(count);
 
       fnEffect.mockRestore();
@@ -467,8 +460,8 @@ describe("DisposableStore", () => {
 
       store.flush();
 
-      expect(fnEffect).toBeCalledTimes(0);
-      expect(fnDispose).toBeCalledTimes(count);
+      expect(fnEffect).toHaveBeenCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(count);
       expect(store.size()).toBe(0);
 
       fnEffect.mockRestore();
@@ -476,8 +469,8 @@ describe("DisposableStore", () => {
 
       store.flush();
 
-      expect(fnEffect).toBeCalledTimes(0);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(0);
     });
   });
@@ -496,8 +489,8 @@ describe("DisposableStore", () => {
         });
       }
 
-      expect(fnEffect).toBeCalledTimes(count);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(count);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(count);
 
       fnEffect.mockRestore();
@@ -505,8 +498,8 @@ describe("DisposableStore", () => {
 
       store.dispose();
 
-      expect(fnEffect).toBeCalledTimes(0);
-      expect(fnDispose).toBeCalledTimes(count);
+      expect(fnEffect).toHaveBeenCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(count);
       expect(store.size()).toBe(0);
 
       fnEffect.mockRestore();
@@ -514,16 +507,14 @@ describe("DisposableStore", () => {
 
       store.dispose();
 
-      expect(fnEffect).toBeCalledTimes(0);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(store.size()).toBe(0);
     });
 
     it("should catch error in disposer", () => {
       const store = disposableStore();
-      const spy = vi
-        .spyOn(globalThis.console, "error")
-        .mockImplementation(() => void 0);
+      const spy = vi.spyOn(globalThis.console, "error").mockImplementation(() => void 0);
       const error1 = new Error();
       const error2 = new Error();
 
@@ -535,11 +526,11 @@ describe("DisposableStore", () => {
         throw error2;
       });
 
-      expect(globalThis.console.error).toBeCalledTimes(0);
+      expect(globalThis.console.error).toHaveBeenCalledTimes(0);
 
       store.dispose();
 
-      expect(globalThis.console.error).toBeCalledTimes(2);
+      expect(globalThis.console.error).toHaveBeenCalledTimes(2);
       expect(globalThis.console.error).toBeCalledWith(error1);
       expect(globalThis.console.error).toBeCalledWith(error2);
 
@@ -583,12 +574,12 @@ describe("DisposableStore", () => {
       store.add(disposer);
 
       expect(store.size()).toBe(1);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
 
       store.flush(disposer);
 
       expect(store.size()).toBe(0);
-      expect(fnDispose).toBeCalledTimes(1);
+      expect(fnDispose).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -615,18 +606,18 @@ describe("DisposableStore", () => {
 
       const b = new B();
 
-      expect(spyA).toBeCalledTimes(0);
-      expect(spyB).toBeCalledTimes(0);
-      expect(b.a.print).toBeCalledTimes(0);
+      expect(spyA).toHaveBeenCalledTimes(0);
+      expect(spyB).toHaveBeenCalledTimes(0);
+      expect(b.a.print).toHaveBeenCalledTimes(0);
 
       b.a.print("hello");
-      expect(b.a.print).toBeCalledTimes(1);
+      expect(b.a.print).toHaveBeenCalledTimes(1);
       expect(b.a.print).toBeCalledWith("hello");
 
       b.dispose();
 
-      expect(spyA).toBeCalledTimes(1);
-      expect(spyB).toBeCalledTimes(1);
+      expect(spyA).toHaveBeenCalledTimes(1);
+      expect(spyB).toHaveBeenCalledTimes(1);
     });
   });
 

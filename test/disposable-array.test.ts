@@ -26,7 +26,7 @@ describe("DisposableArray", () => {
       const returnedDisposer = arr.push(disposer);
 
       expect(returnedDisposer).toBe(disposer);
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(arr.size()).toBe(1);
     });
 
@@ -37,7 +37,7 @@ describe("DisposableArray", () => {
       const returnedDisposable = arr.push(disposer);
 
       expect(returnedDisposable).toBe(disposer);
-      expect(disposer.dispose).toBeCalledTimes(0);
+      expect(disposer.dispose).toHaveBeenCalledTimes(0);
       expect(arr.size()).toBe(1);
     });
 
@@ -52,18 +52,18 @@ describe("DisposableArray", () => {
 
       disposer.dispose();
 
-      expect(disposer.dispose).toBeCalledTimes(1);
+      expect(disposer.dispose).toHaveBeenCalledTimes(1);
       expect(self).toBe(disposer);
 
       const arr = disposableArray();
       arr.push(disposer);
 
-      expect(disposer.dispose).toBeCalledTimes(1);
+      expect(disposer.dispose).toHaveBeenCalledTimes(1);
       self = null;
 
       arr.flush();
 
-      expect(disposer.dispose).toBeCalledTimes(2);
+      expect(disposer.dispose).toHaveBeenCalledTimes(2);
       expect(self).toBe(disposer);
     });
 
@@ -77,7 +77,7 @@ describe("DisposableArray", () => {
       expect(arr.size()).toBe(2);
 
       arr.flush();
-      expect(disposer).toBeCalledTimes(2);
+      expect(disposer).toHaveBeenCalledTimes(2);
       expect(arr.size()).toBe(0);
     });
 
@@ -88,8 +88,8 @@ describe("DisposableArray", () => {
       const returnedValue = arr.push(disposers);
 
       expect(returnedValue).toBe(disposers);
-      disposers.forEach(disposer => {
-        expect(disposer).toBeCalledTimes(0);
+      disposers.forEach((disposer) => {
+        expect(disposer).toHaveBeenCalledTimes(0);
       });
       expect(arr.size()).toBe(5);
     });
@@ -106,9 +106,9 @@ describe("DisposableArray", () => {
         return () => fnDispose("dispose");
       });
 
-      expect(fnEffect).toBeCalledTimes(1);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
       expect(fnEffect).lastCalledWith("execute");
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(arr.size()).toBe(1);
     });
 
@@ -131,9 +131,9 @@ describe("DisposableArray", () => {
         return [disposer1, disposer2];
       });
 
-      expect(fnEffect).toBeCalledTimes(1);
-      expect(disposer1).toBeCalledTimes(0);
-      expect(disposer2).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(1);
+      expect(disposer1).toHaveBeenCalledTimes(0);
+      expect(disposer2).toHaveBeenCalledTimes(0);
       expect(arr.size()).toBe(2);
     });
   });
@@ -184,12 +184,12 @@ describe("DisposableArray", () => {
       arr.push(disposer);
 
       expect(arr.size()).toBe(1);
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
 
       arr.remove(disposer);
 
       expect(arr.size()).toBe(0);
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
     });
 
     it("should return true if removed otherwise false", () => {
@@ -215,9 +215,9 @@ describe("DisposableArray", () => {
 
       arr.flush();
 
-      expect(first).toBeCalledTimes(1);
-      expect(duplicated).toBeCalledTimes(1);
-      expect(last).toBeCalledTimes(1);
+      expect(first).toHaveBeenCalledTimes(1);
+      expect(duplicated).toHaveBeenCalledTimes(1);
+      expect(last).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -228,12 +228,12 @@ describe("DisposableArray", () => {
 
       arr.push(disposer);
 
-      expect(disposer).toBeCalledTimes(0);
+      expect(disposer).toHaveBeenCalledTimes(0);
       expect(arr.size()).toBe(1);
 
       arr.flush(disposer);
 
-      expect(disposer).toBeCalledTimes(1);
+      expect(disposer).toHaveBeenCalledTimes(1);
       expect(arr.size()).toBe(0);
     });
 
@@ -250,13 +250,13 @@ describe("DisposableArray", () => {
         });
       }
 
-      expect(fnEffect).toBeCalledTimes(count);
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnEffect).toHaveBeenCalledTimes(count);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(arr.size()).toBe(count);
 
       arr.flush();
 
-      expect(fnDispose).toBeCalledTimes(count);
+      expect(fnDispose).toHaveBeenCalledTimes(count);
       expect(arr.size()).toBe(0);
     });
 
@@ -270,8 +270,8 @@ describe("DisposableArray", () => {
 
       arr.flush(another);
 
-      expect(target).toBeCalledTimes(0);
-      expect(another).toBeCalledTimes(0);
+      expect(target).toHaveBeenCalledTimes(0);
+      expect(another).toHaveBeenCalledTimes(0);
       expect(arr.size()).toBe(1);
     });
   });
@@ -286,17 +286,17 @@ describe("DisposableArray", () => {
         arr.push(() => fnDispose(i));
       }
 
-      expect(fnDispose).toBeCalledTimes(0);
+      expect(fnDispose).toHaveBeenCalledTimes(0);
       expect(arr.size()).toBe(count);
 
       arr.dispose();
 
-      expect(fnDispose).toBeCalledTimes(count);
+      expect(fnDispose).toHaveBeenCalledTimes(count);
       expect(arr.size()).toBe(0);
 
       arr.dispose();
 
-      expect(fnDispose).toBeCalledTimes(count);
+      expect(fnDispose).toHaveBeenCalledTimes(count);
       expect(arr.size()).toBe(0);
     });
 
@@ -309,7 +309,7 @@ describe("DisposableArray", () => {
       const dispose = arr.dispose;
       dispose();
 
-      expect(fnDispose).toBeCalledTimes(1);
+      expect(fnDispose).toHaveBeenCalledTimes(1);
       expect(arr.size()).toBe(0);
     });
   });
@@ -326,7 +326,7 @@ describe("DisposableArray", () => {
       disposer();
 
       expect(arr.size()).toBe(0);
-      expect(fnDispose).toBeCalledTimes(1);
+      expect(fnDispose).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -352,13 +352,13 @@ describe("DisposableArray", () => {
 
       const b = new B();
 
-      expect(spyA).toBeCalledTimes(0);
-      expect(spyB).toBeCalledTimes(0);
+      expect(spyA).toHaveBeenCalledTimes(0);
+      expect(spyB).toHaveBeenCalledTimes(0);
 
       b.dispose();
 
-      expect(spyA).toBeCalledTimes(1);
-      expect(spyB).toBeCalledTimes(1);
+      expect(spyA).toHaveBeenCalledTimes(1);
+      expect(spyB).toHaveBeenCalledTimes(1);
       expect(b.dispose.size()).toBe(0);
     });
 
