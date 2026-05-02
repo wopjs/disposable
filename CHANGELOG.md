@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.24](https://github.com/wopjs/disposable/compare/v0.1.23...v0.1.24) (2026-05-02)
+
+
+### Features
+
+* add tsdown configuration file ([f9d97ac](https://github.com/wopjs/disposable/commit/f9d97ac897485bf41cdfb23bab8e4f90ef836a52))
+
 ## [0.1.23](https://github.com/wopjs/disposable/compare/v0.1.22...v0.1.23) (2026-05-02)
 
 
