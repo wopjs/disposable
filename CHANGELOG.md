@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.23](https://github.com/wopjs/disposable/compare/v0.1.22...v0.1.23) (2026-05-02)
+
+
+### Features
+
+* add Biome plugins ([47209f8](https://github.com/wopjs/disposable/commit/47209f87aba611c75053713bed75652093933de3))
+
+
+### Bug Fixes
+
+* broken lock file ([ddbcf54](https://github.com/wopjs/disposable/commit/ddbcf5488cd0c42216affa648307329c464bb8f6))
+
 ## [0.1.22](https://github.com/wopjs/disposable/compare/v0.1.21...v0.1.22) (2026-04-24)
 
 
