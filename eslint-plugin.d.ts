@@ -1,9 +1,8 @@
-import type { TSESLint } from "@typescript-eslint/utils";
-import type { ESLint } from "eslint";
+import type { ESLint, Linter } from "eslint";
 
-declare const exports: {
-  plugin: ESLint.Plugin;
-  recommended: TSESLint.FlatConfig.Config;
-};
+export declare const plugin: ESLint.Plugin;
+export declare const recommended: Linter.Config;
+
+declare const exports: { plugin: typeof plugin; recommended: typeof recommended };
 
 export default exports;

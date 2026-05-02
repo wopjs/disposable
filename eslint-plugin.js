@@ -1,4 +1,4 @@
-const plugin = {
+export const plugin = {
   meta: {
     name: "eslint-plugin-disposable",
   },
@@ -29,8 +29,7 @@ const plugin = {
   },
 };
 
-/* global module */
-module.exports = {
+export const recommended = {
   plugin,
   recommended: {
     plugins: {
@@ -41,3 +40,5 @@ module.exports = {
     },
   },
 };
+
+export default recommended;

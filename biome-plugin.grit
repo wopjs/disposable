@@ -1,0 +1,27 @@
+JsPropertyClassMember(modifiers=$modifiers, name=$name, property_annotation=$annotation, value=$value) as $member where {
+  $name <: `dispose`,
+  not $modifiers <: contains `readonly`,
+  or {
+    $annotation <: contains or {
+      `Disposer`,
+      `IDisposable`,
+      `DisposableType`,
+      `DisposableDisposer`,
+      `DisposableArray`,
+      `DisposableStore`,
+      `DisposableMap`,
+      `DisposableOne`
+    },
+    $value <: contains or {
+      `disposableArray($args)`,
+      `disposableArray<$types>($args)`,
+      `disposableStore($args)`,
+      `disposableStore<$types>($args)`,
+      `disposableMap($args)`,
+      `disposableMap<$types>($args)`,
+      `disposableOne($args)`,
+      `disposableOne<$types>($args)`
+    }
+  },
+  register_diagnostic(span=$member, message="Use readonly for Disposable to avoid leaks through accidental reassignment.")
+}

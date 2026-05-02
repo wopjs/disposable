@@ -401,9 +401,9 @@ dispose.add(timeout(() => console.log("timeout"), 1000));
 // The `timeout` disposer will be removed from the `dispose` after 1s.
 ```
 
-## Eslint Plugin
+## ESLint Plugin
 
-This package comes with a eslint plugin:
+This package comes with an ESLint plugin:
 
 ```
 // eslint.config.mjs
@@ -417,6 +417,20 @@ export default [
 Rules:
 
 - `disposable/readonly-dispose`: Enforce `dispose` method to be `readonly`.
+
+## Biome Plugin
+
+This package also comes with a Biome GritQL plugin:
+
+```json
+{
+  "plugins": ["./node_modules/@wopjs/disposable/biome-plugin.grit"]
+}
+```
+
+Check:
+
+- Enforces class `dispose` properties to be `readonly` when they hold a disposable type or are initialized by one of this package's disposable factory functions.
 
 ## License
 

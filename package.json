@@ -17,10 +17,16 @@
         "types": "./dist/index.d.mts",
         "default": "./dist/index.mjs"
       }
-    }
+    },
+    "./eslint-plugin.js": {
+      "types": "./eslint-plugin.d.ts",
+      "default": "./eslint-plugin.js"
+    },
+    "./biome-plugin.grit": "./biome-plugin.grit"
   },
   "sideEffects": false,
   "files": [
+    "biome-plugin.grit",
     "eslint-plugin.d.ts",
     "eslint-plugin.js",
     "src",
