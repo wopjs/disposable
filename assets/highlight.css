@@ -123,6 +123,7 @@
   color: var(--hl-10);
 }
 pre,
-code {
+code,
+math[display="block"] {
   background: var(--code-background);
 }
