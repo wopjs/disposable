@@ -33,7 +33,7 @@ const listen = (target, type, listener) => {
 class A {
   dispose = disposableStore();
   constructor() {
-    this.dispose.add(listen("type", event => console.log(event)));
+    this.dispose.add(listen("type", (event) => console.log(event)));
   }
   print() {
     console.log("print a");
@@ -54,12 +54,7 @@ b.dispose(); // both a and b are disposed
 With more type annotations:
 
 ```ts
-import {
-  disposableStore,
-  disposableMap,
-  type IDisposable,
-  type DisposableStore,
-} from "@wopjs/disposable";
+import { disposableStore, disposableMap, type IDisposable, type DisposableStore } from "@wopjs/disposable";
 
 // Example lib that returns a disposer function
 const listen = (target, type, listener) => {
@@ -78,7 +73,7 @@ class A implements IDisposable {
       () => {
         const timeoutId = setTimeout(() => console.log("timeout"), 1000);
         return () => clearTimeout(timeoutId);
-      }
+      },
     );
   }
 }
@@ -92,7 +87,7 @@ class B implements IDisposable {
       // A is a disposable so it can be added to the store.
       a,
       // Add a disposer function.
-      listen("type", event => console.log(event)),
+      listen("type", (event) => console.log(event)),
     ]);
   }
 }
@@ -128,6 +123,7 @@ b.dispose(); // All side effects in both a and b are disposed
   ```
 
 - And of course it works well with other `@wopjs` libraries.
+
   ```js
   import { addEventListener } from "wopjs/dom";
   import { timeout } from "wopjs/time";
@@ -336,11 +332,7 @@ dispose(); // Logs "disposed 1" and "disposed 2"
 Since it is also a disposer, it can be easily composed with other disposables.
 
 ```ts
-import {
-  disposableMap,
-  disposableStore,
-  type IDisposable,
-} from "@wopjs/disposable";
+import { disposableMap, disposableStore, type IDisposable } from "@wopjs/disposable";
 
 class A implements IDisposable {
   dispose = disposableMap();
